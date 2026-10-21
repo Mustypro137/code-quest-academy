@@ -12,7 +12,7 @@ I built it to learn by small steps: read a short lesson, run an example, solve a
 
 | Module | Lessons | Topics |
 |---|---|---|
-| Python Basics | 15 | Beginner to advanced: variables, loops, `input()`, functions, dictionaries, errors, classes, generators, decorators |
+| Python Basics | 22 | Beginner to advanced: variables, loops, `input()`, functions, dictionaries, errors, tuples and sets, sorting, modules, regular expressions, classes, generators, decorators, recursion, dataclasses, the `with` statement |
 | Python Automation | 12 | Files, CSV, JSON, dates, cleaning data, reports, a customer list cleaner project, merging CSVs, duplicate files, email, web data, Excel |
 | AI with Python | 6 | Prompts, messages, a fake model for testing, JSON replies, calling a real model, a message sorter project |
 | Projects & Portfolio | 6 | Choosing a project, structure, tests, error handling, Git and GitHub, building a portfolio |

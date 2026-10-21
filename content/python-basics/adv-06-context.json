@@ -1,0 +1,136 @@
+{
+  "title": "The with statement",
+  "explanation": [
+    {
+      "type": "text",
+      "text": "`with` does **setup** before a block and **cleanup** after it, even if an error happens. You already know it from files:"
+    },
+    {
+      "type": "code",
+      "code": "with open(\"notes.txt\", \"w\") as f:\n    f.write(\"hello\")\n# the file is closed here, even after an error"
+    },
+    {
+      "type": "text",
+      "text": "Anything that works with `with` is a **context manager**. It has an `__enter__` method (setup) and an `__exit__` method (cleanup). The easiest way to make one is a generator with `@contextmanager`:"
+    },
+    {
+      "type": "code",
+      "code": "from contextlib import contextmanager\n\n@contextmanager\ndef tag(name):\n    print(f\"<{name}>\")       # setup\n    try:\n        yield                 # the with-block runs here\n    finally:\n        print(f\"</{name}>\")   # cleanup: always runs\n\nwith tag(\"p\"):\n    print(\"hello\")"
+    },
+    {
+      "type": "text",
+      "text": "Code before `yield` is the setup. Code after it is the cleanup. Use `try` and `finally` so the cleanup runs even when there is an error. A value after `yield` is given to the name after `as`."
+    },
+    {
+      "type": "text",
+      "text": "`contextlib.suppress` ignores an error you expect:"
+    },
+    {
+      "type": "code",
+      "code": "from contextlib import suppress\n\nwith suppress(FileNotFoundError):\n    open(\"missing.txt\")    # no crash"
+    },
+    {
+      "type": "tip",
+      "text": "Use `with` for anything that must be closed or put back: files, locks, temporary settings."
+    }
+  ],
+  "examples": [
+    {
+      "title": "A file in a with block",
+      "code": "with open(\"notes.txt\", \"w\") as f:\n    f.write(\"line one\\nline two\\n\")\n\nwith open(\"notes.txt\") as f:\n    print(f.read())\nprint(f.closed)"
+    },
+    {
+      "title": "Your own context manager",
+      "code": "from contextlib import contextmanager\n\n@contextmanager\ndef tag(name):\n    print(f\"<{name}>\")\n    try:\n        yield\n    finally:\n        print(f\"</{name}>\")\n\nwith tag(\"p\"):\n    print(\"hello\")"
+    },
+    {
+      "title": "Give a value to as",
+      "code": "from contextlib import contextmanager\n\n@contextmanager\ndef collector():\n    items = []\n    yield items\n    print(\"collected\", len(items))\n\nwith collector() as things:\n    things.append(\"a\")\n    things.append(\"b\")"
+    }
+  ],
+  "exercises": [
+    {
+      "prompt": "A file `notes.txt` is made for you. Write `read_lines(name)`. Open the file with a `with` block and return a list of its lines that are not empty, with spaces removed from the ends.",
+      "starterCode": "with open(\"notes.txt\", \"w\") as f:\n    f.write(\"one\\ntwo\\n\\nthree\\n\")\n\ndef read_lines(name):\n    # your code here\n    pass",
+      "tests": [
+        {
+          "call": "read_lines('notes.txt')",
+          "returns": "['one', 'two', 'three']"
+        }
+      ],
+      "hints": [
+        "`with open(name) as f:` then loop over `f`.",
+        "Keep a line only if `line.strip()` is not empty."
+      ],
+      "solution": "with open(\"notes.txt\", \"w\") as f:\n    f.write(\"one\\ntwo\\n\\nthree\\n\")\n\ndef read_lines(name):\n    with open(name) as f:\n        return [line.strip() for line in f if line.strip()]"
+    },
+    {
+      "prompt": "Write the context manager `tag(name)`. It prints `<name>` when the block starts and `</name>` when it ends. The program at the bottom should then print three lines: `<p>`, `hello`, `</p>`.",
+      "starterCode": "from contextlib import contextmanager\n\n# Write the context manager tag(name).\n# It prints <name> when the block starts and </name> when it ends.\n\nwith tag(\"p\"):\n    print(\"hello\")",
+      "tests": [
+        {
+          "output": "<p>\nhello\n</p>"
+        }
+      ],
+      "hints": [
+        "Put `@contextmanager` above `def tag(name):`.",
+        "Print the opening tag, then `yield`, then print the closing tag (inside `finally`)."
+      ],
+      "solution": "from contextlib import contextmanager\n\n@contextmanager\ndef tag(name):\n    print(f\"<{name}>\")\n    try:\n        yield\n    finally:\n        print(f\"</{name}>\")\n\nwith tag(\"p\"):\n    print(\"hello\")"
+    },
+    {
+      "prompt": "Write `safe_div(a, b)`. It returns `a // b`. If `b` is 0, it returns `None`. Use `suppress` from `contextlib`.",
+      "starterCode": "from contextlib import suppress\n\ndef safe_div(a, b):\n    # your code here\n    pass",
+      "tests": [
+        {
+          "call": "safe_div(7, 2)",
+          "returns": "3"
+        },
+        {
+          "call": "safe_div(7, 0)",
+          "returns": "None"
+        }
+      ],
+      "hints": [
+        "`with suppress(ZeroDivisionError):` then `return a // b` inside.",
+        "After the block, `return None`."
+      ],
+      "solution": "from contextlib import suppress\n\ndef safe_div(a, b):\n    with suppress(ZeroDivisionError):\n        return a // b\n    return None"
+    }
+  ],
+  "quiz": [
+    {
+      "question": "Why use `with open(...)`?",
+      "options": [
+        "It closes the file for you, even after an error",
+        "It makes the file bigger",
+        "It reads faster",
+        "It deletes the file"
+      ],
+      "answer": 0,
+      "explanation": "The `with` block always does the cleanup, so the file is closed."
+    },
+    {
+      "question": "In a `@contextmanager` function, what goes before `yield`?",
+      "options": [
+        "The setup code",
+        "The cleanup code",
+        "Nothing",
+        "The return value"
+      ],
+      "answer": 0,
+      "explanation": "Before `yield` is setup. After `yield` (in `finally`) is cleanup."
+    },
+    {
+      "question": "What does `suppress(ZeroDivisionError)` do?",
+      "options": [
+        "Ignores that error inside the with block",
+        "Stops the program",
+        "Prints the error",
+        "Fixes the division"
+      ],
+      "answer": 0,
+      "explanation": "If that error happens inside the block, Python skips on to the code after the block."
+    }
+  ]
+}

@@ -1,0 +1,155 @@
+{
+  "title": "Modules and import",
+  "explanation": [
+    {
+      "type": "text",
+      "text": "A **module** is a Python file with ready-made code. Use `import` to bring it in. Python comes with a big **standard library** of modules, so you do not have to write everything yourself."
+    },
+    {
+      "type": "code",
+      "code": "import math\nprint(math.sqrt(16))\n\nfrom math import pi     # take one name from the module\nprint(pi)\n\nimport statistics as stats    # a shorter name\nprint(stats.mean([1, 2, 3]))"
+    },
+    {
+      "type": "text",
+      "text": "Some useful modules:"
+    },
+    {
+      "type": "list",
+      "items": [
+        "`math`: square roots, rounding up and down, distance.",
+        "`statistics`: `mean`, `median`.",
+        "`collections.Counter`: counts how often things appear.",
+        "`random`: random numbers and choices.",
+        "`json`, `csv`, `datetime`: you used these in the Automation module."
+      ]
+    },
+    {
+      "type": "text",
+      "text": "You can make your own module too. Any file `helpers.py` can be used from another file in the same folder with `import helpers`."
+    },
+    {
+      "type": "tip",
+      "text": "Do not name your own file after a standard module, such as `random.py` or `math.py`. Python would load your file instead of the real one."
+    },
+    {
+      "type": "pc",
+      "title": "your own module",
+      "text": "Make two files in the same folder. Run main.py with \"python main.py\".",
+      "code": "# helpers.py\ndef greet(name):\n    return \"Hello, \" + name\n\n# main.py\nfrom helpers import greet\nprint(greet(\"Sam\"))"
+    }
+  ],
+  "examples": [
+    {
+      "title": "The math module",
+      "code": "import math\n\nprint(math.sqrt(49))\nprint(round(math.pi, 3))\nprint(math.ceil(2.1), math.floor(2.9))"
+    },
+    {
+      "title": "Count things with Counter",
+      "code": "from collections import Counter\n\ncounts = Counter(\"banana\")\nprint(counts)\nprint(counts.most_common(1))"
+    },
+    {
+      "title": "Mean and median",
+      "code": "import statistics\n\nprint(statistics.mean([1, 2, 3, 4]))\nprint(statistics.median([1, 9, 3]))"
+    }
+  ],
+  "exercises": [
+    {
+      "prompt": "Write `word_counts(text)`. Make the text lowercase, split it into words, and return a dictionary from each word to how many times it appears.",
+      "starterCode": "from collections import Counter\n\ndef word_counts(text):\n    # your code here\n    pass",
+      "tests": [
+        {
+          "call": "word_counts('The cat the dog')",
+          "returns": "{'the': 2, 'cat': 1, 'dog': 1}"
+        },
+        {
+          "call": "word_counts('')",
+          "returns": "{}"
+        }
+      ],
+      "hints": [
+        "`text.lower().split()` gives the words.",
+        "`dict(Counter(words))` counts them."
+      ],
+      "solution": "from collections import Counter\n\ndef word_counts(text):\n    return dict(Counter(text.lower().split()))"
+    },
+    {
+      "prompt": "Write `mean_median(numbers)`. Return a tuple `(mean, median)`. Use the `statistics` module.",
+      "starterCode": "import statistics\n\ndef mean_median(numbers):\n    # your code here\n    pass",
+      "tests": [
+        {
+          "call": "mean_median([1, 2, 3, 4])",
+          "returns": "(2.5, 2.5)"
+        },
+        {
+          "call": "mean_median([2, 4, 6])",
+          "returns": "(4, 4)"
+        },
+        {
+          "call": "mean_median([5])",
+          "returns": "(5, 5)"
+        }
+      ],
+      "hints": [
+        "`statistics.mean(numbers)` and `statistics.median(numbers)`."
+      ],
+      "solution": "import statistics\n\ndef mean_median(numbers):\n    return statistics.mean(numbers), statistics.median(numbers)"
+    },
+    {
+      "prompt": "Write `distance(p, q)`. `p` and `q` are points like `(0, 0)`. Return the straight-line distance between them. The `math` module can do it.",
+      "starterCode": "import math\n\ndef distance(p, q):\n    # your code here\n    pass",
+      "tests": [
+        {
+          "call": "distance((0, 0), (3, 4))",
+          "returns": "5.0"
+        },
+        {
+          "call": "distance((1, 1), (1, 1))",
+          "returns": "0.0"
+        },
+        {
+          "call": "distance((0, 0), (0, 2))",
+          "returns": "2.0"
+        }
+      ],
+      "hints": [
+        "`math.dist(p, q)` gives the distance."
+      ],
+      "solution": "import math\n\ndef distance(p, q):\n    return math.dist(p, q)"
+    }
+  ],
+  "quiz": [
+    {
+      "question": "What does `import math` do?",
+      "options": [
+        "Makes the math module available",
+        "Does your maths homework",
+        "Deletes the module",
+        "Runs a loop"
+      ],
+      "answer": 0,
+      "explanation": "It loads the module so you can use `math.sqrt` and the rest."
+    },
+    {
+      "question": "Which tool counts how often things appear?",
+      "options": [
+        "`collections.Counter`",
+        "`random`",
+        "`math`",
+        "`csv`"
+      ],
+      "answer": 0,
+      "explanation": "`Counter` counts the items in any list or text."
+    },
+    {
+      "question": "Why should you not name your file `random.py`?",
+      "options": [
+        "Python only allows one file",
+        "It can hide the real random module",
+        "The name is too short",
+        "File names need capitals"
+      ],
+      "answer": 1,
+      "explanation": "Python may load your file when you `import random`, and the real module would be hidden."
+    }
+  ]
+}

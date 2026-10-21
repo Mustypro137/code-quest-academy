@@ -1,0 +1,159 @@
+{
+  "title": "Dataclasses",
+  "explanation": [
+    {
+      "type": "text",
+      "text": "Many classes only hold data. A **dataclass** writes the boring methods for you: `__init__`, `__repr__` (how it prints) and `__eq__` (comparing)."
+    },
+    {
+      "type": "code",
+      "code": "from dataclasses import dataclass\n\n@dataclass\nclass Point:\n    x: int = 0\n    y: int = 0\n\np = Point(1, 2)\nprint(p)                    # Point(x=1, y=2)\nprint(p == Point(1, 2))     # True"
+    },
+    {
+      "type": "text",
+      "text": "The `x: int` part is a **type hint**. Python does not check it, but it says what the field should hold. A value after `=` is the default."
+    },
+    {
+      "type": "text",
+      "text": "A list cannot be a plain default, because all objects would share it. Use `field(default_factory=list)`:"
+    },
+    {
+      "type": "code",
+      "code": "from dataclasses import dataclass, field\n\n@dataclass\nclass Student:\n    name: str\n    grades: list = field(default_factory=list)\n\n    def average(self):\n        return sum(self.grades) / len(self.grades) if self.grades else 0"
+    },
+    {
+      "type": "list",
+      "items": [
+        "`@dataclass(frozen=True)` makes objects read-only after they are made.",
+        "`asdict(obj)` turns a dataclass into a dictionary (handy for JSON)."
+      ]
+    },
+    {
+      "type": "tip",
+      "text": "`grades: list = []` raises a `ValueError`. That is Python protecting you from shared lists. Use `default_factory`."
+    }
+  ],
+  "examples": [
+    {
+      "title": "A simple dataclass",
+      "code": "from dataclasses import dataclass\n\n@dataclass\nclass Point:\n    x: int = 0\n    y: int = 0\n\np = Point(3, 4)\nprint(p)\nprint(p.x + p.y)\nprint(Point() == Point(0, 0))"
+    },
+    {
+      "title": "A list field and a method",
+      "code": "from dataclasses import dataclass, field\n\n@dataclass\nclass Student:\n    name: str\n    grades: list = field(default_factory=list)\n\n    def average(self):\n        return sum(self.grades) / len(self.grades) if self.grades else 0\n\nada = Student(\"Ada\", [90, 80])\nbo = Student(\"Bo\")\nbo.grades.append(70)\nprint(ada.average(), bo.average())\nprint(Student(\"Cy\"))"
+    },
+    {
+      "title": "Read-only objects and asdict",
+      "code": "from dataclasses import dataclass, asdict, FrozenInstanceError\n\n@dataclass(frozen=True)\nclass Colour:\n    red: int\n    green: int\n    blue: int\n\nc = Colour(255, 128, 0)\nprint(asdict(c))\ntry:\n    c.red = 0\nexcept FrozenInstanceError:\n    print(\"Colour is read-only\")"
+    }
+  ],
+  "exercises": [
+    {
+      "prompt": "Make `Point` a dataclass with two whole-number fields, `x` and `y`. Both default to `0`.",
+      "starterCode": "from dataclasses import dataclass\n\n# Make Point a dataclass with x and y (whole numbers, default 0)\nclass Point:\n    pass",
+      "tests": [
+        {
+          "call": "Point(1, 2).x",
+          "returns": "1"
+        },
+        {
+          "call": "Point() == Point(0, 0)",
+          "returns": "True"
+        },
+        {
+          "call": "repr(Point(1, 2))",
+          "returns": "'Point(x=1, y=2)'"
+        }
+      ],
+      "hints": [
+        "Put `@dataclass` on the line above `class Point:`.",
+        "Write the fields as `x: int = 0`."
+      ],
+      "solution": "from dataclasses import dataclass\n\n@dataclass\nclass Point:\n    x: int = 0\n    y: int = 0"
+    },
+    {
+      "prompt": "Make `Student` a dataclass with a `name` (text) and `grades` (a list that starts empty). Add a method `average()` that returns the average grade, or `0` when there are no grades.",
+      "starterCode": "from dataclasses import dataclass, field\n\n@dataclass\nclass Student:\n    # name (text) and grades (a list that starts empty), then average()\n    pass",
+      "tests": [
+        {
+          "call": "s.grades",
+          "returns": "[]",
+          "setup": "s = Student('Ada')"
+        },
+        {
+          "call": "s.average()",
+          "returns": "0",
+          "setup": "s = Student('Ada')"
+        },
+        {
+          "call": "s.average()",
+          "returns": "85.0",
+          "setup": "s = Student('Ada', [90, 80])"
+        },
+        {
+          "call": "b.grades",
+          "returns": "[]",
+          "setup": "a = Student('a')\nb = Student('b')\na.grades.append(1)"
+        }
+      ],
+      "hints": [
+        "`name: str` has no default, so put it first.",
+        "`grades: list = field(default_factory=list)`, then `def average(self):`."
+      ],
+      "solution": "from dataclasses import dataclass, field\n\n@dataclass\nclass Student:\n    name: str\n    grades: list = field(default_factory=list)\n\n    def average(self):\n        return sum(self.grades) / len(self.grades) if self.grades else 0"
+    },
+    {
+      "prompt": "The dataclass `Point` is written for you. Write `to_dict(obj)`. It returns the dataclass as a dictionary, using `asdict`.",
+      "starterCode": "from dataclasses import dataclass, asdict\n\n@dataclass\nclass Point:\n    x: int = 0\n    y: int = 0\n\ndef to_dict(obj):\n    # your code here\n    pass",
+      "tests": [
+        {
+          "call": "to_dict(Point(1, 2))",
+          "returns": "{'x': 1, 'y': 2}"
+        },
+        {
+          "call": "to_dict(Point())",
+          "returns": "{'x': 0, 'y': 0}"
+        }
+      ],
+      "hints": [
+        "`asdict(obj)` does it."
+      ],
+      "solution": "from dataclasses import dataclass, asdict\n\n@dataclass\nclass Point:\n    x: int = 0\n    y: int = 0\n\ndef to_dict(obj):\n    return asdict(obj)"
+    }
+  ],
+  "quiz": [
+    {
+      "question": "What does `@dataclass` write for you?",
+      "options": [
+        "The `__init__`, `__repr__` and `__eq__` methods",
+        "Your whole program",
+        "A database",
+        "Your tests"
+      ],
+      "answer": 0,
+      "explanation": "It builds the repetitive methods from the fields you list."
+    },
+    {
+      "question": "How do you give a list field an empty default?",
+      "options": [
+        "`field(default_factory=list)`",
+        "`= []`",
+        "`= list`",
+        "`= None()`"
+      ],
+      "answer": 0,
+      "explanation": "A plain `[]` would be shared by every object. `default_factory` makes a new list each time."
+    },
+    {
+      "question": "What does `frozen=True` do?",
+      "options": [
+        "Makes objects read-only after they are made",
+        "Makes them faster",
+        "Saves them to a file",
+        "Hides them"
+      ],
+      "answer": 0,
+      "explanation": "You cannot change a field afterwards. Python raises `FrozenInstanceError`."
+    }
+  ]
+}

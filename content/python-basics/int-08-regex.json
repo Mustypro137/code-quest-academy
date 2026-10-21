@@ -1,0 +1,163 @@
+{
+  "title": "Find patterns with re",
+  "explanation": [
+    {
+      "type": "text",
+      "text": "A **regular expression** (regex) is a pattern for finding text, such as \"any number\" or \"a date\". Python's `re` module uses them."
+    },
+    {
+      "type": "code",
+      "code": "import re\n\nprint(re.findall(r\"\\d+\", \"I have 3 cats and 12 dogs\"))   # ['3', '12']"
+    },
+    {
+      "type": "text",
+      "text": "Always write patterns as **raw strings**: put an `r` before the quote. Then backslashes stay as they are."
+    },
+    {
+      "type": "text",
+      "text": "**The main pieces**"
+    },
+    {
+      "type": "list",
+      "items": [
+        "`\\d`: one digit. `\\w`: a letter, digit or underscore. `\\s`: a space.",
+        "`.`: any one character.",
+        "`+`: one or more. `*`: zero or more. `?`: optional.",
+        "`{4}`: exactly 4. `[abc]`: one of a, b or c.",
+        "`( )`: a **group**, a part you can read separately."
+      ]
+    },
+    {
+      "type": "text",
+      "text": "**The main functions**"
+    },
+    {
+      "type": "list",
+      "items": [
+        "`re.search(pattern, text)`: the first match, or `None`.",
+        "`re.findall(pattern, text)`: a list of all matches.",
+        "`re.sub(pattern, new, text)`: replace every match.",
+        "`re.fullmatch(pattern, text)`: the whole text must match."
+      ]
+    },
+    {
+      "type": "code",
+      "code": "m = re.search(r\"(\\d{4})-(\\d{2})-(\\d{2})\", \"Due 2026-10-20\")\nprint(m.groups())     # ('2026', '10', '20')"
+    },
+    {
+      "type": "tip",
+      "text": "`re.search` gives `None` when nothing matches. Check for `None` before you use `.group()` or `.groups()`."
+    }
+  ],
+  "examples": [
+    {
+      "title": "Find all numbers",
+      "code": "import re\n\ntext = \"I have 3 cats and 12 dogs\"\nnumbers = [int(n) for n in re.findall(r\"\\d+\", text)]\nprint(numbers, sum(numbers))"
+    },
+    {
+      "title": "Replace with sub",
+      "code": "import re\n\nprint(re.sub(r\"\\d\", \"#\", \"Call 0123 456\"))\nprint(re.sub(r\"\\s+\", \" \", \"too    many     spaces\"))"
+    },
+    {
+      "title": "Read the parts of a date",
+      "code": "import re\n\nm = re.search(r\"(\\d{4})-(\\d{2})-(\\d{2})\", \"Due 2026-10-20 please\")\nif m:\n    year, month, day = m.groups()\n    print(year, month, day)\nprint(re.search(r\"\\d+\", \"no digits here\"))"
+    }
+  ],
+  "exercises": [
+    {
+      "prompt": "Write `find_numbers(text)`. Return a list of all the whole numbers in the text, as `int`s, in order.",
+      "starterCode": "import re\n\ndef find_numbers(text):\n    # your code here\n    pass",
+      "tests": [
+        {
+          "call": "find_numbers('I have 3 cats and 12 dogs')",
+          "returns": "[3, 12]"
+        },
+        {
+          "call": "find_numbers('none here')",
+          "returns": "[]"
+        }
+      ],
+      "hints": [
+        "`re.findall(r\"\\d+\", text)` gives the digits as text.",
+        "Turn each one into an `int`."
+      ],
+      "solution": "import re\n\ndef find_numbers(text):\n    return [int(n) for n in re.findall(r\"\\d+\", text)]"
+    },
+    {
+      "prompt": "Write `mask_digits(text)`. Replace every digit with `#`.",
+      "starterCode": "import re\n\ndef mask_digits(text):\n    # your code here\n    pass",
+      "tests": [
+        {
+          "call": "mask_digits('PIN 1234')",
+          "returns": "'PIN ####'"
+        },
+        {
+          "call": "mask_digits('no digits')",
+          "returns": "'no digits'"
+        }
+      ],
+      "hints": [
+        "Use `re.sub` with the pattern for one digit."
+      ],
+      "solution": "import re\n\ndef mask_digits(text):\n    return re.sub(r\"\\d\", \"#\", text)"
+    },
+    {
+      "prompt": "Write `parse_date(text)`. Find the first date written as `YYYY-MM-DD` (4 digits, 2 digits, 2 digits). Return `(year, month, day)` as `int`s. If there is no such date, return `None`.",
+      "starterCode": "import re\n\ndef parse_date(text):\n    # your code here\n    pass",
+      "tests": [
+        {
+          "call": "parse_date('Due 2026-10-20 please')",
+          "returns": "(2026, 10, 20)"
+        },
+        {
+          "call": "parse_date('no date')",
+          "returns": "None"
+        },
+        {
+          "call": "parse_date('2026-1-5')",
+          "returns": "None"
+        }
+      ],
+      "hints": [
+        "Use groups: `(\\d{4})-(\\d{2})-(\\d{2})`.",
+        "Check for `None`, then `tuple(int(g) for g in match.groups())`."
+      ],
+      "solution": "import re\n\ndef parse_date(text):\n    match = re.search(r\"(\\d{4})-(\\d{2})-(\\d{2})\", text)\n    if match is None:\n        return None\n    return tuple(int(part) for part in match.groups())"
+    }
+  ],
+  "quiz": [
+    {
+      "question": "What does `\\d+` match?",
+      "options": [
+        "One or more digits",
+        "One letter",
+        "A space",
+        "Any text"
+      ],
+      "answer": 0,
+      "explanation": "`\\d` is a digit and `+` means one or more."
+    },
+    {
+      "question": "What does `re.search` return when nothing matches?",
+      "options": [
+        "An empty list",
+        "None",
+        "An error",
+        "0"
+      ],
+      "answer": 1,
+      "explanation": "It returns `None`, so check before you use the result."
+    },
+    {
+      "question": "Why write patterns like `r\"\\d+\"`?",
+      "options": [
+        "The r keeps backslashes as they are",
+        "It makes the code faster",
+        "It is needed for numbers",
+        "It ignores capital letters"
+      ],
+      "answer": 0,
+      "explanation": "In a raw string, `\\d` stays `\\d` and Python does not change it."
+    }
+  ]
+}

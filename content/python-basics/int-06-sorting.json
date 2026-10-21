@@ -1,0 +1,148 @@
+{
+  "title": "Sorting and lambda",
+  "explanation": [
+    {
+      "type": "text",
+      "text": "`sorted(items)` gives a **new** sorted list and leaves the old one alone. `items.sort()` sorts the list **in place** and gives back `None`. Add `reverse=True` for biggest first."
+    },
+    {
+      "type": "code",
+      "code": "numbers = [3, 1, 2]\nprint(sorted(numbers))                 # [1, 2, 3]\nprint(sorted(numbers, reverse=True))   # [3, 2, 1]\nprint(numbers)                         # [3, 1, 2]  (unchanged)"
+    },
+    {
+      "type": "text",
+      "text": "The `key=` option tells Python what to compare. It is a function that gets one item and gives back the value to sort by. A **lambda** is a small function written in one line, with no name."
+    },
+    {
+      "type": "code",
+      "code": "words = [\"pear\", \"fig\", \"banana\"]\nprint(sorted(words, key=len))                  # shortest first\nprint(sorted(words, key=lambda w: w[-1]))      # by the last letter"
+    },
+    {
+      "type": "text",
+      "text": "To sort by two things, give back a tuple. A minus sign flips a number, so the **biggest comes first**:"
+    },
+    {
+      "type": "code",
+      "code": "people = [(\"Ada\", 90), (\"Sam\", 90), (\"Bo\", 70)]\nranked = sorted(people, key=lambda p: (-p[1], p[0]))\nprint(ranked)    # best score first, then by name"
+    },
+    {
+      "type": "text",
+      "text": "`max()` and `min()` also take a `key`."
+    },
+    {
+      "type": "tip",
+      "text": "Sorting is **stable**: items that compare equal keep their old order."
+    }
+  ],
+  "examples": [
+    {
+      "title": "Sort by length",
+      "code": "words = [\"pear\", \"fig\", \"banana\", \"kiwi\"]\nprint(sorted(words, key=len))"
+    },
+    {
+      "title": "Sort dictionaries",
+      "code": "people = [\n    {\"name\": \"Ada\", \"age\": 30},\n    {\"name\": \"Sam\", \"age\": 22},\n    {\"name\": \"Bo\", \"age\": 41},\n]\nyoungest_first = sorted(people, key=lambda p: p[\"age\"])\nprint([p[\"name\"] for p in youngest_first])\nprint(max(people, key=lambda p: p[\"age\"])[\"name\"])"
+    },
+    {
+      "title": "Two sort keys",
+      "code": "scores = {\"Ada\": 90, \"Sam\": 90, \"Bo\": 70}\nranked = sorted(scores.items(), key=lambda item: (-item[1], item[0]))\nprint(ranked)"
+    }
+  ],
+  "exercises": [
+    {
+      "prompt": "Write `by_length(words)`. It returns the words sorted by length, shortest first. Words with the same length go in alphabetical order.",
+      "starterCode": "def by_length(words):\n    # your code here\n    pass",
+      "tests": [
+        {
+          "call": "by_length(['pear', 'fig', 'apple', 'kiwi'])",
+          "returns": "['fig', 'kiwi', 'pear', 'apple']"
+        },
+        {
+          "call": "by_length([])",
+          "returns": "[]"
+        }
+      ],
+      "hints": [
+        "`key=lambda w: (len(w), w)` sorts by length, then by the word."
+      ],
+      "solution": "def by_length(words):\n    return sorted(words, key=lambda w: (len(w), w))"
+    },
+    {
+      "prompt": "Write `top_names(scores, n)`. `scores` is a dictionary from name to score. Return a list of the names of the `n` highest scores, best first. For equal scores, put the names in alphabetical order.",
+      "starterCode": "def top_names(scores, n):\n    # your code here\n    pass",
+      "tests": [
+        {
+          "call": "top_names({'Ada': 90, 'Sam': 90, 'Bo': 70, 'Cy': 95}, 2)",
+          "returns": "['Cy', 'Ada']"
+        },
+        {
+          "call": "top_names({'Ada': 90, 'Sam': 90, 'Bo': 70, 'Cy': 95}, 3)",
+          "returns": "['Cy', 'Ada', 'Sam']"
+        },
+        {
+          "call": "top_names({'Ada': 90, 'Bo': 70}, 10)",
+          "returns": "['Ada', 'Bo']"
+        }
+      ],
+      "hints": [
+        "Sort the names with `key=lambda name: (-scores[name], name)`.",
+        "Cut the list with `[:n]`."
+      ],
+      "solution": "def top_names(scores, n):\n    ranked = sorted(scores, key=lambda name: (-scores[name], name))\n    return ranked[:n]"
+    },
+    {
+      "prompt": "Write `oldest(people)`. `people` is a list of dictionaries with `\"name\"` and `\"age\"`. Return the name of the oldest person.",
+      "starterCode": "def oldest(people):\n    # your code here\n    pass",
+      "tests": [
+        {
+          "call": "oldest([{'name': 'Ada', 'age': 30}, {'name': 'Sam', 'age': 41}])",
+          "returns": "'Sam'"
+        },
+        {
+          "call": "oldest([{'name': 'Bo', 'age': 8}])",
+          "returns": "'Bo'"
+        }
+      ],
+      "hints": [
+        "`max(people, key=lambda p: p[\"age\"])` gives the oldest dictionary.",
+        "Then take `[\"name\"]`."
+      ],
+      "solution": "def oldest(people):\n    return max(people, key=lambda p: p[\"age\"])[\"name\"]"
+    }
+  ],
+  "quiz": [
+    {
+      "question": "What does `sorted(x)` do to the list `x`?",
+      "options": [
+        "Sorts x in place",
+        "Makes a new sorted list and leaves x alone",
+        "Deletes x",
+        "Reverses x"
+      ],
+      "answer": 1,
+      "explanation": "`sorted` returns a new list. `x.sort()` is the one that changes `x`."
+    },
+    {
+      "question": "What is `lambda n: n * 2`?",
+      "options": [
+        "A loop",
+        "A small function with no name",
+        "A class",
+        "A string"
+      ],
+      "answer": 1,
+      "explanation": "A lambda is a one-line function. This one doubles a number."
+    },
+    {
+      "question": "What does `key=len` tell `sorted` to do?",
+      "options": [
+        "Sort by the length of each item",
+        "Count the items",
+        "Remove short items",
+        "Sort by key names"
+      ],
+      "answer": 0,
+      "explanation": "`key` gives the value to compare, here the length."
+    }
+  ]
+}

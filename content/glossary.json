@@ -184,6 +184,206 @@
       "id": "docs",
       "term": "docs",
       "definition": "The manual that explains how a tool or library works. Short for documentation."
+    },
+    {
+      "id": "tuple",
+      "term": "tuple",
+      "definition": "A group of values that cannot be changed, written with round brackets."
+    },
+    {
+      "id": "set",
+      "term": "set",
+      "definition": "A group of unique values with no order, written with curly brackets."
+    },
+    {
+      "id": "unpacking",
+      "term": "unpacking",
+      "definition": "Putting each value of a tuple or list into its own name, like x, y = point."
+    },
+    {
+      "id": "lambda",
+      "term": "lambda",
+      "definition": "A small function written in one line, with no name."
+    },
+    {
+      "id": "key-function",
+      "term": "key function",
+      "definition": "A function that tells sorted or max which value to compare."
+    },
+    {
+      "id": "standard-library",
+      "term": "standard library",
+      "definition": "The modules that come with Python, such as math, csv and json."
+    },
+    {
+      "id": "import",
+      "term": "import",
+      "definition": "A statement that brings a module into your program."
+    },
+    {
+      "id": "regular-expression",
+      "term": "regular expression",
+      "definition": "A pattern for finding text, such as \\d+ for digits. Also called a regex."
+    },
+    {
+      "id": "raw-string",
+      "term": "raw string",
+      "definition": "A string that starts with r. Backslashes in it are kept as they are."
+    },
+    {
+      "id": "group",
+      "term": "group",
+      "definition": "In a regular expression, a part in round brackets whose match you can read separately."
+    },
+    {
+      "id": "recursion",
+      "term": "recursion",
+      "definition": "When a function calls itself to solve a smaller version of the problem."
+    },
+    {
+      "id": "base-case",
+      "term": "base case",
+      "definition": "The case in a recursive function that stops without calling itself again."
+    },
+    {
+      "id": "memoization",
+      "term": "memoization",
+      "definition": "Saving the results of function calls so the same work is not done twice."
+    },
+    {
+      "id": "dataclass",
+      "term": "dataclass",
+      "definition": "A class that mainly holds data, with __init__ and __repr__ written for you."
+    },
+    {
+      "id": "type-hint",
+      "term": "type hint",
+      "definition": "A note about the expected type, like x: int. Python does not check it."
+    },
+    {
+      "id": "context-manager",
+      "term": "context manager",
+      "definition": "An object used with \"with\" that does setup and cleanup for you."
+    },
+    {
+      "id": "generator",
+      "term": "generator",
+      "definition": "A function that gives values one at a time with yield."
+    },
+    {
+      "id": "decorator",
+      "term": "decorator",
+      "definition": "A function that wraps another function to add behaviour, used with @."
+    },
+    {
+      "id": "iterator",
+      "term": "iterator",
+      "definition": "An object that gives its items one by one when you loop over it."
+    },
+    {
+      "id": "list-comprehension",
+      "term": "list comprehension",
+      "definition": "A short way to build a list from a loop, like [n * 2 for n in numbers]."
+    },
+    {
+      "id": "f-string",
+      "term": "f-string",
+      "definition": "A string that starts with f and puts values inside curly brackets."
+    },
+    {
+      "id": "slice",
+      "term": "slice",
+      "definition": "Part of a list or string, like items[1:3]."
+    },
+    {
+      "id": "index",
+      "term": "index",
+      "definition": "The position of an item in a list or string, counting from 0."
+    },
+    {
+      "id": "mutable",
+      "term": "mutable",
+      "definition": "Can be changed after it is made, like a list."
+    },
+    {
+      "id": "immutable",
+      "term": "immutable",
+      "definition": "Cannot be changed after it is made, like a tuple or a string."
+    },
+    {
+      "id": "none",
+      "term": "None",
+      "definition": "A special value that means \"nothing is here\"."
+    },
+    {
+      "id": "default-argument",
+      "term": "default argument",
+      "definition": "The value a parameter gets when you do not give one."
+    },
+    {
+      "id": "keyword-argument",
+      "term": "keyword argument",
+      "definition": "An argument given by name, like greet(name=\"Sam\")."
+    },
+    {
+      "id": "indentation",
+      "term": "indentation",
+      "definition": "The spaces at the start of a line that show which block it belongs to."
+    },
+    {
+      "id": "syntax-error",
+      "term": "syntax error",
+      "definition": "An error because Python cannot read the code, such as a missing colon."
+    },
+    {
+      "id": "attribute",
+      "term": "attribute",
+      "definition": "A variable that belongs to an object."
+    },
+    {
+      "id": "inheritance",
+      "term": "inheritance",
+      "definition": "Making a new class that gets everything from another class and adds more."
+    },
+    {
+      "id": "self",
+      "term": "self",
+      "definition": "The name a method gives to the object it is working on."
+    },
+    {
+      "id": "algorithm",
+      "term": "algorithm",
+      "definition": "A list of steps that solves a problem."
+    },
+    {
+      "id": "pip",
+      "term": "pip",
+      "definition": "The tool that installs Python packages."
+    },
+    {
+      "id": "readme",
+      "term": "README",
+      "definition": "The front page of a project. It says what it is and how to run it."
+    },
+    {
+      "id": "markdown",
+      "term": "Markdown",
+      "definition": "A simple way to format text with symbols like # and -."
+    },
+    {
+      "id": "git",
+      "term": "Git",
+      "definition": "A tool that keeps the history of a project."
+    },
+    {
+      "id": "github",
+      "term": "GitHub",
+      "definition": "A website that stores Git projects online."
+    },
+    {
+      "id": "push",
+      "term": "push",
+      "definition": "Sending your commits to GitHub."
     }
   ]
 }

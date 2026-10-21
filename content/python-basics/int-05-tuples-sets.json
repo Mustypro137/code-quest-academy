@@ -1,0 +1,169 @@
+{
+  "title": "Tuples and sets",
+  "explanation": [
+    {
+      "type": "text",
+      "text": "A **tuple** is like a list that cannot change. Use round brackets. Tuples are good for a small group of values that belong together, such as a point or a pair."
+    },
+    {
+      "type": "code",
+      "code": "point = (3, 4)\nx, y = point        # unpacking: each value gets a name\nprint(x, y)"
+    },
+    {
+      "type": "text",
+      "text": "**Unpacking** puts each value into its own name. A function can use a tuple to return two values at once:"
+    },
+    {
+      "type": "code",
+      "code": "def min_max(numbers):\n    return min(numbers), max(numbers)\n\nlow, high = min_max([4, 9, 1])\nprint(low, high)"
+    },
+    {
+      "type": "text",
+      "text": "A **set** keeps only **unique** values and has no order. Use curly brackets, or `set(items)`. Checking `x in a_set` is fast."
+    },
+    {
+      "type": "code",
+      "code": "seen = {1, 2, 2, 3}\nprint(len(seen))      # 3\nprint(2 in seen)      # True"
+    },
+    {
+      "type": "text",
+      "text": "Sets can be combined like in maths:"
+    },
+    {
+      "type": "list",
+      "items": [
+        "`a | b`: every item that is in a or b (union).",
+        "`a & b`: items that are in both (intersection).",
+        "`a - b`: items that are in a but not in b (difference)."
+      ]
+    },
+    {
+      "type": "tip",
+      "text": "`{}` is an empty **dictionary**, not an empty set. Make an empty set with `set()`."
+    },
+    {
+      "type": "tip",
+      "text": "A set has no order, so `list(set(items))` can change the order. To remove repeats and keep the order, use `list(dict.fromkeys(items))`."
+    }
+  ],
+  "examples": [
+    {
+      "title": "Swap two values",
+      "code": "a, b = 1, 2\na, b = b, a\nprint(a, b)"
+    },
+    {
+      "title": "Remove repeats",
+      "code": "names = [\"Ada\", \"Sam\", \"Ada\", \"Bo\", \"Sam\"]\nunique_names = set(names)\nprint(len(unique_names))\nprint(sorted(unique_names))"
+    },
+    {
+      "title": "Set operations",
+      "code": "a = {1, 2, 3, 4}\nb = {3, 4, 5}\nprint(sorted(a | b))\nprint(sorted(a & b))\nprint(sorted(a - b))"
+    }
+  ],
+  "exercises": [
+    {
+      "prompt": "Write `min_max(numbers)`. It returns a tuple `(smallest, largest)`.",
+      "starterCode": "def min_max(numbers):\n    # your code here\n    pass",
+      "tests": [
+        {
+          "call": "min_max([4, 9, 1])",
+          "returns": "(1, 9)"
+        },
+        {
+          "call": "min_max([5])",
+          "returns": "(5, 5)"
+        },
+        {
+          "call": "min_max([-2, 0, 7])",
+          "returns": "(-2, 7)"
+        }
+      ],
+      "hints": [
+        "`min(numbers)` and `max(numbers)` give the two values.",
+        "Return them with a comma: `return a, b`."
+      ],
+      "solution": "def min_max(numbers):\n    return min(numbers), max(numbers)"
+    },
+    {
+      "prompt": "Write `unique(items)`. It returns a list with the repeats removed. Keep the items in the order they first appear.",
+      "starterCode": "def unique(items):\n    # your code here\n    pass",
+      "tests": [
+        {
+          "call": "unique([3, 1, 3, 2, 1])",
+          "returns": "[3, 1, 2]"
+        },
+        {
+          "call": "unique([])",
+          "returns": "[]"
+        },
+        {
+          "call": "unique(['a', 'A', 'a'])",
+          "returns": "['a', 'A']"
+        }
+      ],
+      "hints": [
+        "A dictionary keeps the first-seen order of its keys.",
+        "`list(dict.fromkeys(items))` does it."
+      ],
+      "solution": "def unique(items):\n    return list(dict.fromkeys(items))"
+    },
+    {
+      "prompt": "Write `common(a, b)`. It returns a **sorted** list of the items that are in both lists, with no repeats.",
+      "starterCode": "def common(a, b):\n    # your code here\n    pass",
+      "tests": [
+        {
+          "call": "common([1, 2, 2, 3], [2, 3, 4])",
+          "returns": "[2, 3]"
+        },
+        {
+          "call": "common([1], [2])",
+          "returns": "[]"
+        },
+        {
+          "call": "common(['b', 'a'], ['a', 'b', 'c'])",
+          "returns": "['a', 'b']"
+        }
+      ],
+      "hints": [
+        "Turn each list into a set and use `&`.",
+        "`sorted(...)` turns the set into a sorted list."
+      ],
+      "solution": "def common(a, b):\n    return sorted(set(a) & set(b))"
+    }
+  ],
+  "quiz": [
+    {
+      "question": "What is the difference between a tuple and a list?",
+      "options": [
+        "A tuple cannot be changed after it is made",
+        "A tuple can only hold numbers",
+        "A tuple has no order",
+        "There is no difference"
+      ],
+      "answer": 0,
+      "explanation": "A tuple is fixed once made. A list can change."
+    },
+    {
+      "question": "What does `{1, 2, 2, 3}` make?",
+      "options": [
+        "A list with 4 items",
+        "A set with 3 items",
+        "A dictionary",
+        "An error"
+      ],
+      "answer": 1,
+      "explanation": "A set keeps only unique values, so the second 2 is dropped."
+    },
+    {
+      "question": "What does `a & b` give for two sets?",
+      "options": [
+        "Items in either set",
+        "Items in both sets",
+        "Items only in a",
+        "Items only in b"
+      ],
+      "answer": 1,
+      "explanation": "`&` is the intersection: the items that are in both."
+    }
+  ]
+}

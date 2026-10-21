@@ -1,0 +1,160 @@
+{
+  "title": "Recursion",
+  "explanation": [
+    {
+      "type": "text",
+      "text": "A **recursive** function calls itself. It solves a big problem by solving a smaller copy of it. Every recursive function needs two parts:"
+    },
+    {
+      "type": "list",
+      "items": [
+        "A **base case**: an easy case that stops without calling itself.",
+        "A **recursive case**: call itself with a smaller problem."
+      ]
+    },
+    {
+      "type": "code",
+      "code": "def factorial(n):\n    if n <= 1:                 # base case\n        return 1\n    return n * factorial(n - 1)   # smaller problem\n\nprint(factorial(5))    # 120"
+    },
+    {
+      "type": "text",
+      "text": "Read it like this: `factorial(3)` is `3 * factorial(2)`, which is `3 * 2 * factorial(1)`, which is `3 * 2 * 1`."
+    },
+    {
+      "type": "tip",
+      "text": "With no base case, a function calls itself again and again. Python stops it at about 1000 levels with a `RecursionError`."
+    },
+    {
+      "type": "text",
+      "text": "Recursion fits data that has the same shape inside itself, such as lists inside lists. For simple counting, a loop is usually easier."
+    },
+    {
+      "type": "text",
+      "text": "A recursive function can repeat the same work many times. **Memoization** saves answers you already found. `functools.lru_cache` does it for you:"
+    },
+    {
+      "type": "code",
+      "code": "from functools import lru_cache\n\n@lru_cache(maxsize=None)\ndef fib(n):\n    return n if n < 2 else fib(n - 1) + fib(n - 2)\n\nprint(fib(30))"
+    }
+  ],
+  "examples": [
+    {
+      "title": "Count down",
+      "code": "def countdown(n):\n    if n == 0:\n        print(\"Go!\")\n        return\n    print(n)\n    countdown(n - 1)\n\ncountdown(3)"
+    },
+    {
+      "title": "Factorial",
+      "code": "def factorial(n):\n    if n <= 1:\n        return 1\n    return n * factorial(n - 1)\n\nfor n in range(6):\n    print(n, factorial(n))"
+    },
+    {
+      "title": "Fibonacci with a cache",
+      "code": "from functools import lru_cache\n\n@lru_cache(maxsize=None)\ndef fib(n):\n    return n if n < 2 else fib(n - 1) + fib(n - 2)\n\nprint(fib(30))\nprint(fib.cache_info().hits > 0)"
+    }
+  ],
+  "exercises": [
+    {
+      "prompt": "Write `factorial(n)` with recursion. `factorial(5)` is `5 * 4 * 3 * 2 * 1 = 120`. The factorial of 0 and 1 is 1.",
+      "starterCode": "def factorial(n):\n    # your code here\n    pass",
+      "tests": [
+        {
+          "call": "factorial(0)",
+          "returns": "1"
+        },
+        {
+          "call": "factorial(1)",
+          "returns": "1"
+        },
+        {
+          "call": "factorial(5)",
+          "returns": "120"
+        }
+      ],
+      "hints": [
+        "Base case: `if n <= 1: return 1`.",
+        "Otherwise `return n * factorial(n - 1)`."
+      ],
+      "solution": "def factorial(n):\n    if n <= 1:\n        return 1\n    return n * factorial(n - 1)"
+    },
+    {
+      "prompt": "Write `sum_list(items)` with recursion. Do not use `sum()`. The sum of an empty list is 0.",
+      "starterCode": "def sum_list(items):\n    # your code here\n    pass",
+      "tests": [
+        {
+          "call": "sum_list([])",
+          "returns": "0"
+        },
+        {
+          "call": "sum_list([5])",
+          "returns": "5"
+        },
+        {
+          "call": "sum_list([1, 2, 3, 4])",
+          "returns": "10"
+        }
+      ],
+      "hints": [
+        "Base case: an empty list gives 0.",
+        "Otherwise: the first item plus `sum_list(items[1:])`."
+      ],
+      "solution": "def sum_list(items):\n    if not items:\n        return 0\n    return items[0] + sum_list(items[1:])"
+    },
+    {
+      "prompt": "Write `flatten(nested)`. A list can hold numbers and other lists, at any depth. Return one flat list with all the numbers, in order.",
+      "starterCode": "def flatten(nested):\n    # your code here\n    pass",
+      "tests": [
+        {
+          "call": "flatten([1, [2, [3, 4]], 5])",
+          "returns": "[1, 2, 3, 4, 5]"
+        },
+        {
+          "call": "flatten([])",
+          "returns": "[]"
+        },
+        {
+          "call": "flatten([[], [1]])",
+          "returns": "[1]"
+        }
+      ],
+      "hints": [
+        "Loop over the items. If an item is a list (`isinstance(item, list)`), flatten it too.",
+        "Use `result.extend(flatten(item))` for a list and `result.append(item)` for a number."
+      ],
+      "solution": "def flatten(nested):\n    result = []\n    for item in nested:\n        if isinstance(item, list):\n            result.extend(flatten(item))\n        else:\n            result.append(item)\n    return result"
+    }
+  ],
+  "quiz": [
+    {
+      "question": "What stops a recursive function?",
+      "options": [
+        "A base case",
+        "A loop",
+        "A comment",
+        "A print"
+      ],
+      "answer": 0,
+      "explanation": "The base case returns without calling the function again."
+    },
+    {
+      "question": "What happens if a recursive function has no base case?",
+      "options": [
+        "It finishes quickly",
+        "Python raises a RecursionError",
+        "It returns None",
+        "It prints Done"
+      ],
+      "answer": 1,
+      "explanation": "It keeps calling itself until Python stops it with `RecursionError`."
+    },
+    {
+      "question": "What does `lru_cache` do?",
+      "options": [
+        "Remembers the results of earlier calls",
+        "Sorts a list",
+        "Makes recursion illegal",
+        "Deletes old files"
+      ],
+      "answer": 0,
+      "explanation": "It saves answers, so the same call is not worked out twice. That is memoization."
+    }
+  ]
+}
