@@ -78,6 +78,9 @@ A lesson is one JSON file, and no JavaScript changes are needed. See [docs/addin
 - The real-model lesson (AI with Python, lesson 5) needs an account and an API key, and it was not run during
   development. Check the current model name in the provider's documentation.
 
+## Contact
+Built by Mustapha Abdullahi. Email: [mustypro137@gmail.com](mailto:mustypro137@gmail.com)
+
 ## License
 MIT. See [LICENSE](LICENSE).
 
