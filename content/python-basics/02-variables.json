@@ -1,0 +1,62 @@
+{
+  "title": "Variables: give a value a name",
+  "explanation": [
+    {"type":"text","text":"A variable is a name that holds a value. Use `=` to make one. The value goes on the right, the name goes on the left."},
+    {"type":"code","code":"name = \"Sam\"\nage = 12\nprint(name)\nprint(age)"},
+    {"type":"text","text":"A name can have letters, numbers and `_`. It cannot start with a number and cannot have spaces. Python programmers write names in lowercase with underscores, like `first_name`."},
+    {"type":"text","text":"You can change a variable later. The new value replaces the old one."},
+    {"type":"code","code":"score = 0\nscore = score + 10\nprint(score)  # 10"},
+    {"type":"text","text":"A line that starts with `#` is a comment. Python ignores it. Use comments to explain your code to yourself."},
+    {"type":"tip","text":"`=` means \"store this value\". It does not mean \"is equal to\". To compare two values, Python uses `==` (you will see it soon)."},
+    {"type":"tip","text":"Coming from JavaScript? There is no `let` or `const` in Python. Just write the name."}
+  ],
+  "examples": [
+    {"title":"Change a variable","code":"city = \"Paris\"\nprint(city)\ncity = \"Rome\"\nprint(city)"},
+    {"title":"Print more than one thing","code":"name = \"Sam\"\nage = 12\nprint(name, age)\nprint(\"My name is\", name)"}
+  ],
+  "exercises": [
+    {
+      "prompt": "Make a variable called `animal` with the text `cat`. Then print it.",
+      "starterCode": "# Write your code below\n",
+      "tests": [
+        {
+          "call": "animal",
+          "returns": "'cat'",
+          "label": "The variable animal"
+        },
+        {
+          "output": "cat"
+        }
+      ],
+      "hints": [
+        "Write `animal = \"cat\"`.",
+        "Then write `print(animal)`."
+      ],
+      "solution": "animal = \"cat\"\nprint(animal)"
+    },
+    {
+      "prompt": "Make a variable `score` with the value `5`. Then add 10 to `score` (change `score` itself). Print `score`.",
+      "starterCode": "# Write your code below\n",
+      "tests": [
+        {
+          "call": "score",
+          "returns": "15",
+          "label": "The variable score"
+        },
+        {
+          "output": "15"
+        }
+      ],
+      "hints": [
+        "Start with `score = 5`.",
+        "To add 10, write `score = score + 10`."
+      ],
+      "solution": "score = 5\nscore = score + 10\nprint(score)"
+    }
+  ],
+  "quiz": [
+    {"question":"Which line makes a variable called `age` with the value 12?","options":["age == 12","12 = age","age = 12","let age = 12"],"answer":2,"explanation":"The name goes on the left of `=`, the value on the right."},
+    {"question":"Which is a good variable name?","options":["first name","first_name","1st_name","first-name"],"answer":1,"explanation":"No spaces, no dashes, and it cannot start with a number. Use underscores."},
+    {"question":"After `x = 3` and then `x = x + 1`, what is `x`?","options":["3","4","31","An error"],"answer":1,"explanation":"Python works out `x + 1` first (4), then stores it in `x`."}
+  ]
+}

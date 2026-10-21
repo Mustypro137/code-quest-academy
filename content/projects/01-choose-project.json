@@ -1,0 +1,104 @@
+{
+  "title": "Choose a project you can finish",
+  "explanation": [
+    {
+      "type": "text",
+      "text": "A portfolio is proof that you can build things. One small project that works and is explained well is worth more than five big projects that are half done."
+    },
+    {
+      "type": "text",
+      "text": "**A good first project**"
+    },
+    {
+      "type": "list",
+      "items": [
+        "Solves one small, real problem.",
+        "Can be finished in a few days or a weekend.",
+        "Uses your own files or fake data, never other people's private data.",
+        "Can be shown in one minute: a screenshot, a short output, or a few lines of text."
+      ]
+    },
+    {
+      "type": "text",
+      "text": "**The one-sentence test.** Can you say it like this? \"This program takes **[input]** and gives **[output]** for **[who]**.\" If you cannot say it in one sentence, the project is too big. Make it smaller."
+    },
+    {
+      "type": "text",
+      "text": "**Write \"done when\" first.** Decide how you will know the project is finished before you start. Without it, a project never ends, because you keep adding things."
+    },
+    {
+      "type": "tip",
+      "text": "Cut features, not quality. A small tool that handles bad input well looks better than a big tool that crashes."
+    },
+    {
+      "type": "text",
+      "text": "**Ideas that fit what you already know**"
+    },
+    {
+      "type": "list",
+      "items": [
+        "Clean a messy list and write a short report (you built one in the Automation module).",
+        "Sort messages into labels with a fake or real AI model (you built one in the AI module).",
+        "Summarize monthly spending from a CSV file.",
+        "Rename and sort files into folders, with a \"dry run\" first so nothing is lost.",
+        "A study planner that shows days left before each exam.",
+        "A quiz maker that reads questions from a JSON file."
+      ]
+    },
+    {
+      "type": "template",
+      "title": "Project plan",
+      "text": "Fill this in before you write code. Keep it to one page. Change it when you learn something new.",
+      "code": "Project name: [short name]\n\nOne sentence: This program takes [input] and gives [output] for [who].\n\nThe problem it solves: [why someone would want it]\n\nInput: [what goes in: a file, a list, text]\nOutput: [what comes out: a file, a report, a message]\n\nSteps:\n1. [small step]\n2. [small step]\n3. [small step]\n\nDone when: [3 things you can check, for example \"it cleans the sample file\", \"it never crashes on bad lines\", \"the README explains how to run it\"]\n\nNot now: [ideas for later, so you do not add them today]"
+    }
+  ],
+  "examples": [
+    {
+      "title": "Too big, then smaller",
+      "run": false,
+      "wrap": true,
+      "code": "Too big: \"An app that manages my whole life with AI.\"\nSmaller: \"A program that reads my study dates and prints how many days are left for each exam.\""
+    },
+    {
+      "title": "A weak plan, then a better plan",
+      "run": false,
+      "wrap": true,
+      "code": "Weak: \"Done when it is good.\"\nBetter: \"Done when it reads the sample file, prints a report with totals, and shows a clear message if the file is missing.\""
+    }
+  ],
+  "quiz": [
+    {
+      "question": "Which is the better portfolio choice?",
+      "options": [
+        "Five big projects, all half done",
+        "One small project that works and is explained",
+        "A project you never finish",
+        "A copy of someone else's project"
+      ],
+      "answer": 1,
+      "explanation": "A small finished project is real proof. Half-done work does not show much."
+    },
+    {
+      "question": "What does the one-sentence test check?",
+      "options": [
+        "If your Python is fast",
+        "If the project is small and clear enough",
+        "If your computer is new",
+        "If the project has a logo"
+      ],
+      "answer": 1,
+      "explanation": "If you cannot say what goes in, what comes out and who it helps in one sentence, the project is too big."
+    },
+    {
+      "question": "Why write \"done when\" before you start?",
+      "options": [
+        "So you know when to stop",
+        "So the code runs faster",
+        "Because Python needs it",
+        "So nobody can see your plan"
+      ],
+      "answer": 0,
+      "explanation": "It gives you a finish line, so you do not keep adding features forever."
+    }
+  ]
+}

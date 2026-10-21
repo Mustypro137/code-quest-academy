@@ -1,0 +1,173 @@
+{
+  "title": "Handle errors kindly",
+  "explanation": [
+    {
+      "type": "text",
+      "text": "Real input is messy. A file may be missing, a number may be text, a line may be empty. A good program does not show a scary traceback to the user. It says clearly what went wrong and what to do."
+    },
+    {
+      "type": "text",
+      "text": "Use `try` and `except`, and name the error you expect:"
+    },
+    {
+      "type": "code",
+      "code": "try:\n    age = int(\"abc\")\nexcept ValueError:\n    print(\"Please type a number, such as 12.\")"
+    },
+    {
+      "type": "list",
+      "items": [
+        "Catch **specific** errors (`ValueError`, `FileNotFoundError`). Do not use a bare `except:`, because it hides real bugs.",
+        "Keep the `try` block small: only the line that can fail.",
+        "Write a message that tells the user what to do next."
+      ]
+    },
+    {
+      "type": "text",
+      "text": "**Raise your own error.** When a function gets a bad value, stop with a clear message using `raise`:"
+    },
+    {
+      "type": "code",
+      "code": "def set_age(age):\n    if age < 0:\n        raise ValueError(\"Age cannot be negative\")\n    return age"
+    },
+    {
+      "type": "text",
+      "text": "**Collect problems, do not stop.** When you process many rows, one bad row should not stop the whole job. Keep the good rows, and write the bad ones in a list of problems to show at the end."
+    },
+    {
+      "type": "tip",
+      "text": "Error messages are part of the user experience. \"Something went wrong\" helps nobody. \"Line 3: price 'abc' is not a number\" helps a lot."
+    }
+  ],
+  "examples": [
+    {
+      "title": "Catch a specific error",
+      "code": "for text in [\"12\", \"abc\", \"\"]:\n    try:\n        print(int(text) + 1)\n    except ValueError:\n        print(\"Not a number:\", repr(text))"
+    },
+    {
+      "title": "Raise your own error",
+      "code": "def set_age(age):\n    if age < 0:\n        raise ValueError(\"Age cannot be negative\")\n    return age\n\ntry:\n    set_age(-5)\nexcept ValueError as error:\n    print(\"Problem:\", error)"
+    },
+    {
+      "title": "Keep going after a bad row",
+      "code": "rows = [\"10\", \"x\", \"30\"]\ngood = []\nproblems = []\nfor number, row in enumerate(rows, start=1):\n    try:\n        good.append(int(row))\n    except ValueError:\n        problems.append(f\"Row {number}: {row!r}\")\nprint(good)\nprint(problems)"
+    }
+  ],
+  "exercises": [
+    {
+      "prompt": "Write `safe_int(text, default=0)`. It returns the whole number in the text. If the text is not a whole number, it returns `default`.",
+      "starterCode": "def safe_int(text, default=0):\n    # your code here\n    pass",
+      "tests": [
+        {
+          "call": "safe_int('42')",
+          "returns": "42"
+        },
+        {
+          "call": "safe_int(' 7 ')",
+          "returns": "7"
+        },
+        {
+          "call": "safe_int('abc')",
+          "returns": "0"
+        },
+        {
+          "call": "safe_int('', -1)",
+          "returns": "-1"
+        }
+      ],
+      "hints": [
+        "Put `int(text)` inside `try`.",
+        "Use `except ValueError:` and return `default`."
+      ],
+      "solution": "def safe_int(text, default=0):\n    try:\n        return int(text)\n    except ValueError:\n        return default"
+    },
+    {
+      "prompt": "Write `parse_age(text)`. It returns the age as an `int` when the text is a whole number from 0 to 120. Otherwise it must `raise ValueError(\"Age must be a number from 0 to 120\")`.",
+      "starterCode": "def parse_age(text):\n    # your code here\n    pass",
+      "tests": [
+        {
+          "call": "attempt(parse_age, '30')",
+          "returns": "30",
+          "setup": "def attempt(f, x):\n    try:\n        return f(x)\n    except ValueError as error:\n        return 'Error: ' + str(error)"
+        },
+        {
+          "call": "attempt(parse_age, 'abc')",
+          "returns": "'Error: Age must be a number from 0 to 120'",
+          "setup": "def attempt(f, x):\n    try:\n        return f(x)\n    except ValueError as error:\n        return 'Error: ' + str(error)"
+        },
+        {
+          "call": "attempt(parse_age, '150')",
+          "returns": "'Error: Age must be a number from 0 to 120'",
+          "setup": "def attempt(f, x):\n    try:\n        return f(x)\n    except ValueError as error:\n        return 'Error: ' + str(error)"
+        },
+        {
+          "call": "attempt(parse_age, '-1')",
+          "returns": "'Error: Age must be a number from 0 to 120'",
+          "setup": "def attempt(f, x):\n    try:\n        return f(x)\n    except ValueError as error:\n        return 'Error: ' + str(error)"
+        }
+      ],
+      "hints": [
+        "`int(text)` already raises `ValueError` for text, but with another message. Catch it and raise yours.",
+        "After converting, check the range and raise the same message if it is wrong."
+      ],
+      "solution": "def parse_age(text):\n    message = \"Age must be a number from 0 to 120\"\n    try:\n        age = int(text)\n    except ValueError:\n        raise ValueError(message)\n    if not 0 <= age <= 120:\n        raise ValueError(message)\n    return age"
+    },
+    {
+      "prompt": "Write `load_prices(lines)`. It goes through a list of text lines. Lines that are numbers are converted with `float` and kept. Lines that are not numbers are not stopped on: they are added to a list of problems as `Line N: text` (N starts at 1).\n\nReturn two lists: `(prices, problems)`.",
+      "starterCode": "def load_prices(lines):\n    # your code here\n    pass",
+      "tests": [
+        {
+          "call": "load_prices(['1.5', 'abc', '2'])",
+          "returns": "([1.5, 2.0], ['Line 2: abc'])"
+        },
+        {
+          "call": "load_prices([])",
+          "returns": "([], [])"
+        },
+        {
+          "call": "load_prices(['x', 'y'])",
+          "returns": "([], ['Line 1: x', 'Line 2: y'])"
+        }
+      ],
+      "hints": [
+        "`for number, line in enumerate(lines, start=1):`",
+        "Use `try: float(line)` and `except ValueError:` to add the problem text."
+      ],
+      "solution": "def load_prices(lines):\n    prices = []\n    problems = []\n    for number, line in enumerate(lines, start=1):\n        try:\n            prices.append(float(line))\n        except ValueError:\n            problems.append(f\"Line {number}: {line}\")\n    return prices, problems"
+    }
+  ],
+  "quiz": [
+    {
+      "question": "Why avoid a bare `except:`?",
+      "options": [
+        "It is slower",
+        "It hides real bugs",
+        "Python does not allow it",
+        "It prints too much"
+      ],
+      "answer": 1,
+      "explanation": "A bare except catches everything, even mistakes in your own code. Name the error you expect."
+    },
+    {
+      "question": "You process 1000 rows and one is bad. What is usually best?",
+      "options": [
+        "Stop and show a traceback",
+        "Skip it silently and say nothing",
+        "Keep the good rows and report the bad row",
+        "Delete the whole file"
+      ],
+      "answer": 2,
+      "explanation": "Keep working, but tell the user which row was bad, so nothing is hidden."
+    },
+    {
+      "question": "Which message helps the user most?",
+      "options": [
+        "\"Error\"",
+        "\"Something went wrong\"",
+        "\"Line 3: price 'abc' is not a number\"",
+        "\"Failed\""
+      ],
+      "answer": 2,
+      "explanation": "It says where the problem is and what is wrong with it."
+    }
+  ]
+}

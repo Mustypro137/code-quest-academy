@@ -1,0 +1,122 @@
+{
+  "title": "Prompts are just text",
+  "explanation": [
+    {
+      "type": "text",
+      "text": "An AI model like Claude is a program that reads text and writes text back. The text you send is the **prompt**. The text that comes back is the **reply**. Python can build prompts, send them, and use the replies."
+    },
+    {
+      "type": "text",
+      "text": "This module works fully offline. You will learn the Python side first, with a fake AI, so it costs nothing. In lesson 5 you will see how to call a real one on your own PC."
+    },
+    {
+      "type": "text",
+      "text": "A prompt is a string. Everything you know about strings works here: f-strings, `join`, `strip`, `split`."
+    },
+    {
+      "type": "code",
+      "code": "task = \"Summarize this in one sentence.\"\ntext = \"Python is a popular language for beginners.\"\nprompt = f\"{task}\\n\\nText:\\n{text}\"\nprint(prompt)"
+    },
+    {
+      "type": "text",
+      "text": "**Tokens.** A model reads text in small pieces called tokens. A token is often a short word or part of a word. A long prompt has more tokens. With a paid service, more tokens means more cost and a slower answer."
+    },
+    {
+      "type": "tip",
+      "text": "Good prompts are clear and specific. Say the task, give the text, and say how you want the answer. Python helps because it builds the same prompt the same way every time."
+    }
+  ],
+  "examples": [
+    {
+      "title": "Build a prompt with an f-string",
+      "code": "task = \"Fix the spelling in this text.\"\ntext = \"I lik pythn\"\nprint(f\"{task}\\n\\nText:\\n{text}\")"
+    },
+    {
+      "title": "A longer prompt with triple quotes",
+      "code": "topic = \"loops\"\nprompt = f\"\"\"You are a kind Python teacher.\nExplain {topic} to a 12 year old.\nUse at most 3 sentences.\"\"\"\nprint(prompt)"
+    },
+    {
+      "title": "How long is the prompt?",
+      "code": "prompt = \"Explain what a list is in Python.\"\nprint(\"Characters:\", len(prompt))\nprint(\"Words:\", len(prompt.split()))"
+    }
+  ],
+  "exercises": [
+    {
+      "prompt": "Write a function `build_prompt(task, text)` that returns the task, a blank line, the word `Text:`, a new line, and the text.\n\nFor example `build_prompt(\"Summarize this.\", \"Hi\")` gives:\n\n```\nSummarize this.\n\nText:\nHi\n```",
+      "starterCode": "def build_prompt(task, text):\n    # your code here\n    pass",
+      "tests": [
+        {
+          "call": "build_prompt('Summarize this.', 'Hi')",
+          "returns": "'Summarize this.\\n\\nText:\\nHi'"
+        },
+        {
+          "call": "build_prompt('Fix spelling.', 'I lik pythn')",
+          "returns": "'Fix spelling.\\n\\nText:\\nI lik pythn'"
+        }
+      ],
+      "hints": [
+        "Use an f-string and `\\n` for a new line.",
+        "The shape is `f\"{task}\\n\\nText:\\n{text}\"`."
+      ],
+      "solution": "def build_prompt(task, text):\n    return f\"{task}\\n\\nText:\\n{text}\""
+    },
+    {
+      "prompt": "Long prompts cost more. Write a function `short_enough(prompt, max_words)` that returns `True` when the prompt has `max_words` words or fewer, and `False` when it has more.",
+      "starterCode": "def short_enough(prompt, max_words):\n    # your code here\n    pass",
+      "tests": [
+        {
+          "call": "short_enough('one two three', 3)",
+          "returns": "True"
+        },
+        {
+          "call": "short_enough('one two three', 2)",
+          "returns": "False"
+        },
+        {
+          "call": "short_enough('', 0)",
+          "returns": "True"
+        }
+      ],
+      "hints": [
+        "`prompt.split()` makes a list of words.",
+        "Compare `len(prompt.split())` with `max_words`."
+      ],
+      "solution": "def short_enough(prompt, max_words):\n    return len(prompt.split()) <= max_words"
+    }
+  ],
+  "quiz": [
+    {
+      "question": "In AI work, what is a \"prompt\"?",
+      "options": [
+        "The reply from the model",
+        "The text you send to the model",
+        "A Python error",
+        "A kind of file"
+      ],
+      "answer": 1,
+      "explanation": "The prompt is the text you send. The text that comes back is the reply."
+    },
+    {
+      "question": "What is a token?",
+      "options": [
+        "A password",
+        "A small piece of text the model reads",
+        "A Python keyword",
+        "A type of file"
+      ],
+      "answer": 1,
+      "explanation": "Models read text in small pieces called tokens, often short words or parts of words."
+    },
+    {
+      "question": "Why build prompts with Python code?",
+      "options": [
+        "Python makes the AI smarter",
+        "You get the same prompt shape every time",
+        "Prompts must be written in Python",
+        "It is the only way to send text"
+      ],
+      "answer": 1,
+      "explanation": "A function builds the same prompt in the same way each time, so your results are steadier."
+    }
+  ]
+}

@@ -1,0 +1,67 @@
+{
+  "title": "Working with CSV files",
+  "explanation": [
+    {"type":"text","text":"A CSV file is a table saved as plain text. Each line is a row, and commas split the columns. Excel and Google Sheets can both save and open CSV files, so it is the easiest way to move table data in and out of Python."},
+    {"type":"text","text":"First, let us make a small CSV file to practise with."},
+    {"type":"code","code":"from pathlib import Path\n\nPath(\"customers.csv\").write_text(\"\"\"name,city,spent\nAda,Lagos,120.50\nSam,Accra,80\nMia,Lagos,200\n\"\"\")"},
+    {"type":"text","text":"`csv.DictReader` reads each row as a dictionary. The first line of the file gives the keys."},
+    {"type":"code","code":"import csv\n\nwith open(\"customers.csv\", newline=\"\") as f:\n    rows = list(csv.DictReader(f))\n\nprint(rows[0])           # {'name': 'Ada', 'city': 'Lagos', 'spent': '120.50'}\nprint(rows[0][\"name\"])   # Ada"},
+    {"type":"text","text":"Look closely: `spent` is `'120.50'`, which is **text**. Everything you read from a CSV file is text. Change it with `float()` or `int()` before you do maths."},
+    {"type":"code","code":"total = 0\nfor row in rows:\n    total = total + float(row[\"spent\"])\nprint(total)   # 400.5\n\nlagos = [row for row in rows if row[\"city\"] == \"Lagos\"]\nprint(len(lagos))   # 2"},
+    {"type":"text","text":"To sort rows, tell `sorted()` what to sort by. Give it a small function with `key=`."},
+    {"type":"code","code":"def spent(row):\n    return float(row[\"spent\"])\n\nbest_first = sorted(rows, key=spent, reverse=True)\nprint(best_first[0][\"name\"])   # Mia"},
+    {"type":"text","text":"To write a CSV file, use `csv.DictWriter`."},
+    {"type":"code","code":"with open(\"report.csv\", \"w\", newline=\"\") as f:\n    writer = csv.DictWriter(f, fieldnames=[\"name\", \"spent\"])\n    writer.writeheader()\n    writer.writerow({\"name\": \"Mia\", \"spent\": 200})"},
+    {"type":"tip","text":"Always open CSV files with `newline=\"\"`. It lets the csv module handle line endings correctly on every computer."},
+    {"type":"pc","title":"total spending per city","text":"Export a customer list from Excel with **File, Save As, CSV**. Name it `customers.csv` with the columns `name`, `city` and `spent`, and put it next to this script. The script writes a new file `city_totals.csv`.","code":"import csv\n\ntotals = {}\nwith open(\"customers.csv\", newline=\"\") as f:\n    for row in csv.DictReader(f):\n        city = row[\"city\"].strip()\n        totals[city] = totals.get(city, 0) + float(row[\"spent\"])\n\nwith open(\"city_totals.csv\", \"w\", newline=\"\") as f:\n    writer = csv.writer(f)\n    writer.writerow([\"city\", \"total\"])\n    for city, total in sorted(totals.items()):\n        writer.writerow([city, round(total, 2)])\n\nprint(\"Done. See city_totals.csv\")"}
+  ],
+  "examples": [
+    {"title":"Read a CSV file","code":"import csv\nfrom pathlib import Path\n\nPath(\"customers.csv\").write_text(\"\"\"name,city,spent\nAda,Lagos,120.50\nSam,Accra,80\nMia,Lagos,200\n\"\"\")\n\nwith open(\"customers.csv\", newline=\"\") as f:\n    for row in csv.DictReader(f):\n        print(row[\"name\"], \"spent\", row[\"spent\"])"},
+    {"title":"Total spending per city","code":"import csv\nfrom pathlib import Path\n\nPath(\"customers.csv\").write_text(\"\"\"name,city,spent\nAda,Lagos,120.50\nSam,Accra,80\nMia,Lagos,200\n\"\"\")\n\ntotals = {}\nwith open(\"customers.csv\", newline=\"\") as f:\n    for row in csv.DictReader(f):\n        city = row[\"city\"]\n        totals[city] = totals.get(city, 0) + float(row[\"spent\"])\nprint(totals)"},
+    {"title":"Write a CSV file and read it as text","code":"import csv\n\nwith open(\"report.csv\", \"w\", newline=\"\") as f:\n    writer = csv.DictWriter(f, fieldnames=[\"name\", \"spent\"])\n    writer.writeheader()\n    writer.writerow({\"name\": \"Mia\", \"spent\": 200})\n    writer.writerow({\"name\": \"Ada\", \"spent\": 120.5})\n\nprint(open(\"report.csv\").read())"}
+  ],
+  "exercises": [
+    {
+      "prompt": "The file `sales.csv` is made for you. It has the columns `product`, `price` and `qty`.\n\nRead it into a list `rows`. Then make `revenue`: the sum of price times quantity for every row.",
+      "starterCode": "from pathlib import Path\n\nPath(\"sales.csv\").write_text(\"\"\"product,price,qty\npen,1.5,10\nbook,12,3\nbag,30,1\n\"\"\")\n\n# Your code below\n",
+      "tests": [
+        {
+          "call": "len(rows)",
+          "returns": "3",
+          "label": "The number of rows"
+        },
+        {
+          "call": "revenue",
+          "returns": "81.0",
+          "label": "The variable revenue"
+        }
+      ],
+      "hints": [
+        "Use `import csv` and `csv.DictReader(f)`.",
+        "Start with `revenue = 0`. In a loop, add `float(row[\"price\"]) * int(row[\"qty\"])`."
+      ],
+      "solution": "from pathlib import Path\n\nPath(\"sales.csv\").write_text(\"\"\"product,price,qty\npen,1.5,10\nbook,12,3\nbag,30,1\n\"\"\")\n\nimport csv\n\nwith open(\"sales.csv\", newline=\"\") as f:\n    rows = list(csv.DictReader(f))\n\nrevenue = 0\nfor row in rows:\n    revenue = revenue + float(row[\"price\"]) * int(row[\"qty\"])"
+    },
+    {
+      "prompt": "The file `customers.csv` is made for you.\n\nMake a list `big_spenders` with the names of customers who spent more than 100. Keep the order of the file.",
+      "starterCode": "from pathlib import Path\n\nPath(\"customers.csv\").write_text(\"\"\"name,city,spent\nAda,Lagos,120.50\nSam,Accra,80\nMia,Lagos,200\nTom,Abuja,99.99\n\"\"\")\n\n# Your code below\n",
+      "tests": [
+        {
+          "call": "big_spenders",
+          "returns": "['Ada', 'Mia']",
+          "label": "The list big_spenders"
+        }
+      ],
+      "hints": [
+        "Read the rows with `csv.DictReader`.",
+        "Remember: `spent` is text. Use `float(row[\"spent\"]) > 100`."
+      ],
+      "solution": "from pathlib import Path\n\nPath(\"customers.csv\").write_text(\"\"\"name,city,spent\nAda,Lagos,120.50\nSam,Accra,80\nMia,Lagos,200\nTom,Abuja,99.99\n\"\"\")\n\nimport csv\n\nbig_spenders = []\nwith open(\"customers.csv\", newline=\"\") as f:\n    for row in csv.DictReader(f):\n        if float(row[\"spent\"]) > 100:\n            big_spenders.append(row[\"name\"])"
+    }
+  ],
+  "quiz": [
+    {"question":"What does `csv.DictReader` give you for each row?","options":["A list of numbers","A dictionary with the column names as keys","One long string","A file"],"answer":1,"explanation":"The first line of the file gives the keys. Each row becomes a dictionary."},
+    {"question":"You read a CSV file. What is the type of `row[\"spent\"]`?","options":["A list","None","A number","Text (a string)"],"answer":3,"explanation":"Everything from a CSV file is text. Use `float()` or `int()` to get a number."},
+    {"question":"Why do you open CSV files with `newline=\"\"`?","options":["So the csv module handles line endings correctly","It makes the file faster","It makes the file read-only","Python needs it for every file"],"answer":0,"explanation":"It stops extra blank lines and other line-ending problems."}
+  ]
+}

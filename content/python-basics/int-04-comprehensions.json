@@ -1,0 +1,58 @@
+{
+  "title": "List comprehensions",
+  "explanation": [
+    { "type": "text", "text": "A list comprehension builds a new list in one line. It is a short way to write a loop that fills a list." },
+    { "type": "code", "code": "squares = [n * n for n in range(5)]\nprint(squares)  # [0, 1, 4, 9, 16]" },
+    { "type": "text", "text": "Add `if` at the end to keep only some items." },
+    { "type": "code", "code": "evens = [n for n in range(10) if n % 2 == 0]" },
+    { "type": "tip", "text": "If a comprehension is hard to read, use a normal loop. Clear code beats short code." }
+  ],
+  "examples": [
+    { "title": "Clean up text", "code": "names = [\" ann \", \"BOB\"]\nclean = [n.strip().title() for n in names]\nprint(clean)  # ['Ann', 'Bob']" }
+  ],
+  "exercises": [
+    {
+      "prompt": "Write a function `squares(numbers)` that returns a new list with the square of each number. Use a list comprehension.",
+      "starterCode": "def squares(numbers):\n    # your code here\n    pass\n",
+      "tests": [
+        {
+          "call": "squares([1, 2, 3])",
+          "returns": "[1, 4, 9]"
+        },
+        {
+          "call": "squares([])",
+          "returns": "[]"
+        }
+      ],
+      "hints": [
+        "The shape is `[something for n in numbers]`.",
+        "The square of `n` is `n * n`."
+      ],
+      "solution": "def squares(numbers):\n    return [n * n for n in numbers]"
+    },
+    {
+      "prompt": "Write a function `only_long(words)` that returns only the words with more than 3 letters.",
+      "starterCode": "def only_long(words):\n    # your code here\n    pass\n",
+      "tests": [
+        {
+          "call": "only_long(['cat', 'house', 'tree', 'go'])",
+          "returns": "['house', 'tree']"
+        },
+        {
+          "call": "only_long(['a', 'b'])",
+          "returns": "[]"
+        }
+      ],
+      "hints": [
+        "Add `if` at the end of the comprehension.",
+        "Use `len(word) > 3`."
+      ],
+      "solution": "def only_long(words):\n    return [w for w in words if len(w) > 3]"
+    }
+  ],
+  "quiz": [
+    { "question": "What does `[n * 2 for n in range(3)]` give?", "options": ["[0, 2, 4]", "[2, 4, 6]", "[0, 1, 2]", "[0, 2, 4, 6]"], "answer": 0, "explanation": "`range(3)` is 0, 1, 2. Each one is doubled." },
+    { "question": "Which one keeps only the even numbers?", "options": ["[n if n % 2 == 0 for n in range(10)]", "[even n in range(10)]", "[n for n in range(10) if n % 2 == 0]", "[n for n % 2 == 0 in range(10)]"], "answer": 2, "explanation": "The `if` goes at the end of the comprehension." },
+    { "question": "When should you use a normal loop instead?", "options": ["Never", "When using numbers", "When the list is short", "When the comprehension is hard to read"], "answer": 3, "explanation": "Clear code beats short code." }
+  ]
+}

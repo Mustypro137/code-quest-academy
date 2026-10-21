@@ -1,0 +1,65 @@
+{
+  "title": "Classes and objects",
+  "explanation": [
+    { "type": "text", "text": "A class is a blueprint. An object is one thing made from that blueprint. A class keeps data and the functions that use it together." },
+    { "type": "code", "code": "class Account:\n    def __init__(self, owner, balance=0):\n        self.owner = owner\n        self.balance = balance\n\n    def deposit(self, amount):\n        self.balance += amount\n\nacc = Account(\"Sam\")\nacc.deposit(50)\nprint(acc.balance)  # 50" },
+    { "type": "text", "text": "`__init__` runs when you create an object. `self` is the object itself. Functions inside a class are called methods." },
+    { "type": "tip", "text": "Use a class when data and behavior belong together. A plain function is often enough." }
+  ],
+  "examples": [
+    { "title": "Inheritance", "code": "class Account:\n    def __init__(self, balance=0):\n        self.balance = balance\n\nclass Savings(Account):\n    def add_interest(self):\n        self.balance *= 1.05\n\nsaver = Savings(100)\nsaver.add_interest()\nprint(saver.balance)" }
+  ],
+  "exercises": [
+    {
+      "prompt": "Write a class `Counter`. A new counter has `value` equal to 0. The method `add()` adds 1 to `value`.",
+      "starterCode": "class Counter:\n    # your code here\n    pass\n",
+      "tests": [
+        {
+          "setup": "c = Counter()",
+          "call": "c.value",
+          "returns": "0",
+          "label": "A new counter value"
+        },
+        {
+          "setup": "c = Counter()\nc.add()\nc.add()",
+          "call": "c.value",
+          "returns": "2",
+          "label": "After two add() calls, value"
+        }
+      ],
+      "hints": [
+        "Make `__init__(self)` and set `self.value = 0`.",
+        "In `add`, write `self.value += 1`."
+      ],
+      "solution": "class Counter:\n    def __init__(self):\n        self.value = 0\n\n    def add(self):\n        self.value += 1"
+    },
+    {
+      "prompt": "Write a class `Dog`. It takes a `name`. The method `speak()` returns the name, then ` says Woof`.\n\nFor example `Dog(\"Rex\").speak()` gives `Rex says Woof`.",
+      "starterCode": "class Dog:\n    # your code here\n    pass\n",
+      "tests": [
+        {
+          "setup": "d = Dog('Rex')",
+          "call": "d.speak()",
+          "returns": "'Rex says Woof'",
+          "label": "Dog('Rex').speak()"
+        },
+        {
+          "setup": "d = Dog('Max')",
+          "call": "d.speak()",
+          "returns": "'Max says Woof'",
+          "label": "Dog('Max').speak()"
+        }
+      ],
+      "hints": [
+        "Save the name in `__init__`: `self.name = name`.",
+        "Return `self.name + \" says Woof\"`."
+      ],
+      "solution": "class Dog:\n    def __init__(self, name):\n        self.name = name\n\n    def speak(self):\n        return self.name + \" says Woof\""
+    }
+  ],
+  "quiz": [
+    { "question": "What is a class?", "options": ["A blueprint for objects", "A kind of loop", "A built-in number", "A file"], "answer": 0, "explanation": "A class describes how to build objects. Each object is one thing made from it." },
+    { "question": "What is `self` inside a method?", "options": ["A global variable", "The object the method is called on", "The class name", "A loop keyword"], "answer": 1, "explanation": "`self` is the object itself, so a method can reach its data." },
+    { "question": "Which method runs when you create an object?", "options": ["__start__", "__new_obj__", "__init__", "__make__"], "answer": 2, "explanation": "`__init__` sets up a new object." }
+  ]
+}

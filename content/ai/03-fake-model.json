@@ -1,0 +1,153 @@
+{
+  "title": "A fake AI for safe testing",
+  "explanation": [
+    {
+      "type": "text",
+      "text": "A real AI call needs the internet, costs money, and can give a different answer each time. That makes it hard to test your code. The fix: write a **fake model**, a plain Python function with the same shape as the real one."
+    },
+    {
+      "type": "text",
+      "text": "The shape is simple: **text in, text out**."
+    },
+    {
+      "type": "code",
+      "code": "def fake_ai(prompt):\n    if \"hello\" in prompt.lower():\n        return \"Hello! How can I help?\"\n    return \"Sorry, I don't know.\"\n\nprint(fake_ai(\"Hello there\"))"
+    },
+    {
+      "type": "text",
+      "text": "Now write your other functions so the model is a **parameter**. They call whatever model you hand them. In tests you pass the fake. Later you pass the real one. The rest of your code does not change."
+    },
+    {
+      "type": "code",
+      "code": "def ask(model, question):\n    return model(question.strip())\n\nprint(ask(fake_ai, \"  hello  \"))"
+    },
+    {
+      "type": "tip",
+      "text": "In Python a function is a value. You can pass `fake_ai` (without brackets) to another function, and that function can call it with `model(...)`."
+    },
+    {
+      "type": "tip",
+      "text": "A fake model gives the same answer every time, so your tests are steady. It can also act badly on purpose (wrong format, empty reply) so you can check that your code survives."
+    }
+  ],
+  "examples": [
+    {
+      "title": "A fake with a few rules",
+      "code": "def fake_ai(prompt):\n    text = prompt.lower()\n    if \"price\" in text:\n        return \"Prices start at $10.\"\n    if \"hello\" in text:\n        return \"Hello!\"\n    return \"Sorry, I don't know.\"\n\nfor p in [\"Hello\", \"What is the price?\", \"Tell me a joke\"]:\n    print(p, \"->\", fake_ai(p))"
+    },
+    {
+      "title": "Pass the model in",
+      "code": "def shout(model, prompt):\n    return model(prompt).upper()\n\ndef fake_ai(prompt):\n    return \"thanks for asking\"\n\nprint(shout(fake_ai, \"hi\"))"
+    },
+    {
+      "title": "A fake that fails on purpose",
+      "code": "def broken_ai(prompt):\n    return \"Sure! Here you go: not valid json\"\n\nreply = broken_ai(\"give me json\")\nprint(reply.startswith(\"{\"))"
+    }
+  ],
+  "exercises": [
+    {
+      "prompt": "Write `fake_ai(prompt)`. Ignore capital letters. Return:\n\n- `Hello! How can I help?` if the prompt contains `hello`\n- `Prices start at $10.` if it contains `price`\n- `Sorry, I don't know.` for anything else\n\nCheck `hello` first.",
+      "starterCode": "def fake_ai(prompt):\n    # your code here\n    pass",
+      "tests": [
+        {
+          "call": "fake_ai('Hello there')",
+          "returns": "\"Hello! How can I help?\""
+        },
+        {
+          "call": "fake_ai('What is the PRICE?')",
+          "returns": "\"Prices start at $10.\""
+        },
+        {
+          "call": "fake_ai('Tell me a joke')",
+          "returns": "\"Sorry, I don't know.\""
+        },
+        {
+          "call": "fake_ai('hello, what is the price?')",
+          "returns": "\"Hello! How can I help?\""
+        }
+      ],
+      "hints": [
+        "Make a lowercase copy: `text = prompt.lower()`.",
+        "Use `if`, a second `if`, then a final `return`."
+      ],
+      "solution": "def fake_ai(prompt):\n    text = prompt.lower()\n    if \"hello\" in text:\n        return \"Hello! How can I help?\"\n    if \"price\" in text:\n        return \"Prices start at $10.\"\n    return \"Sorry, I don't know.\""
+    },
+    {
+      "prompt": "Write `shout_reply(model, prompt)`. It calls `model(prompt)` and returns the reply in capital letters.",
+      "starterCode": "def shout_reply(model, prompt):\n    # your code here\n    pass",
+      "tests": [
+        {
+          "call": "shout_reply(m, 'hi')",
+          "returns": "'OK HI'",
+          "setup": "def m(p):\n    return 'ok ' + p"
+        },
+        {
+          "call": "shout_reply(m, 'a')",
+          "returns": "'1 A'",
+          "setup": "def m(p):\n    return '1 ' + p"
+        }
+      ],
+      "hints": [
+        "`model` is a function. Call it like `model(prompt)`.",
+        "Add `.upper()` to the reply."
+      ],
+      "solution": "def shout_reply(model, prompt):\n    return model(prompt).upper()"
+    },
+    {
+      "prompt": "Write `ask_all(model, questions)`. It asks the model every question and returns the replies as a list, in the same order.",
+      "starterCode": "def ask_all(model, questions):\n    # your code here\n    pass",
+      "tests": [
+        {
+          "call": "ask_all(m, ['abc', 'xy'])",
+          "returns": "['cba', 'yx']",
+          "setup": "def m(p):\n    return p[::-1]"
+        },
+        {
+          "call": "ask_all(m, [])",
+          "returns": "[]",
+          "setup": "def m(p):\n    return p"
+        }
+      ],
+      "hints": [
+        "Make an empty list, loop over the questions, and add each reply.",
+        "Or use a list comprehension: `[model(q) for q in questions]`."
+      ],
+      "solution": "def ask_all(model, questions):\n    return [model(q) for q in questions]"
+    }
+  ],
+  "quiz": [
+    {
+      "question": "Why use a fake model while you build?",
+      "options": [
+        "It is smarter than a real one",
+        "It is free, fast and gives the same answer every time",
+        "Real models cannot be used from Python",
+        "It makes the real model cheaper"
+      ],
+      "answer": 1,
+      "explanation": "A fake needs no internet and no money, and its answers do not change, so tests are steady."
+    },
+    {
+      "question": "What is the shape of a model function in this module?",
+      "options": [
+        "Number in, number out",
+        "Text in, text out",
+        "No input, a file out",
+        "A list in, nothing out"
+      ],
+      "answer": 1,
+      "explanation": "The model takes a prompt (text) and returns a reply (text). The fake and the real one share that shape."
+    },
+    {
+      "question": "How do you pass the function `fake_ai` to another function?",
+      "options": [
+        "`ask(fake_ai(), \"hi\")`",
+        "`ask(fake_ai, \"hi\")`",
+        "`ask(\"fake_ai\", \"hi\")`",
+        "`ask(def fake_ai, \"hi\")`"
+      ],
+      "answer": 1,
+      "explanation": "Write the name without brackets. With brackets you would call it right away and pass its result."
+    }
+  ]
+}

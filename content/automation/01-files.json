@@ -1,0 +1,64 @@
+{
+  "title": "Files and folders",
+  "explanation": [
+    {"type":"text","text":"Automation means letting Python do the boring jobs for you. Many of those jobs are about files: reading them, writing them, and sorting them into folders."},
+    {"type":"text","text":"On this site your files live in a practice folder. It is empty at the start of every run and cleared at the end, so you can experiment safely. On your own computer, the same code works on real files."},
+    {"type":"text","text":"`pathlib` is the tool for this. A `Path` is a file name or a folder name."},
+    {"type":"code","code":"from pathlib import Path\n\nnote = Path(\"note.txt\")\nnote.write_text(\"Hello\\nWorld\")   # make the file\nprint(note.read_text())          # read it back"},
+    {"type":"text","text":"A few more things a `Path` can do:"},
+    {"type":"code","code":"folder = Path(\"reports\")\nfolder.mkdir(exist_ok=True)           # make a folder (no error if it exists)\nfile = folder / \"may.txt\"             # \"/\" joins a folder and a file name\nprint(file.name, file.stem, file.suffix)   # may.txt may .txt\nprint(file.exists())                  # False until you write it\nfiles = sorted(folder.glob(\"*.txt\"))  # find all .txt files, in order"},
+    {"type":"text","text":"`read_text().splitlines()` gives you the lines of a file as a list. To add to the end of a file without erasing it, open it in append mode, with `\"a\"`."},
+    {"type":"code","code":"with open(\"log.txt\", \"a\") as f:\n    f.write(\"job finished\\n\")"},
+    {"type":"tip","text":"Always try a new file script on COPIES of your files first. A script that renames or deletes files cannot be undone."},
+    {"type":"pc","title":"rename files safely","text":"This script adds a date to the start of every `.txt` file name in a folder. It starts in **dry run** mode: it only shows what it would do. Change `DRY_RUN` to `False` only when the preview looks right.","code":"from pathlib import Path\nfrom datetime import date\n\nfolder = Path(\"my_files\")   # a folder with COPIES of your files\nDRY_RUN = True              # True = only show what would happen\n\nfor file in sorted(folder.glob(\"*.txt\")):\n    new_name = f\"{date.today()}_{file.name}\"\n    print(file.name, \"->\", new_name)\n    if not DRY_RUN:\n        file.rename(folder / new_name)"}
+  ],
+  "examples": [
+    {"title":"Write and read a file","code":"from pathlib import Path\n\nnote = Path(\"note.txt\")\nnote.write_text(\"Hello\\nWorld\")\nprint(note.exists())\nprint(note.read_text())\nprint(note.read_text().splitlines())"},
+    {"title":"Make a folder and list its files","code":"from pathlib import Path\n\nfolder = Path(\"reports\")\nfolder.mkdir(exist_ok=True)\nfor name in [\"march.txt\", \"april.txt\", \"notes.md\"]:\n    (folder / name).write_text(\"data\")\n\nfor file in sorted(folder.glob(\"*.txt\")):\n    print(file.name, file.stem, file.suffix)"},
+    {"title":"Add lines to a log file","code":"for message in [\"started\", \"working\", \"done\"]:\n    with open(\"log.txt\", \"a\") as f:\n        f.write(message + \"\\n\")\n\nprint(open(\"log.txt\").read())"}
+  ],
+  "exercises": [
+    {
+      "prompt": "Write a file called `todo.txt` with three lines: `buy milk`, `call Sam` and `pay rent`.\n\nThen read the file back and make a variable `lines` with the three lines as a list.",
+      "starterCode": "from pathlib import Path\n\n# Write your code below\n",
+      "tests": [
+        {
+          "call": "__import__('os').path.exists('todo.txt')",
+          "returns": "True",
+          "label": "The file todo.txt exists, so this"
+        },
+        {
+          "call": "lines",
+          "returns": "['buy milk', 'call Sam', 'pay rent']",
+          "label": "The variable lines"
+        }
+      ],
+      "hints": [
+        "Use `Path(\"todo.txt\").write_text(...)`. Use `\\n` between the lines.",
+        "Read it back with `.read_text().splitlines()`."
+      ],
+      "solution": "from pathlib import Path\n\ntodo = Path(\"todo.txt\")\ntodo.write_text(\"buy milk\\ncall Sam\\npay rent\")\nlines = todo.read_text().splitlines()"
+    },
+    {
+      "prompt": "The folder `invoices` is made for you, with some files in it. Count the files that end with `.pdf`. Put the number in a variable `pdf_count`.",
+      "starterCode": "from pathlib import Path\n\nfolder = Path(\"invoices\")\nfolder.mkdir(exist_ok=True)\nfor name in [\"jan.pdf\", \"feb.pdf\", \"feb.txt\", \"mar.pdf\", \"notes.md\"]:\n    (folder / name).write_text(\"x\")\n\n# Your code below\n",
+      "tests": [
+        {
+          "call": "pdf_count",
+          "returns": "3",
+          "label": "The variable pdf_count"
+        }
+      ],
+      "hints": [
+        "`folder.glob(\"*.pdf\")` finds the PDF files.",
+        "Turn the result into a list with `list(...)`, then use `len()`."
+      ],
+      "solution": "from pathlib import Path\n\nfolder = Path(\"invoices\")\nfolder.mkdir(exist_ok=True)\nfor name in [\"jan.pdf\", \"feb.pdf\", \"feb.txt\", \"mar.pdf\", \"notes.md\"]:\n    (folder / name).write_text(\"x\")\n\npdf_count = len(list(folder.glob(\"*.pdf\")))"
+    }
+  ],
+  "quiz": [
+    {"question":"Which line writes text into a file?","options":["note.read_text()","note.write_text(\"hi\")","note.open(\"hi\")","note.save(\"hi\")"],"answer":1,"explanation":"`write_text()` makes the file and puts the text in it."},
+    {"question":"What does `Path(\"reports\") / \"may.txt\"` make?","options":["A division","An error","The path reports/may.txt","A list"],"answer":2,"explanation":"For a Path, `/` joins a folder and a file name."},
+    {"question":"Why should a new file script start with a \"dry run\"?","options":["Python needs it","It is faster","It saves memory","You see what would change before anything really changes"],"answer":3,"explanation":"Renaming and deleting cannot be undone, so look at the plan first."}
+  ]
+}

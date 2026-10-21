@@ -1,0 +1,71 @@
+{
+  "title": "Working with JSON",
+  "explanation": [
+    {"type":"text","text":"JSON is a text format for structured data. Websites, apps and settings files all use it. You already know it from JavaScript: it looks like a JavaScript object."},
+    {"type":"text","text":"Python has a built-in `json` module. A JSON object becomes a Python dictionary, and a JSON array becomes a list."},
+    {"type":"code","code":"import json\n\ntext = '{\"name\": \"Ada\", \"skills\": [\"python\", \"sql\"], \"active\": true}'\ndata = json.loads(text)           # text -> Python\nprint(data[\"name\"])               # Ada\nprint(data[\"skills\"][0])          # python\nprint(data[\"active\"])             # True"},
+    {"type":"text","text":"The names are easy to mix up. Think of the `s` as \"string\": `loads` reads from a string, and `dumps` makes a string."},
+    {"type":"code","code":"print(json.dumps(data))             # Python -> text\nprint(json.dumps(data, indent=2))   # nicer to read"},
+    {"type":"text","text":"Values change a little on the way. `True` becomes `true`, `False` becomes `false`, and `None` becomes `null`."},
+    {"type":"text","text":"To save JSON in a file and load it again:"},
+    {"type":"code","code":"with open(\"data.json\", \"w\") as f:\n    json.dump(data, f, indent=2)\n\nwith open(\"data.json\") as f:\n    loaded = json.load(f)"},
+    {"type":"text","text":"If the text is not valid JSON, Python raises an error. Catch it with `try` and `except`."},
+    {"type":"code","code":"try:\n    json.loads(\"{name: Ada}\")\nexcept json.JSONDecodeError:\n    print(\"That is not valid JSON\")"},
+    {"type":"tip","text":"JSON needs double quotes around names and text. Single quotes make it invalid."},
+    {"type":"pc","title":"a settings file with defaults","text":"Many scripts keep their settings in a file, so you can change them without editing the code. This script makes the file the first time, and reads it after that.","code":"import json\nfrom pathlib import Path\n\nsettings_file = Path(\"settings.json\")\ndefaults = {\"currency\": \"USD\", \"report_title\": \"Weekly report\"}\n\nif settings_file.exists():\n    settings = json.loads(settings_file.read_text())\nelse:\n    settings = defaults\n    settings_file.write_text(json.dumps(defaults, indent=2))\n    print(\"Made settings.json. Edit it, then run me again.\")\n\nprint(\"Title:\", settings.get(\"report_title\", \"Report\"))"}
+  ],
+  "examples": [
+    {"title":"Read JSON text","code":"import json\n\ntext = '{\"name\": \"Ada\", \"skills\": [\"python\", \"sql\"], \"active\": true}'\ndata = json.loads(text)\nprint(data[\"name\"], data[\"skills\"][0], data[\"active\"])"},
+    {"title":"Save and load settings","code":"import json\n\nsettings = {\"theme\": \"dark\", \"font_size\": 14}\nwith open(\"settings.json\", \"w\") as f:\n    json.dump(settings, f, indent=2)\n\nprint(open(\"settings.json\").read())\n\nwith open(\"settings.json\") as f:\n    loaded = json.load(f)\nloaded[\"font_size\"] = 16\nprint(loaded)"},
+    {"title":"Catch bad JSON","code":"import json\n\nfor text in ['{\"ok\": true}', '{ok: true}']:\n    try:\n        print(json.loads(text))\n    except json.JSONDecodeError:\n        print(\"Not valid JSON:\", text)"}
+  ],
+  "exercises": [
+    {
+      "prompt": "The variable `text` holds the JSON for an order. Turn it into a Python dictionary called `order`.\n\nThen make `total`: the sum of price times qty for every item in `order[\"items\"]`.",
+      "starterCode": "text = '{\"customer\": \"Ada\", \"items\": [{\"name\": \"pen\", \"price\": 1.5, \"qty\": 4}, {\"name\": \"book\", \"price\": 12, \"qty\": 2}]}'\n\n# Your code below\n",
+      "tests": [
+        {
+          "call": "order[\"customer\"]",
+          "returns": "'Ada'",
+          "label": "The customer in order"
+        },
+        {
+          "call": "total",
+          "returns": "30.0",
+          "label": "The variable total"
+        }
+      ],
+      "hints": [
+        "You need `import json` and `json.loads(text)`.",
+        "Loop over `order[\"items\"]`. Add `item[\"price\"] * item[\"qty\"]` to a total that starts at 0."
+      ],
+      "solution": "import json\n\ntext = '{\"customer\": \"Ada\", \"items\": [{\"name\": \"pen\", \"price\": 1.5, \"qty\": 4}, {\"name\": \"book\", \"price\": 12, \"qty\": 2}]}'\n\norder = json.loads(text)\ntotal = 0\nfor item in order[\"items\"]:\n    total = total + item[\"price\"] * item[\"qty\"]"
+    },
+    {
+      "prompt": "The dictionary `settings` is made for you.\n\nSave it in a file called `settings.json` (with `indent=2`). Then load the file back into a variable `loaded`.",
+      "starterCode": "settings = {\"theme\": \"dark\", \"font_size\": 14}\n\n# Your code below\n",
+      "tests": [
+        {
+          "call": "'\"theme\"' in open('settings.json').read()",
+          "returns": "True",
+          "label": "The file settings.json contains the key theme, so this"
+        },
+        {
+          "call": "loaded",
+          "returns": "{'theme': 'dark', 'font_size': 14}",
+          "label": "The variable loaded"
+        }
+      ],
+      "hints": [
+        "Use `json.dump(settings, f, indent=2)` inside `with open(\"settings.json\", \"w\") as f:`.",
+        "Read it back with `json.load(f)` and `open(\"settings.json\")`."
+      ],
+      "solution": "import json\n\nsettings = {\"theme\": \"dark\", \"font_size\": 14}\n\nwith open(\"settings.json\", \"w\") as f:\n    json.dump(settings, f, indent=2)\n\nwith open(\"settings.json\") as f:\n    loaded = json.load(f)"
+    }
+  ],
+  "quiz": [
+    {"question":"Which function turns JSON text into a Python dictionary?","options":["json.dumps","json.loads","json.read","json.parse"],"answer":1,"explanation":"`loads` means \"load from string\". (`parse` is the JavaScript name.)"},
+    {"question":"What does Python `True` become in JSON?","options":["True","\"true\"","true","1"],"answer":2,"explanation":"JSON uses lowercase `true`, `false` and `null`."},
+    {"question":"What does `indent=2` do in `json.dumps`?","options":["Limits the data to 2 items","Sorts the keys","Encrypts the text","Makes the text easier to read"],"answer":3,"explanation":"It adds line breaks and spaces. The data stays the same."}
+  ]
+}

@@ -1,0 +1,2 @@
+# Keep the vendored Pyodide files byte-for-byte (they are hash-checked)
+vendor/** -text

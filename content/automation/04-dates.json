@@ -1,0 +1,83 @@
+{
+  "title": "Dates and times",
+  "explanation": [
+    {"type":"text","text":"Business jobs are full of dates: due dates, renewals, birthdays, deadlines. Python has a `datetime` module that understands them."},
+    {"type":"text","text":"A date in a CSV file is just text, like `\"2026-09-01\"`. To do maths with it, turn it into a real date first. The format year-month-day is called ISO format. It is the best way to save dates, because it sorts in the right order."},
+    {"type":"code","code":"from datetime import date\n\ndue = date.fromisoformat(\"2026-09-01\")   # text -> date\nprint(due)                                # 2026-09-01\nprint(due.year, due.month, due.day)       # 2026 9 1"},
+    {"type":"text","text":"Subtract one date from another to get the gap. The gap has a `.days` number."},
+    {"type":"code","code":"today = date.fromisoformat(\"2026-10-20\")\ngap = today - due\nprint(gap.days)     # 49\nprint(today > due)  # True  (dates can be compared)"},
+    {"type":"text","text":"Use `timedelta` to move a date forwards or backwards."},
+    {"type":"code","code":"from datetime import timedelta\n\nprint(due + timedelta(days=30))   # 2026-10-01\nprint(due - timedelta(weeks=1))   # 2026-08-25"},
+    {"type":"text","text":"To show a date in a friendlier way, use `strftime`. `%d` is the day, `%B` the month name and `%Y` the year."},
+    {"type":"code","code":"print(due.strftime(\"%d %B %Y\"))   # 01 September 2026"},
+    {"type":"text","text":"A date that does not exist, like `\"2026-02-30\"`, raises a `ValueError`. Catch it with `try` and `except` if your data might have mistakes."},
+    {"type":"tip","text":"Do not call `date.today()` inside your functions. Give the function a `today` argument instead. Then you can test it with any date you like, and your script can pass in `date.today()` when it runs for real."},
+    {"type":"pc","title":"who is due this week?","text":"This script reads a `customers.csv` file with a `due_date` column and lists everyone who is due in the next 7 days.","code":"import csv\nfrom datetime import date, timedelta\n\ntoday = date.today()\nsoon = today + timedelta(days=7)\n\nwith open(\"customers.csv\", newline=\"\") as f:\n    for row in csv.DictReader(f):\n        due = date.fromisoformat(row[\"due_date\"].strip())\n        if today <= due <= soon:\n            print(row[\"name\"], \"is due on\", due.strftime(\"%d %B %Y\"))"}
+  ],
+  "examples": [
+    {"title":"Dates from text","code":"from datetime import date\n\ndue = date.fromisoformat(\"2026-09-01\")\nprint(due.year, due.month, due.day)\nprint(due.strftime(\"%d %B %Y\"))"},
+    {"title":"How many days late?","code":"from datetime import date\n\ndue = date.fromisoformat(\"2026-09-01\")\ntoday = date.fromisoformat(\"2026-10-20\")\nprint((today - due).days)\nprint(today > due)"},
+    {"title":"Add days and weeks","code":"from datetime import date, timedelta\n\nstart = date.fromisoformat(\"2026-01-31\")\nfor weeks in [1, 2, 4]:\n    print(weeks, \"weeks later:\", start + timedelta(weeks=weeks))"}
+  ],
+  "exercises": [
+    {
+      "prompt": "Write a function `days_between(start, end)`. Both dates are text in ISO format, like `\"2026-09-01\"`. Return the number of days from `start` to `end`. The answer is negative if `end` is earlier.",
+      "starterCode": "from datetime import date\n\ndef days_between(start, end):\n    # your code here\n    pass\n",
+      "tests": [
+        {
+          "call": "days_between('2026-09-01', '2026-10-20')",
+          "returns": "49"
+        },
+        {
+          "call": "days_between('2026-10-20', '2026-09-01')",
+          "returns": "-49"
+        },
+        {
+          "call": "days_between('2026-01-01', '2026-01-01')",
+          "returns": "0"
+        }
+      ],
+      "hints": [
+        "Turn both texts into dates with `date.fromisoformat(...)`.",
+        "Subtract them, then take `.days`."
+      ],
+      "solution": "from datetime import date\n\ndef days_between(start, end):\n    return (date.fromisoformat(end) - date.fromisoformat(start)).days"
+    },
+    {
+      "prompt": "Write a function `is_late(due, today, paid)`. The dates are ISO text. A bill is late when it is **not paid** and the due date is **before** today. Return `True` or `False`.\n\nA bill that is due today is not late yet.",
+      "starterCode": "from datetime import date\n\ndef is_late(due, today, paid):\n    # your code here\n    pass\n",
+      "tests": [
+        {
+          "call": "is_late('2026-09-01', '2026-10-20', False)",
+          "returns": "True",
+          "label": "Unpaid and past due: is_late"
+        },
+        {
+          "call": "is_late('2026-09-01', '2026-10-20', True)",
+          "returns": "False",
+          "label": "Paid and past due: is_late"
+        },
+        {
+          "call": "is_late('2026-10-30', '2026-10-20', False)",
+          "returns": "False",
+          "label": "Not due yet: is_late"
+        },
+        {
+          "call": "is_late('2026-10-20', '2026-10-20', False)",
+          "returns": "False",
+          "label": "Due today: is_late"
+        }
+      ],
+      "hints": [
+        "Use `and` to join two conditions: `not paid` and a date comparison.",
+        "Dates compare with `<`, after you turn the text into dates."
+      ],
+      "solution": "from datetime import date\n\ndef is_late(due, today, paid):\n    return (not paid) and date.fromisoformat(due) < date.fromisoformat(today)"
+    }
+  ],
+  "quiz": [
+    {"question":"What does `date.fromisoformat(\"2026-09-01\")` give you?","options":["A string","A date you can do maths with","A number","An error"],"answer":1,"explanation":"It turns ISO text into a real date."},
+    {"question":"You subtract two dates: `today - due`. What do you get?","options":["A date","A string","A whole number of days","A time gap (use `.days` for the number of days)"],"answer":3,"explanation":"The result is a `timedelta`. Its `.days` is the number you want."},
+    {"question":"Why give a function a `today` argument instead of calling `date.today()` inside it?","options":["`date.today()` is slow","Python requires it","You can test it with any date you choose","`date.today()` does not work in functions"],"answer":2,"explanation":"A fixed date makes the result the same every time, so you can test it."}
+  ]
+}

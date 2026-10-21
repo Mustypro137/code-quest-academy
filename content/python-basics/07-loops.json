@@ -1,0 +1,60 @@
+{
+  "title": "Loops: repeat things",
+  "explanation": [
+    {"type":"text","text":"A loop repeats code. A `for` loop goes through the items of a list, one by one."},
+    {"type":"code","code":"for fruit in [\"apple\", \"banana\"]:\n    print(fruit)"},
+    {"type":"text","text":"`range()` makes a row of numbers. `range(5)` gives 0, 1, 2, 3, 4. It stops before the last number. `range(1, 6)` gives 1, 2, 3, 4, 5."},
+    {"type":"code","code":"for i in range(5):\n    print(i)"},
+    {"type":"text","text":"A loop is good for adding things up. Make a variable before the loop, and change it inside."},
+    {"type":"code","code":"total = 0\nfor n in [1, 2, 3]:\n    total = total + n\nprint(total)  # 6"},
+    {"type":"text","text":"A `while` loop repeats as long as a condition is true."},
+    {"type":"code","code":"count = 3\nwhile count > 0:\n    print(count)\n    count = count - 1\nprint(\"Go!\")"},
+    {"type":"text","text":"`break` stops a loop early. `continue` skips to the next round."},
+    {"type":"tip","text":"If a `while` loop never becomes false, it never ends. This is called an infinite loop. The code runner on this site stops your code after 10 seconds."},
+    {"type":"tip","text":"Only the indented lines are inside the loop. The line after the loop, with no indent, runs once at the end."}
+  ],
+  "examples": [
+    {"title":"Three times table","code":"for i in range(1, 6):\n    print(i * 3)"},
+    {"title":"Stop early with break","code":"for n in range(10):\n    if n == 3:\n        break\n    print(n)"}
+  ],
+  "exercises": [
+    {
+      "prompt": "Use a loop to print the numbers 1 to 5, each on its own line.",
+      "starterCode": "# Write your code below\n",
+      "tests": [
+        {
+          "output": "1\n2\n3\n4\n5"
+        }
+      ],
+      "hints": [
+        "`range(1, 6)` gives 1, 2, 3, 4, 5.",
+        "Write `for number in range(1, 6):` and print inside the loop."
+      ],
+      "solution": "for number in range(1, 6):\n    print(number)"
+    },
+    {
+      "prompt": "Make a variable `total` that adds up all the numbers from 1 to 100. Print it.",
+      "starterCode": "# Write your code below\n",
+      "tests": [
+        {
+          "call": "total",
+          "returns": "5050",
+          "label": "The variable total"
+        },
+        {
+          "output": "5050"
+        }
+      ],
+      "hints": [
+        "Start with `total = 0` before the loop.",
+        "Loop over `range(1, 101)` and add each number to `total`."
+      ],
+      "solution": "total = 0\nfor n in range(1, 101):\n    total = total + n\nprint(total)"
+    }
+  ],
+  "quiz": [
+    {"question":"What numbers does `range(3)` give?","options":["1, 2, 3","0, 1, 2","0, 1, 2, 3","1, 2"],"answer":1,"explanation":"It starts at 0 and stops before 3."},
+    {"question":"Which loop repeats while a condition is true?","options":["for","if","while","def"],"answer":2,"explanation":"A `while` loop keeps going as long as its condition is true."},
+    {"question":"What does `break` do?","options":["Stops the loop completely","Skips to the next round","Deletes the loop","Prints a break"],"answer":0,"explanation":"`break` leaves the loop at once. `continue` is the one that skips a round."}
+  ]
+}

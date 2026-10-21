@@ -1,0 +1,60 @@
+{
+  "title": "Handling errors with try/except",
+  "explanation": [
+    { "type": "text", "text": "Errors will happen: a missing file, bad input, no internet. If you do not handle them, your program stops. Use `try` and `except` to deal with them." },
+    { "type": "code", "code": "try:\n    number = int(input(\"Number: \"))\nexcept ValueError:\n    print(\"That is not a number.\")" },
+    { "type": "text", "text": "Python runs the `try` block. If a `ValueError` happens, it jumps to `except`. Name the exact error you expect. Do not catch everything." },
+    { "type": "tip", "text": "Use `finally` for code that must always run, such as closing a file. Better still, use `with open(...)`, which closes it for you." }
+  ],
+  "examples": [
+    { "title": "Safe division", "code": "def divide(a, b):\n    try:\n        return a / b\n    except ZeroDivisionError:\n        return None\n\nprint(divide(10, 2))\nprint(divide(1, 0))" }
+  ],
+  "exercises": [
+    {
+      "prompt": "Write a function `to_number(text)` that returns the text as a whole number. If the text is not a number, return `None`.",
+      "starterCode": "def to_number(text):\n    # your code here\n    pass\n",
+      "tests": [
+        {
+          "call": "to_number('42')",
+          "returns": "42"
+        },
+        {
+          "call": "to_number('abc')",
+          "returns": "None"
+        },
+        {
+          "call": "to_number('')",
+          "returns": "None"
+        }
+      ],
+      "hints": [
+        "Put `int(text)` inside a `try` block.",
+        "Use `except ValueError:` and return `None`."
+      ],
+      "solution": "def to_number(text):\n    try:\n        return int(text)\n    except ValueError:\n        return None"
+    },
+    {
+      "prompt": "Write a function `safe_divide(a, b)` that returns `a / b`. If `b` is 0, return the text `cannot divide by zero`.",
+      "starterCode": "def safe_divide(a, b):\n    # your code here\n    pass\n",
+      "tests": [
+        {
+          "call": "safe_divide(10, 4)",
+          "returns": "2.5"
+        },
+        {
+          "call": "safe_divide(1, 0)",
+          "returns": "'cannot divide by zero'"
+        }
+      ],
+      "hints": [
+        "The error to catch is `ZeroDivisionError`."
+      ],
+      "solution": "def safe_divide(a, b):\n    try:\n        return a / b\n    except ZeroDivisionError:\n        return \"cannot divide by zero\""
+    }
+  ],
+  "quiz": [
+    { "question": "Which block holds the code that might fail?", "options": ["except", "try", "def", "else"], "answer": 1, "explanation": "Put risky code in `try`. If it fails, Python jumps to `except`." },
+    { "question": "What error does `int(\"abc\")` raise?", "options": ["ZeroDivisionError", "TypeError", "ValueError", "NameError"], "answer": 2, "explanation": "The value has the right type (text) but cannot become a number, so it is a `ValueError`." },
+    { "question": "What is the best way to write `except`?", "options": ["Name the exact error you expect", "Catch every error", "Leave it empty", "Never use try"], "answer": 0, "explanation": "Catching everything can hide real bugs. Name the error you expect." }
+  ]
+}

@@ -1,0 +1,75 @@
+{
+  "title": "Building reports",
+  "explanation": [
+    {"type":"text","text":"A report turns many rows into a few lines a person can read. In Python you build the report as text. Then you can print it or save it in a file."},
+    {"type":"text","text":"First, format numbers with an f-string. After the `:`, `,` adds thousands separators and `.2f` keeps 2 decimal places."},
+    {"type":"code","code":"price = 1250\nprint(f\"{price:,}\")        # 1,250\nprint(f\"{price:,.2f}\")     # 1,250.00\nprint(f\"${price:,.2f}\")    # $1,250.00"},
+    {"type":"text","text":"To line up columns, give each value a width. `:<10` puts the value on the left in 10 spaces. `:>10` puts it on the right."},
+    {"type":"code","code":"print(f\"{'Name':<10}{'Owed':>10}\")\nprint(f\"{'Ada':<10}{120.5:>10.2f}\")\nprint(f\"{'Priya':<10}{1250:>10.2f}\")"},
+    {"type":"text","text":"That prints:"},
+    {"type":"code","code":"Name            Owed\nAda           120.50\nPriya        1250.00"},
+    {"type":"text","text":"Build a report as a list of lines, then join the lines with a newline character."},
+    {"type":"code","code":"lines = [\"WEEKLY REPORT\", \"============\"]\nlines.append(\"Customers: 3\")\nreport = \"\\n\".join(lines)\nprint(report)"},
+    {"type":"text","text":"To save the report, write it to a file with `Path(\"report.txt\").write_text(report)`."},
+    {"type":"tip","text":"Make your report function **return** the text instead of printing it. Then you can test it, print it, or save it to a file, all from the same function."},
+    {"type":"pc","title":"a weekly sales summary","text":"This script reads a `sales.csv` file with the columns `product`, `price` and `qty`. It writes `weekly_summary.txt`, with the best-selling product first.","code":"import csv\nfrom pathlib import Path\n\ntotals = {}\nwith open(\"sales.csv\", newline=\"\") as f:\n    for row in csv.DictReader(f):\n        name = row[\"product\"].strip().title()\n        totals[name] = totals.get(name, 0) + float(row[\"price\"]) * int(row[\"qty\"])\n\nlines = [\"WEEKLY SALES\", \"\"]\nfor name in sorted(totals, key=totals.get, reverse=True):   # biggest total first\n    lines.append(f\"{name:<15}{totals[name]:>12,.2f}\")\nlines.append(\"\")\nlines.append(f\"{'Total':<15}{sum(totals.values()):>12,.2f}\")\n\nreport = \"\\n\".join(lines)\nprint(report)\nPath(\"weekly_summary.txt\").write_text(report)"}
+  ],
+  "examples": [
+    {"title":"Format money","code":"for amount in [5, 1250, 99.99, 1234567.891]:\n    print(f\"${amount:,.2f}\")"},
+    {"title":"Line up a table","code":"rows = [(\"Ada\", 120.5), (\"Tom\", 99.99), (\"Priya\", 1250)]\n\nprint(f\"{'Name':<10}{'Owed':>10}\")\nprint(\"-\" * 20)\nfor name, owed in rows:\n    print(f\"{name:<10}{owed:>10,.2f}\")"},
+    {"title":"Build a report and save it","code":"from pathlib import Path\n\nlines = [\"WEEKLY REPORT\", \"============\"]\nfor name, total in [(\"Ada\", 120.5), (\"Tom\", 99.99)]:\n    lines.append(f\"{name}: ${total:,.2f}\")\n\nreport = \"\\n\".join(lines)\nPath(\"report.txt\").write_text(report)\nprint(Path(\"report.txt\").read_text())"}
+  ],
+  "exercises": [
+    {
+      "prompt": "Write a function `money(x)` that turns a number into text with a dollar sign, thousands separators and 2 decimal places.\n\nFor example `money(1250)` gives `$1,250.00`.",
+      "starterCode": "def money(x):\n    # your code here\n    pass\n",
+      "tests": [
+        {
+          "call": "money(1250)",
+          "returns": "'$1,250.00'"
+        },
+        {
+          "call": "money(5)",
+          "returns": "'$5.00'"
+        },
+        {
+          "call": "money(99.999)",
+          "returns": "'$100.00'"
+        },
+        {
+          "call": "money(0)",
+          "returns": "'$0.00'"
+        }
+      ],
+      "hints": [
+        "Use an f-string with a format after the colon.",
+        "The format is `,.2f`. Put the dollar sign in front of the `{`."
+      ],
+      "solution": "def money(x):\n    return f\"${x:,.2f}\""
+    },
+    {
+      "prompt": "The function `money` is given. Write `table(rows)`. `rows` is a list of `(name, amount)` pairs. Return text with one line per pair: the name on the left in 10 spaces, then the amount (made with `money`) on the right in 10 spaces.\n\nReturn an empty string for an empty list. Do not print anything.",
+      "starterCode": "def money(x):\n    return f\"${x:,.2f}\"\n\ndef table(rows):\n    # your code here\n    pass\n",
+      "tests": [
+        {
+          "call": "table([('Ada', 120.5), ('Tom', 99.99)])",
+          "returns": "'Ada          $120.50\\nTom           $99.99'"
+        },
+        {
+          "call": "table([])",
+          "returns": "''"
+        }
+      ],
+      "hints": [
+        "Make an empty list `lines`. For each `name, amount` in `rows`, add one line.",
+        "The line is `f\"{name:<10}{money(amount):>10}\"`. At the end, `\"\\n\".join(lines)`."
+      ],
+      "solution": "def money(x):\n    return f\"${x:,.2f}\"\n\ndef table(rows):\n    lines = []\n    for name, amount in rows:\n        lines.append(f\"{name:<10}{money(amount):>10}\")\n    return \"\\n\".join(lines)"
+    }
+  ],
+  "quiz": [
+    {"question":"What does `f\"{1250:,.2f}\"` give?","options":["1250","1,250.00","1,250","1250.00"],"answer":1,"explanation":"`,` adds the thousands separator and `.2f` keeps 2 decimals."},
+    {"question":"What does `{value:>10}` do?","options":["Left-aligns the value in 10 spaces","Repeats the value 10 times","Right-aligns the value in 10 spaces","Rounds to 10 places"],"answer":2,"explanation":"`>` means right-aligned. `<` means left-aligned."},
+    {"question":"Why should a report function return the text instead of printing it?","options":["Printing is slow","Python cannot print inside functions","Returned text is shorter","You can then test it, print it, or save it to a file"],"answer":3,"explanation":"A returned value can be used in many ways. A print is gone once it is shown."}
+  ]
+}

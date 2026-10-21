@@ -1,0 +1,112 @@
+{
+  "title": "Save and share with Git and GitHub",
+  "explanation": [
+    {
+      "type": "text",
+      "text": "This lesson is for your own PC, so the commands have a **Copy** button and no Run button."
+    },
+    {
+      "type": "text",
+      "text": "**Git** is a tool that keeps the history of your project. Each saved step is a **commit**: a snapshot with a short message. You can look back and undo mistakes. **GitHub** is a website that stores a copy of your project online, so you can share it and show it in your portfolio."
+    },
+    {
+      "type": "text",
+      "text": "**Before you start**"
+    },
+    {
+      "type": "list",
+      "items": [
+        "Install Git (from git-scm.com) and make a free GitHub account.",
+        "Check the install: run `git --version` in a terminal.",
+        "Use only code, fake data and notes that you are happy for the world to see, if the repository is public."
+      ]
+    },
+    {
+      "type": "pc",
+      "title": "first-time setup",
+      "text": "Run these once on your PC. Use your own name and email.",
+      "code": "git config --global user.name \"Your Name\"\ngit config --global user.email \"you@example.com\""
+    },
+    {
+      "type": "pc",
+      "title": "save your project (your first commit)",
+      "text": "Run these inside your project folder. \"git status\" shows what changed, so use it often.",
+      "code": "git init\ngit add .\ngit status\ngit commit -m \"Add customer list cleaner and README\""
+    },
+    {
+      "type": "template",
+      "title": ".gitignore file",
+      "text": "Make a file named .gitignore in your project folder, then add it BEFORE the first \"git add .\" so these files are never saved. Add the names of your own private files.",
+      "code": "__pycache__/\n*.pyc\n.env\nvenv/\n.venv/\nreal_customers.csv\nsecrets.txt"
+    },
+    {
+      "type": "pc",
+      "title": "put it on GitHub",
+      "text": "First make a new empty repository on github.com (do not tick \"add a README\"). Copy its address and put it in the second line.",
+      "code": "git branch -M main\ngit remote add origin https://github.com/YOUR-NAME/YOUR-REPO.git\ngit push -u origin main"
+    },
+    {
+      "type": "pc",
+      "title": "the everyday loop",
+      "text": "After a change that works, save it and send it.",
+      "code": "git add .\ngit commit -m \"Handle empty lines in the input file\"\ngit push"
+    },
+    {
+      "type": "tip",
+      "text": "Commit messages tell the story of your project. Write what changed, in plain words: \"Fix crash on empty file\" is much better than \"update\"."
+    },
+    {
+      "type": "tip",
+      "text": "**Never commit keys, passwords or real private data.** If you do by mistake, change the key at once. Deleting the file in a later commit does not remove it from the history."
+    }
+  ],
+  "examples": [
+    {
+      "title": "Weak and better commit messages",
+      "run": false,
+      "wrap": true,
+      "code": "Weak: \"update\"\nWeak: \"stuff\"\nBetter: \"Add report with totals per customer\"\nBetter: \"Fix crash when the input file is empty\""
+    },
+    {
+      "title": "What belongs in the repository",
+      "run": false,
+      "wrap": true,
+      "code": "Yes: your code, the README, small fake sample files, .gitignore.\nNo: API keys, passwords, real customer files, big downloaded data, the venv folder."
+    }
+  ],
+  "quiz": [
+    {
+      "question": "What is a commit?",
+      "options": [
+        "A saved snapshot of your project with a message",
+        "A Python error",
+        "A kind of file",
+        "A GitHub account"
+      ],
+      "answer": 0,
+      "explanation": "A commit is one step in the history of your project, with a short message that says what changed."
+    },
+    {
+      "question": "Which file should NOT be committed?",
+      "options": [
+        "README.md",
+        "cleaner.py",
+        "A file with your API key",
+        "A small fake sample file"
+      ],
+      "answer": 2,
+      "explanation": "Secrets must stay out of the repository, especially a public one."
+    },
+    {
+      "question": "What does GitHub give you?",
+      "options": [
+        "A place to store and share your project online",
+        "A faster computer",
+        "A new version of Python",
+        "Free API keys"
+      ],
+      "answer": 0,
+      "explanation": "GitHub keeps an online copy of your repository, so you can share it and show it to others."
+    }
+  ]
+}

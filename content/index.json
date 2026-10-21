@@ -1,0 +1,213 @@
+{
+  "modules": [
+    {
+      "id": "python-basics",
+      "icon": "🐍",
+      "title": "Python Basics",
+      "blurb": "Print, variables, loops and functions.",
+      "lessons": [
+        {
+          "id": "01-print",
+          "title": "Your first program: print()",
+          "level": "beginner"
+        },
+        {
+          "id": "02-variables",
+          "title": "Variables: give a value a name",
+          "level": "beginner"
+        },
+        {
+          "id": "03-numbers",
+          "title": "Numbers and maths",
+          "level": "beginner"
+        },
+        {
+          "id": "04-strings",
+          "title": "Strings: working with text",
+          "level": "beginner"
+        },
+        {
+          "id": "05-conditions",
+          "title": "Conditions: making choices",
+          "level": "beginner"
+        },
+        {
+          "id": "06-lists",
+          "title": "Lists: many values in one",
+          "level": "beginner"
+        },
+        {
+          "id": "07-loops",
+          "title": "Loops: repeat things",
+          "level": "beginner"
+        },
+        {
+          "id": "int-01-functions",
+          "title": "Functions: reuse your code",
+          "level": "intermediate"
+        },
+        {
+          "id": "int-02-dictionaries",
+          "title": "Dictionaries: store data with names",
+          "level": "intermediate"
+        },
+        {
+          "id": "int-03-errors",
+          "title": "Handling errors with try/except",
+          "level": "intermediate"
+        },
+        {
+          "id": "int-04-comprehensions",
+          "title": "List comprehensions",
+          "level": "intermediate"
+        },
+        {
+          "id": "adv-01-classes",
+          "title": "Classes and objects",
+          "level": "advanced"
+        },
+        {
+          "id": "adv-02-generators",
+          "title": "Generators and lazy values",
+          "level": "advanced"
+        },
+        {
+          "id": "adv-03-decorators",
+          "title": "Decorators",
+          "level": "advanced"
+        }
+      ]
+    },
+    {
+      "id": "automation",
+      "icon": "⚙️",
+      "title": "Python Automation",
+      "blurb": "Save time on files, CSVs and reports.",
+      "lessons": [
+        {
+          "id": "01-files",
+          "title": "Files and folders"
+        },
+        {
+          "id": "02-csv",
+          "title": "Working with CSV files"
+        },
+        {
+          "id": "03-json",
+          "title": "Working with JSON"
+        },
+        {
+          "id": "04-dates",
+          "title": "Dates and times"
+        },
+        {
+          "id": "05-cleaning",
+          "title": "Cleaning messy text"
+        },
+        {
+          "id": "06-reports",
+          "title": "Building reports"
+        },
+        {
+          "id": "07-project",
+          "title": "Mini project: customer list cleaner"
+        }
+      ]
+    },
+    {
+      "id": "ai",
+      "icon": "🤖",
+      "title": "AI with Python",
+      "blurb": "Prompts, messages, fake models, JSON replies, and calling a real model.",
+      "lessons": [
+        {
+          "id": "01-prompts",
+          "title": "Prompts are just text"
+        },
+        {
+          "id": "02-messages",
+          "title": "Messages: system, user, assistant"
+        },
+        {
+          "id": "03-fake-model",
+          "title": "A fake AI for safe testing"
+        },
+        {
+          "id": "04-json-replies",
+          "title": "Get answers you can use: JSON"
+        },
+        {
+          "id": "05-real-api",
+          "title": "Call a real AI model (on your PC)"
+        },
+        {
+          "id": "06-project",
+          "title": "Mini project: customer message sorter"
+        }
+      ]
+    },
+    {
+      "id": "projects",
+      "icon": "🧰",
+      "title": "Projects & Portfolio",
+      "blurb": "Build real things and show them.",
+      "lessons": [
+        {
+          "id": "01-choose-project",
+          "title": "Choose a project you can finish"
+        },
+        {
+          "id": "02-structure",
+          "title": "Structure your project"
+        },
+        {
+          "id": "03-testing",
+          "title": "Test your code with assert"
+        },
+        {
+          "id": "04-errors",
+          "title": "Handle errors kindly"
+        },
+        {
+          "id": "05-git-github",
+          "title": "Save and share with Git and GitHub"
+        },
+        {
+          "id": "06-portfolio",
+          "title": "Build your portfolio"
+        }
+      ]
+    },
+    {
+      "id": "linkedin",
+      "icon": "💼",
+      "title": "LinkedIn & Communication",
+      "blurb": "Write posts and present your work.",
+      "lessons": [
+        {
+          "id": "01-profile",
+          "title": "Your LinkedIn profile: the basics"
+        },
+        {
+          "id": "02-simple-writing",
+          "title": "Write clearly in simple English"
+        },
+        {
+          "id": "03-project-post",
+          "title": "Turn a project into a LinkedIn post"
+        },
+        {
+          "id": "04-readme",
+          "title": "Present your project: a README"
+        }
+      ]
+    },
+    {
+      "id": "english",
+      "icon": "⌨️",
+      "title": "Typing & Technical English",
+      "blurb": "Type faster. Explain code in simple English.",
+      "lessons": []
+    }
+  ]
+}

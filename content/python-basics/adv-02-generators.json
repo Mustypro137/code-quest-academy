@@ -1,0 +1,62 @@
+{
+  "title": "Generators and lazy values",
+  "explanation": [
+    { "type": "text", "text": "A generator gives you values one at a time, only when you ask. It does not build the whole list in memory first. This helps with big data." },
+    { "type": "code", "code": "def count_up(limit):\n    n = 1\n    while n <= limit:\n        yield n\n        n += 1\n\nfor number in count_up(3):\n    print(number)" },
+    { "type": "text", "text": "`yield` hands back a value and pauses the function. The next loop step continues from the same place." },
+    { "type": "tip", "text": "A generator expression looks like a list comprehension but uses round brackets: `(n * n for n in range(1000000))`." }
+  ],
+  "examples": [
+    { "title": "Squares, one at a time", "code": "def squares(limit):\n    for n in range(limit):\n        yield n * n\n\nfor value in squares(5):\n    print(value)\n\nprint(list(squares(5)))" },
+    { "title": "Read a big file line by line (needs a real file, so it cannot run here)", "run": false, "code": "def long_lines(path):\n    with open(path) as f:\n        for line in f:\n            if len(line) > 80:\n                yield line" }
+  ],
+  "exercises": [
+    {
+      "prompt": "Write a generator `countdown(n)` that yields `n`, then `n - 1`, and so on down to 1.",
+      "starterCode": "def countdown(n):\n    # your code here\n    pass\n",
+      "tests": [
+        {
+          "call": "list(countdown(3))",
+          "returns": "[3, 2, 1]"
+        },
+        {
+          "call": "list(countdown(0))",
+          "returns": "[]"
+        },
+        {
+          "call": "type(countdown(1)).__name__",
+          "returns": "'generator'",
+          "label": "The type of countdown(1)"
+        }
+      ],
+      "hints": [
+        "Use `yield`, not `return`.",
+        "Use a `while n > 0:` loop and lower `n` each time."
+      ],
+      "solution": "def countdown(n):\n    while n > 0:\n        yield n\n        n -= 1"
+    },
+    {
+      "prompt": "Write a generator `evens(limit)` that yields the even numbers from 0 up to, but not including, `limit`.",
+      "starterCode": "def evens(limit):\n    # your code here\n    pass\n",
+      "tests": [
+        {
+          "call": "list(evens(7))",
+          "returns": "[0, 2, 4, 6]"
+        },
+        {
+          "call": "list(evens(0))",
+          "returns": "[]"
+        }
+      ],
+      "hints": [
+        "`range(0, limit, 2)` counts in steps of 2."
+      ],
+      "solution": "def evens(limit):\n    for n in range(0, limit, 2):\n        yield n"
+    }
+  ],
+  "quiz": [
+    { "question": "What does `yield` do?", "options": ["Ends the program", "Hands back a value and pauses the function", "Prints a value", "Creates a class"], "answer": 1, "explanation": "The function pauses at `yield` and continues from there on the next step." },
+    { "question": "What is the main benefit of a generator?", "options": ["Faster math", "Safer errors", "Uses less memory: values come one at a time", "Shorter names"], "answer": 2, "explanation": "It does not build the whole list in memory first." },
+    { "question": "Which one is a generator expression?", "options": ["[n * n for n in range(5)]", "(n * n for n in range(5))", "{n * n for n in range(5)}", "<n * n for n in range(5)>"], "answer": 1, "explanation": "Round brackets make a generator. Square brackets make a list." }
+  ]
+}

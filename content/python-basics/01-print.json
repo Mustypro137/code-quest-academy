@@ -1,0 +1,48 @@
+{
+  "title": "Your first program: print()",
+  "explanation": [
+    { "type": "text", "text": "A program is a list of instructions. Python reads them from top to bottom, one line at a time." },
+    { "type": "text", "text": "The `print()` function shows something on the screen. Put your message inside the brackets, between quotes." },
+    { "type": "code", "code": "print(\"Hello, world!\")" },
+    { "type": "tip", "text": "Text inside quotes is called a string. You can use single quotes or double quotes, but do not mix them." }
+  ],
+  "examples": [
+    { "title": "Print two lines", "code": "print(\"Hello\")\nprint(\"I am learning Python\")" },
+    { "title": "Print a number", "code": "print(42)" }
+  ],
+  "exercises": [
+    {
+      "prompt": "Print the message `Hello, Python!` on the screen.",
+      "starterCode": "# Write your code below\n",
+      "tests": [
+        {
+          "output": "Hello, Python!"
+        }
+      ],
+      "hints": [
+        "Use the `print()` function.",
+        "Put the text inside quotes: `print(\"...\")`."
+      ],
+      "solution": "print(\"Hello, Python!\")"
+    },
+    {
+      "prompt": "Print two lines.\n\nThe first line is `My name is Sam`. The second line is `I am learning Python`.",
+      "starterCode": "# Write your code below\n",
+      "tests": [
+        {
+          "output": "My name is Sam\nI am learning Python"
+        }
+      ],
+      "hints": [
+        "Each `print()` makes one new line.",
+        "You need two `print()` lines."
+      ],
+      "solution": "print(\"My name is Sam\")\nprint(\"I am learning Python\")"
+    }
+  ],
+  "quiz": [
+    { "question": "Which line shows Hello on the screen?", "options": ["say(\"Hello\")", "print(\"Hello\")", "echo Hello", "print Hello"], "answer": 1, "explanation": "Python uses `print()` with brackets, and text goes inside quotes." },
+    { "question": "What is text inside quotes called?", "options": ["A number", "A function", "A string", "A comment"], "answer": 2, "explanation": "Text inside quotes is a string." },
+    { "question": "What does `print(42)` show?", "options": ["An error", "\"42\" with quotes", "4 and 2 on two lines", "42"], "answer": 3, "explanation": "`print()` shows the value only. A number does not need quotes." }
+  ]
+}

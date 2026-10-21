@@ -1,0 +1,65 @@
+{
+  "title": "Decorators",
+  "explanation": [
+    { "type": "text", "text": "A decorator wraps a function to add extra behavior, without changing the function itself. In Python, functions are values, so you can pass them to other functions." },
+    { "type": "code", "code": "def shout(func):\n    def wrapper(*args, **kwargs):\n        result = func(*args, **kwargs)\n        return result.upper()\n    return wrapper\n\n@shout\ndef greet(name):\n    return \"hello \" + name\n\nprint(greet(\"sam\"))  # HELLO SAM" },
+    { "type": "text", "text": "`@shout` is a short way to write `greet = shout(greet)`. `*args` and `**kwargs` let the wrapper accept any arguments." },
+    { "type": "tip", "text": "Real uses: timing a function, logging calls, checking permissions, caching results." }
+  ],
+  "examples": [
+    { "title": "Time a function", "code": "import time\n\ndef timed(func):\n    def wrapper(*args, **kwargs):\n        start = time.time()\n        result = func(*args, **kwargs)\n        print(f\"Took {time.time() - start:.3f}s\")\n        return result\n    return wrapper\n\n@timed\ndef slow_sum():\n    return sum(range(1000000))\n\nprint(slow_sum())" }
+  ],
+  "exercises": [
+    {
+      "prompt": "Write a decorator `add_exclaim`. It makes the decorated function return its text with `!` added at the end.",
+      "starterCode": "def add_exclaim(func):\n    # your code here\n    pass\n",
+      "tests": [
+        {
+          "setup": "@add_exclaim\ndef hello():\n    return \"hi\"",
+          "call": "hello()",
+          "returns": "'hi!'",
+          "label": "A decorated function that returns \"hi\", when called, gives"
+        }
+      ],
+      "hints": [
+        "Make an inner function `wrapper(*args, **kwargs)`.",
+        "Call `func(*args, **kwargs)` inside it, add `\"!\"`, and return `wrapper`."
+      ],
+      "solution": "def add_exclaim(func):\n    def wrapper(*args, **kwargs):\n        return func(*args, **kwargs) + \"!\"\n    return wrapper"
+    },
+    {
+      "prompt": "Write a decorator `count_calls`. The decorated function gets an attribute `calls` that counts how many times it was called. It starts at 0.",
+      "starterCode": "def count_calls(func):\n    # your code here\n    pass\n",
+      "tests": [
+        {
+          "setup": "@count_calls\ndef f():\n    return 1",
+          "call": "f.calls",
+          "returns": "0",
+          "label": "Before any call, f.calls"
+        },
+        {
+          "setup": "@count_calls\ndef f():\n    return 1\nf()\nf()",
+          "call": "f.calls",
+          "returns": "2",
+          "label": "After two calls, f.calls"
+        },
+        {
+          "setup": "@count_calls\ndef f():\n    return 1",
+          "call": "f()",
+          "returns": "1",
+          "label": "The decorated function still returns its value, so f()"
+        }
+      ],
+      "hints": [
+        "Set `wrapper.calls = 0` after you define `wrapper`.",
+        "Inside `wrapper`, write `wrapper.calls += 1` before calling `func`."
+      ],
+      "solution": "def count_calls(func):\n    def wrapper(*args, **kwargs):\n        wrapper.calls += 1\n        return func(*args, **kwargs)\n    wrapper.calls = 0\n    return wrapper"
+    }
+  ],
+  "quiz": [
+    { "question": "What does a decorator do?", "options": ["Deletes a function", "Renames a variable", "Adds behavior to a function without changing it", "Makes a class"], "answer": 2, "explanation": "It wraps the function and adds extra behavior around it." },
+    { "question": "Putting `@shout` above `def greet` is the same as what?", "options": ["shout = greet(shout)", "greet(shout)", "shout.greet()", "greet = shout(greet)"], "answer": 3, "explanation": "`@shout` replaces `greet` with the wrapped version." },
+    { "question": "What do `*args` and `**kwargs` let the wrapper do?", "options": ["Run faster", "Accept any arguments", "Hide errors", "Print results"], "answer": 1, "explanation": "The wrapper can then pass along whatever the original function needs." }
+  ]
+}

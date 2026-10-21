@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CodeQuest Academy</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%E2%9A%94%EF%B8%8F%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+  <script>
+    // Apply saved theme before first paint to avoid a flash.
+    try {
+      var t = JSON.parse(localStorage.getItem('cqa.progress') || '{}').theme;
+      if (t) document.documentElement.dataset.theme = t;
+    } catch (e) {}
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <a class="brand" href="#/">⚔️ CodeQuest Academy</a>
+    <button id="theme-toggle" class="btn btn-ghost" type="button" aria-label="Switch light/dark theme">🌓</button>
+  </header>
+
+  <div id="file-warning" class="banner" hidden>
+    This page was opened as a file. Python will not work this way.
+    Start a local server instead (see README), then open <code>http://localhost:8000</code>.
+  </div>
+
+  <main id="main" tabindex="-1"></main>
+
+  <script type="module" src="js/app.js"></script>
+  <noscript>CodeQuest Academy needs JavaScript.</noscript>
+  <script>
+    if (location.protocol === 'file:') document.getElementById('file-warning').hidden = false;
+  </script>
+</body>
+</html>

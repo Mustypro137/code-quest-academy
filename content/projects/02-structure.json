@@ -1,0 +1,166 @@
+{
+  "title": "Structure your project",
+  "explanation": [
+    {
+      "type": "text",
+      "text": "A project is easier to read, test and share when it is split into small parts. A common pattern is **input, process, output**: get the data, work on it, show the result."
+    },
+    {
+      "type": "text",
+      "text": "**Keep \"doing\" apart from \"showing\".** A function that does the work should **return** a value. Only one place at the end should **print**. A function that returns is easy to test and easy to reuse. A function that prints is hard to test."
+    },
+    {
+      "type": "code",
+      "code": "def summarize(numbers):          # does the work, returns a value\n    return sum(numbers)\n\ndef main():                      # shows the result\n    print(\"Total:\", summarize([1, 2, 3]))"
+    },
+    {
+      "type": "text",
+      "text": "**A simple folder for a small project**"
+    },
+    {
+      "type": "code",
+      "code": "customer-list-cleaner/\n  README.md          what it is and how to run it\n  cleaner.py         the code\n  sample_data/       small fake files for people to try\n    customers.csv\n  .gitignore         files git should not keep"
+    },
+    {
+      "type": "list",
+      "items": [
+        "One clear name for the folder, in lowercase with dashes.",
+        "A README so people know what the project does.",
+        "Small **fake** sample data, so anyone can try it without your private files.",
+        "No keys, passwords or real customer data inside the folder."
+      ]
+    },
+    {
+      "type": "text",
+      "text": "The line `if __name__ == \"__main__\":` is a line at the bottom of a script. The code under it runs when you run the file directly, but not when another file imports your functions. It is a normal way to end a script."
+    },
+    {
+      "type": "code",
+      "code": "def main():\n    print(\"Hello from my project\")\n\nif __name__ == \"__main__\":\n    main()"
+    },
+    {
+      "type": "tip",
+      "text": "Put numbers and words you might change (a limit, a file name) in capital letters at the top, such as `MAX_ROWS = 100`. Then you change them in one place."
+    }
+  ],
+  "examples": [
+    {
+      "title": "Returning is better than printing",
+      "code": "def total_bad(numbers):\n    print(sum(numbers))      # shows it, but you cannot use the number\n\ndef total_good(numbers):\n    return sum(numbers)      # gives the number back\n\nx = total_good([1, 2, 3]) * 2\nprint(x)"
+    },
+    {
+      "title": "Input, process, output",
+      "code": "text = \"3\\n5\\n\\n10\\n\"          # input\n\nnumbers = [int(line) for line in text.split() if line]   # process\nresult = sum(numbers)\n\nprint(\"Total:\", result)                                    # output"
+    },
+    {
+      "title": "A setting at the top",
+      "code": "TAX_RATE = 0.2\n\ndef with_tax(price):\n    return round(price * (1 + TAX_RATE), 2)\n\nprint(with_tax(10))\nprint(with_tax(25))"
+    }
+  ],
+  "exercises": [
+    {
+      "prompt": "Write `clean_lines(text)`. It splits the text into lines, removes spaces at the ends of each line, and returns a list of the lines that are not empty.",
+      "starterCode": "def clean_lines(text):\n    # your code here\n    pass",
+      "tests": [
+        {
+          "call": "clean_lines('a\\n\\n b \\n')",
+          "returns": "['a', 'b']"
+        },
+        {
+          "call": "clean_lines('')",
+          "returns": "[]"
+        },
+        {
+          "call": "clean_lines('  \\n x')",
+          "returns": "['x']"
+        }
+      ],
+      "hints": [
+        "`text.split(\"\\n\")` gives the lines.",
+        "Strip each line and keep it only if something is left."
+      ],
+      "solution": "def clean_lines(text):\n    lines = [line.strip() for line in text.split(\"\\n\")]\n    return [line for line in lines if line]"
+    },
+    {
+      "prompt": "Write `summarize(numbers)`. It returns a dictionary with three keys: `\"count\"` (how many numbers), `\"total\"` (the sum) and `\"average\"` (total divided by count). For an empty list the average is `0`.\n\nIt must return the dictionary and not print it.",
+      "starterCode": "def summarize(numbers):\n    # your code here\n    pass",
+      "tests": [
+        {
+          "call": "summarize([2, 4, 6])",
+          "returns": "{'count': 3, 'total': 12, 'average': 4.0}"
+        },
+        {
+          "call": "summarize([])",
+          "returns": "{'count': 0, 'total': 0, 'average': 0}"
+        },
+        {
+          "call": "summarize([5])",
+          "returns": "{'count': 1, 'total': 5, 'average': 5.0}"
+        }
+      ],
+      "hints": [
+        "Handle the empty list first: dividing by 0 is an error.",
+        "Use `len(numbers)` and `sum(numbers)`."
+      ],
+      "solution": "def summarize(numbers):\n    count = len(numbers)\n    total = sum(numbers)\n    average = total / count if count else 0\n    return {\"count\": count, \"total\": total, \"average\": average}"
+    },
+    {
+      "prompt": "Write `format_summary(summary)`. It takes a dictionary like the one from `summarize` and returns one line of text with the average shown with 2 decimals:\n\n```\nCount: 3 | Total: 12 | Average: 4.00\n```",
+      "starterCode": "def format_summary(summary):\n    # your code here\n    pass",
+      "tests": [
+        {
+          "call": "format_summary({'count': 3, 'total': 12, 'average': 4.0})",
+          "returns": "'Count: 3 | Total: 12 | Average: 4.00'"
+        },
+        {
+          "call": "format_summary({'count': 0, 'total': 0, 'average': 0})",
+          "returns": "'Count: 0 | Total: 0 | Average: 0.00'"
+        },
+        {
+          "call": "format_summary({'count': 2, 'total': 5, 'average': 2.5})",
+          "returns": "'Count: 2 | Total: 5 | Average: 2.50'"
+        }
+      ],
+      "hints": [
+        "Use an f-string with `summary[\"count\"]` and so on.",
+        "The average uses `:.2f`, like `{summary[\"average\"]:.2f}`."
+      ],
+      "solution": "def format_summary(summary):\n    return f\"Count: {summary['count']} | Total: {summary['total']} | Average: {summary['average']:.2f}\""
+    }
+  ],
+  "quiz": [
+    {
+      "question": "Why should a function return a value instead of printing it?",
+      "options": [
+        "Printing is not allowed",
+        "A returned value is easy to test and reuse",
+        "Return is faster",
+        "Python cannot print inside functions"
+      ],
+      "answer": 1,
+      "explanation": "With a returned value, other code (and tests) can use the result. A print only shows it on the screen."
+    },
+    {
+      "question": "What should the sample data in a shared project be?",
+      "options": [
+        "Your real customer list",
+        "Small fake data",
+        "Your passwords",
+        "No data and no explanation"
+      ],
+      "answer": 1,
+      "explanation": "Fake sample data lets anyone try the project and keeps private information safe."
+    },
+    {
+      "question": "What does `if __name__ == \"__main__\":` do?",
+      "options": [
+        "Runs the code under it only when the file is run directly",
+        "Deletes the file",
+        "Installs a package",
+        "Makes the code faster"
+      ],
+      "answer": 0,
+      "explanation": "The code under it runs when you start the file yourself, but not when another file imports your functions."
+    }
+  ]
+}

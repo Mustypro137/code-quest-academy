@@ -1,0 +1,100 @@
+{
+  "title": "Call a real AI model (on your PC)",
+  "explanation": [
+    {
+      "type": "text",
+      "text": "This lesson is for your own PC. A real model runs on a company's servers, so the code needs the internet and an account. It cannot run in this browser lesson, so the code below has a **Copy** button and no Run button."
+    },
+    {
+      "type": "text",
+      "text": "**What you need**"
+    },
+    {
+      "type": "list",
+      "items": [
+        "An account with the AI company and an **API key** (a long secret text, like a password).",
+        "Python on your PC and the company's package: `pip install anthropic`.",
+        "A spending limit on the account, so a mistake cannot cost a lot. Check the current prices on the company's website."
+      ]
+    },
+    {
+      "type": "text",
+      "text": "**Keep your key secret.** Never write the key inside your Python file. If you post that file on GitHub or LinkedIn, other people can use your key and you pay. Keep it in an **environment variable** and let the code read it."
+    },
+    {
+      "type": "pc",
+      "title": "save your key (Windows PowerShell)",
+      "text": "Run this once, then close the terminal and open a new one. Replace the text with your own key. Do not share it with anyone.",
+      "code": "setx ANTHROPIC_API_KEY \"paste-your-key-here\""
+    },
+    {
+      "type": "pc",
+      "title": "ask_claude.py: your first real call",
+      "text": "This function has the same shape as your fake model: text in, text out. Model names change over time, so check the current name in the documentation.",
+      "code": "# 1. pip install anthropic\n# 2. Save your key as shown above\nimport anthropic\n\nclient = anthropic.Anthropic()   # reads ANTHROPIC_API_KEY from the environment\n\ndef ask_claude(prompt):\n    response = client.messages.create(\n        model=\"claude-sonnet-5-5\",\n        max_tokens=300,          # the longest reply you allow (this also limits the cost)\n        messages=[{\"role\": \"user\", \"content\": prompt}],\n    )\n    return response.content[0].text\n\nprint(ask_claude(\"Say hello in five words.\"))"
+    },
+    {
+      "type": "pc",
+      "title": "a system message, history, and safe errors",
+      "text": "The system text is a separate setting here. The history is the same list of messages you built in lesson 2.",
+      "code": "import anthropic\n\nclient = anthropic.Anthropic()\n\nhistory = [\n    {\"role\": \"user\", \"content\": \"What is a list in Python?\"},\n    {\"role\": \"assistant\", \"content\": \"A list holds many values in order.\"},\n    {\"role\": \"user\", \"content\": \"Show me a short example.\"},\n]\n\ntry:\n    response = client.messages.create(\n        model=\"claude-sonnet-5-5\",\n        max_tokens=300,\n        system=\"You are a kind Python teacher. Keep answers short.\",\n        messages=history,\n    )\n    print(response.content[0].text)\nexcept anthropic.APIError as error:\n    print(\"The AI service had a problem:\", error)"
+    },
+    {
+      "type": "tip",
+      "text": "Because `ask_claude` has the same shape as `fake_ai`, you can pass it to any function from lessons 3 and 4. Build and test with the fake. Switch to the real one at the end."
+    },
+    {
+      "type": "tip",
+      "text": "Privacy: do not send real customer data, passwords or private messages to any online service unless you have permission. Test with fake data."
+    }
+  ],
+  "examples": [
+    {
+      "title": "Wrong: the key is inside the code",
+      "run": false,
+      "wrap": true,
+      "code": "client = anthropic.Anthropic(api_key=\"sk-my-real-key-123\")\n# If this file goes on GitHub, anyone can use your key."
+    },
+    {
+      "title": "Right: the key stays outside the code",
+      "run": false,
+      "wrap": true,
+      "code": "client = anthropic.Anthropic()\n# The package reads ANTHROPIC_API_KEY from your environment.\n# Your code file has no secret in it."
+    }
+  ],
+  "quiz": [
+    {
+      "question": "Where should your API key live?",
+      "options": [
+        "Inside the Python file",
+        "In an environment variable",
+        "In a LinkedIn post",
+        "In the README"
+      ],
+      "answer": 1,
+      "explanation": "An environment variable keeps the secret out of your code, so you cannot share it by mistake."
+    },
+    {
+      "question": "What does `max_tokens` do?",
+      "options": [
+        "Sets the longest reply you allow",
+        "Sets how many keys you have",
+        "Chooses the model",
+        "Makes the reply smarter"
+      ],
+      "answer": 0,
+      "explanation": "It limits the length of the reply, which also limits the cost."
+    },
+    {
+      "question": "Where is the reply text in `response`?",
+      "options": [
+        "`response.key`",
+        "`response.content[0].text`",
+        "`response.print()`",
+        "`response[\"fake\"]`"
+      ],
+      "answer": 1,
+      "explanation": "The reply is a list of content parts. The first part holds the text in `.text`."
+    }
+  ]
+}

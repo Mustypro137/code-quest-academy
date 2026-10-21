@@ -1,0 +1,161 @@
+{
+  "title": "Get answers you can use: JSON",
+  "explanation": [
+    {
+      "type": "text",
+      "text": "A chatty reply is hard for a program to use. If you ask the model for **JSON**, Python can read it with `json.loads` and get a dictionary."
+    },
+    {
+      "type": "code",
+      "code": "import json\n\nreply = '{\"label\": \"billing\", \"urgent\": true}'\ndata = json.loads(reply)\nprint(data[\"label\"])    # billing\nprint(data[\"urgent\"])   # True"
+    },
+    {
+      "type": "text",
+      "text": "But models do not always obey. A reply may have extra words (\"Sure! Here you go: ...\"), a code fence, or broken JSON. Your code must expect this and never crash."
+    },
+    {
+      "type": "list",
+      "items": [
+        "Wrap `json.loads` in `try` / `except json.JSONDecodeError`.",
+        "Check that the result is a dictionary and has the keys you need.",
+        "Check that the value is allowed (for example, the label is in your list). If not, use a safe value such as `\"unknown\"`."
+      ]
+    },
+    {
+      "type": "text",
+      "text": "Many models wrap JSON in a code fence: three backticks, the word `json`, the JSON, and three backticks again. A small helper can remove the fence before parsing."
+    },
+    {
+      "type": "tip",
+      "text": "Treat model output like user input: **never trust it**. Parse it, check it, and have a plan for when it is wrong."
+    }
+  ],
+  "examples": [
+    {
+      "title": "Read JSON safely",
+      "code": "import json\n\ndef parse(text):\n    try:\n        return json.loads(text)\n    except json.JSONDecodeError:\n        return None\n\nprint(parse('{\"a\": 1}'))\nprint(parse(\"Sure! Here is the JSON\"))"
+    },
+    {
+      "title": "Check the value is allowed",
+      "code": "allowed = [\"billing\", \"shipping\"]\ndata = {\"label\": \"pizza\"}\nlabel = data.get(\"label\")\nprint(label if label in allowed else \"unknown\")"
+    },
+    {
+      "title": "Remove a code fence",
+      "code": "fence = \"```\"\nreply = fence + 'json\\n{\"label\": \"other\"}\\n' + fence\nlines = reply.strip().split(\"\\n\")\nprint(\"\\n\".join(lines[1:-1]))"
+    }
+  ],
+  "exercises": [
+    {
+      "prompt": "Write `parse_reply(text)`. It returns the dictionary from the JSON text. It returns `None` when the text is not valid JSON, or when the JSON is not a dictionary (for example a list).",
+      "starterCode": "import json\n\ndef parse_reply(text):\n    # your code here\n    pass",
+      "tests": [
+        {
+          "call": "parse_reply('{\"a\": 1}')",
+          "returns": "{'a': 1}"
+        },
+        {
+          "call": "parse_reply('Sure! {\"a\": 1}')",
+          "returns": "None"
+        },
+        {
+          "call": "parse_reply('[1, 2]')",
+          "returns": "None"
+        }
+      ],
+      "hints": [
+        "Use `try:` and `except json.JSONDecodeError:`.",
+        "After loading, check `isinstance(data, dict)`."
+      ],
+      "solution": "import json\n\ndef parse_reply(text):\n    try:\n        data = json.loads(text)\n    except json.JSONDecodeError:\n        return None\n    if isinstance(data, dict):\n        return data\n    return None"
+    },
+    {
+      "prompt": "Write `strip_fence(text)`. If the text starts with a code fence (three backticks), remove the first line and the closing fence line. Then return the text without spaces at the ends. Text with no fence is returned with just the spaces removed.",
+      "starterCode": "def strip_fence(text):\n    # your code here\n    pass",
+      "tests": [
+        {
+          "call": "strip_fence('```json\\n{\"a\": 1}\\n```')",
+          "returns": "'{\"a\": 1}'"
+        },
+        {
+          "call": "strip_fence('  {\"a\": 1}  ')",
+          "returns": "'{\"a\": 1}'"
+        },
+        {
+          "call": "strip_fence('```\\nhello\\n```')",
+          "returns": "'hello'"
+        }
+      ],
+      "hints": [
+        "Start with `text = text.strip()`. Then use `text.startswith(...)` to look for the three backticks.",
+        "Split with `text.split(\"\\n\")`, drop the first line, and drop the last line if it is the closing fence."
+      ],
+      "solution": "def strip_fence(text):\n    text = text.strip()\n    if text.startswith(\"```\"):\n        lines = text.split(\"\\n\")[1:]\n        if lines and lines[-1].strip() == \"```\":\n            lines = lines[:-1]\n        text = \"\\n\".join(lines)\n    return text.strip()"
+    },
+    {
+      "prompt": "Write `get_label(text, allowed)`. Remove any fence, parse the JSON, and return the value of `\"label\"` if it is in the `allowed` list. In every other case return `\"unknown\"`.\n\nThe helpers `parse_reply` and `strip_fence` are already written for you.",
+      "starterCode": "import json\n\ndef parse_reply(text):\n    try:\n        data = json.loads(text)\n    except json.JSONDecodeError:\n        return None\n    return data if isinstance(data, dict) else None\n\ndef strip_fence(text):\n    text = text.strip()\n    if text.startswith(\"```\"):\n        lines = text.split(\"\\n\")[1:]\n        if lines and lines[-1].strip() == \"```\":\n            lines = lines[:-1]\n        text = \"\\n\".join(lines)\n    return text.strip()\n\ndef get_label(text, allowed):\n    # your code here\n    pass",
+      "tests": [
+        {
+          "call": "get_label('{\"label\": \"billing\"}', ['billing', 'other'])",
+          "returns": "'billing'"
+        },
+        {
+          "call": "get_label('```json\\n{\"label\": \"other\"}\\n```', ['billing', 'other'])",
+          "returns": "'other'"
+        },
+        {
+          "call": "get_label('not json', ['billing', 'other'])",
+          "returns": "'unknown'"
+        },
+        {
+          "call": "get_label('{\"label\": \"pizza\"}', ['billing', 'other'])",
+          "returns": "'unknown'"
+        },
+        {
+          "call": "get_label('{\"name\": \"x\"}', ['billing', 'other'])",
+          "returns": "'unknown'"
+        }
+      ],
+      "hints": [
+        "`data = parse_reply(strip_fence(text))`.",
+        "If `data` is `None`, return `\"unknown\"`. Use `data.get(\"label\")` for a missing key."
+      ],
+      "solution": "import json\n\ndef parse_reply(text):\n    try:\n        data = json.loads(text)\n    except json.JSONDecodeError:\n        return None\n    return data if isinstance(data, dict) else None\n\ndef strip_fence(text):\n    text = text.strip()\n    if text.startswith(\"```\"):\n        lines = text.split(\"\\n\")[1:]\n        if lines and lines[-1].strip() == \"```\":\n            lines = lines[:-1]\n        text = \"\\n\".join(lines)\n    return text.strip()\n\ndef get_label(text, allowed):\n    data = parse_reply(strip_fence(text))\n    if data is None:\n        return \"unknown\"\n    label = data.get(\"label\")\n    if label in allowed:\n        return label\n    return \"unknown\""
+    }
+  ],
+  "quiz": [
+    {
+      "question": "Why ask the model for JSON?",
+      "options": [
+        "JSON makes the model faster",
+        "A program can read it easily with `json.loads`",
+        "JSON is the only text a model can write",
+        "It removes all mistakes"
+      ],
+      "answer": 1,
+      "explanation": "`json.loads` turns the text into a dictionary your code can use."
+    },
+    {
+      "question": "What should your code do when the reply is not valid JSON?",
+      "options": [
+        "Crash, so you notice",
+        "Catch the error and use a safe value",
+        "Ignore it and carry on with the broken text",
+        "Ask the model again forever"
+      ],
+      "answer": 1,
+      "explanation": "Catch `json.JSONDecodeError` and fall back to a safe value such as `None` or `\"unknown\"`."
+    },
+    {
+      "question": "The model returns `{\"label\": \"pizza\"}` but allowed labels are billing and other. What is best?",
+      "options": [
+        "Use \"pizza\" anyway",
+        "Use \"unknown\"",
+        "Delete the program",
+        "Use the first allowed label"
+      ],
+      "answer": 1,
+      "explanation": "A value that is not allowed must not be trusted. Falling back to \"unknown\" keeps your data clean."
+    }
+  ]
+}

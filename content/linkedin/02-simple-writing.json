@@ -1,0 +1,24 @@
+{
+  "title": "Write clearly in simple English",
+  "explanation": [
+    {"type":"text","text":"Clear writing is a skill, and it is the same skill for LinkedIn, emails, reports and code comments. Simple writing is not childish. It respects the reader's time."},
+    {"type":"text","text":"Five habits make most writing better:"},
+    {"type":"list","items":["**One idea per sentence.** If a sentence is long, split it.","**Common words.** Say \"use\", not \"utilise\". Say \"help\", not \"assist\".","**Active voice.** Say who did it: \"The script cleaned the file\", not \"The file was cleaned\".","**Be specific.** Numbers and real details beat vague words like \"better\" or \"a lot\".","**Start with the point.** Put the most important thing first."]},
+    {"type":"text","text":"Some simple swaps: \"utilise\" becomes \"use\", \"in order to\" becomes \"to\", \"approximately\" becomes \"about\", \"commence\" becomes \"start\", \"assist\" becomes \"help\", \"due to the fact that\" becomes \"because\"."},
+    {"type":"text","text":"Numbers make your writing believable. But they must be **true**. Only write a number if you measured it or know it."},
+    {"type":"text","text":"To check your writing, read it out loud. If you run out of breath or stumble, the sentence is too long or too hard. Then cut every word you can, and read it again."},
+    {"type":"tip","text":"Explaining code is the same skill. Pretend you are talking to a friend who has never programmed. Say what it does first, then why, then how."},
+    {"type":"template","title":"Explain a piece of code in 3 sentences","text":"Use this to explain any function or script in simple English. It is also a good way to write a README summary.","code":"What it does: [one sentence, no jargon].\nWhy it matters: [who needs it, or what problem it solves].\nHow it works: [the main steps, in plain words]."}
+  ],
+  "examples": [
+    {"title":"Too heavy","run":false,"wrap":true,"code":"I was responsible for the utilisation of Python in order to facilitate the optimisation of data cleaning processes."},
+    {"title":"Clear","run":false,"wrap":true,"code":"I used Python to clean data faster."},
+    {"title":"Passive and vague","run":false,"wrap":true,"code":"Improvements were made to the process."},
+    {"title":"Active and specific (use only numbers that are true for you)","run":false,"wrap":true,"code":"I cut a weekly 2-hour spreadsheet job to 5 minutes with a Python script."}
+  ],
+  "quiz": [
+    {"question":"Which sentence is the clearest?","options":["I utilised Python in order to facilitate data cleaning.","Python was utilised by me for data cleaning purposes.","I used Python to clean data.","Data cleaning was done through the usage of Python."],"answer":2,"explanation":"Short, common words, and it says who did what."},
+    {"question":"Which sentence gives the reader the most useful information?","options":["I cut a weekly 2-hour job to 5 minutes.","I made the process better.","I improved things a lot.","I worked hard on the process."],"answer":0,"explanation":"It uses real numbers. The others are vague."},
+    {"question":"What is a good test for a sentence?","options":["Does it sound impressive?","Does it have long words?","Is it more than 30 words?","Can I read it out loud easily, and does it have one idea?"],"answer":3,"explanation":"If it is hard to say, it is hard to read."}
+  ]
+}

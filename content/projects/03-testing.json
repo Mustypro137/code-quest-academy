@@ -1,0 +1,182 @@
+{
+  "title": "Test your code with assert",
+  "explanation": [
+    {
+      "type": "text",
+      "text": "A test is a small check that says \"this input should give this output\". If you test your functions, you find bugs before other people do, and you can change your code later without fear."
+    },
+    {
+      "type": "text",
+      "text": "The simplest tool is `assert`. It does nothing when the claim is true. When the claim is false it stops with an `AssertionError`."
+    },
+    {
+      "type": "code",
+      "code": "def double(n):\n    return n * 2\n\nassert double(4) == 8\nassert double(0) == 0\nassert double(-3) == -6, \"negative numbers should work\"\nprint(\"All tests passed\")"
+    },
+    {
+      "type": "text",
+      "text": "**What to test.** For each function, try:"
+    },
+    {
+      "type": "list",
+      "items": [
+        "**A normal case**: the usual input.",
+        "**An edge case**: empty list, zero, one item, very long text.",
+        "**A bad case**: wrong type, missing value, text where a number should be."
+      ]
+    },
+    {
+      "type": "text",
+      "text": "Most bugs hide at the edges. The average of an empty list is a classic: `sum([]) / len([])` divides by zero."
+    },
+    {
+      "type": "tip",
+      "text": "When you find a bug, first write a test that fails because of it. Then fix the code until the test passes. The bug can never come back without you noticing."
+    },
+    {
+      "type": "pc",
+      "title": "tests in a separate file (on your PC)",
+      "text": "Save this as test_cleaner.py next to your code. Run it with \"python test_cleaner.py\". Many people later use a tool called pytest, which finds tests like these for you.",
+      "code": "from cleaner import clean_name\n\ndef test_clean_name():\n    assert clean_name(\"  ADA  \") == \"Ada\"\n    assert clean_name(\"\") == \"\"\n\ntest_clean_name()\nprint(\"Tests passed\")"
+    }
+  ],
+  "examples": [
+    {
+      "title": "A passing test and a failing test",
+      "code": "def double(n):\n    return n * 2\n\nassert double(4) == 8\nprint(\"first test passed\")\n\ntry:\n    assert double(2) == 5, \"double(2) should be 4\"\nexcept AssertionError as error:\n    print(\"test failed:\", error)"
+    },
+    {
+      "title": "Test many cases in a loop",
+      "code": "def is_even(n):\n    return n % 2 == 0\n\ncases = [(2, True), (3, False), (0, True), (-4, True)]\nfor value, expected in cases:\n    result = is_even(value)\n    print(value, \"ok\" if result == expected else \"FAIL\")"
+    },
+    {
+      "title": "An edge case finds a bug",
+      "code": "def average(numbers):\n    return sum(numbers) / len(numbers)\n\nprint(average([2, 4]))\ntry:\n    print(average([]))\nexcept ZeroDivisionError:\n    print(\"bug: an empty list crashes the function\")"
+    }
+  ],
+  "exercises": [
+    {
+      "prompt": "This function crashes on an empty list. Fix `average(numbers)` so it returns `0` for an empty list and the normal average otherwise.",
+      "starterCode": "def average(numbers):\n    return sum(numbers) / len(numbers)",
+      "tests": [
+        {
+          "call": "average([2, 4])",
+          "returns": "3.0"
+        },
+        {
+          "call": "average([])",
+          "returns": "0"
+        },
+        {
+          "call": "average([5])",
+          "returns": "5.0"
+        }
+      ],
+      "hints": [
+        "Check `if not numbers:` first.",
+        "`return 0` for the empty case."
+      ],
+      "solution": "def average(numbers):\n    if not numbers:\n        return 0\n    return sum(numbers) / len(numbers)"
+    },
+    {
+      "prompt": "Write `failing_inputs(func, cases)`. `cases` is a list of pairs `(input, expected)`. Call `func(input)` for each pair and return a list of the inputs where the result is **not** equal to `expected`, in order.",
+      "starterCode": "def failing_inputs(func, cases):\n    # your code here\n    pass",
+      "tests": [
+        {
+          "call": "failing_inputs(double, [(1, 2), (2, 5), (3, 6), (4, 9)])",
+          "returns": "[2, 4]",
+          "setup": "def double(n):\n    return n * 2"
+        },
+        {
+          "call": "failing_inputs(double, [(1, 2)])",
+          "returns": "[]",
+          "setup": "def double(n):\n    return n * 2"
+        },
+        {
+          "call": "failing_inputs(double, [])",
+          "returns": "[]",
+          "setup": "def double(n):\n    return n * 2"
+        }
+      ],
+      "hints": [
+        "Loop with `for value, expected in cases:`.",
+        "If `func(value) != expected`, add `value` to a result list."
+      ],
+      "solution": "def failing_inputs(func, cases):\n    failed = []\n    for value, expected in cases:\n        if func(value) != expected:\n            failed.append(value)\n    return failed"
+    },
+    {
+      "prompt": "Write `is_valid_age(value)`. It returns `True` only when `value` is a whole number (an `int`) from 0 to 120. Anything else, such as text, `-1`, `121` or `2.5`, gives `False`.\n\nThink about the edges: 0 and 120 are valid.",
+      "starterCode": "def is_valid_age(value):\n    # your code here\n    pass",
+      "tests": [
+        {
+          "call": "is_valid_age(25)",
+          "returns": "True"
+        },
+        {
+          "call": "is_valid_age(0)",
+          "returns": "True"
+        },
+        {
+          "call": "is_valid_age(120)",
+          "returns": "True"
+        },
+        {
+          "call": "is_valid_age(121)",
+          "returns": "False"
+        },
+        {
+          "call": "is_valid_age(-1)",
+          "returns": "False"
+        },
+        {
+          "call": "is_valid_age('25')",
+          "returns": "False"
+        },
+        {
+          "call": "is_valid_age(2.5)",
+          "returns": "False"
+        }
+      ],
+      "hints": [
+        "Check the type with `isinstance(value, int)`.",
+        "Then check `0 <= value <= 120`."
+      ],
+      "solution": "def is_valid_age(value):\n    return isinstance(value, int) and 0 <= value <= 120"
+    }
+  ],
+  "quiz": [
+    {
+      "question": "What does `assert` do when the claim is true?",
+      "options": [
+        "Stops the program",
+        "Nothing, the program goes on",
+        "Prints an error",
+        "Deletes the variable"
+      ],
+      "answer": 1,
+      "explanation": "A true assert is silent. A false assert raises an AssertionError."
+    },
+    {
+      "question": "Which input is an \"edge case\" for an average function?",
+      "options": [
+        "A list of 3 normal numbers",
+        "An empty list",
+        "A list with the number 5 twice",
+        "A list of 100 numbers"
+      ],
+      "answer": 1,
+      "explanation": "An empty list is at the edge of what the function was written for, and it often breaks the code."
+    },
+    {
+      "question": "You find a bug. What is a good order?",
+      "options": [
+        "Fix it and never test",
+        "Write a test that fails because of the bug, then fix the code",
+        "Delete the function",
+        "Hope nobody sees it"
+      ],
+      "answer": 1,
+      "explanation": "A test that first fails and then passes proves the fix, and it guards against the bug coming back."
+    }
+  ]
+}

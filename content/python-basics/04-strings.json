@@ -1,0 +1,58 @@
+{
+  "title": "Strings: working with text",
+  "explanation": [
+    {"type":"text","text":"A string is text inside quotes. You can join strings with `+` and repeat them with `*`."},
+    {"type":"code","code":"first = \"Ada\"\nlast = \"Lovelace\"\nfull = first + \" \" + last\nprint(full)\nprint(\"ha\" * 3)  # hahaha"},
+    {"type":"text","text":"An f-string puts variables inside text. Write `f` before the quotes and put the variable in curly brackets."},
+    {"type":"code","code":"name = \"Sam\"\nage = 12\nprint(f\"{name} is {age} years old\")"},
+    {"type":"text","text":"Strings have built-in tools called methods. `len()` counts the characters."},
+    {"type":"code","code":"word = \"python\"\nprint(word.upper())  # PYTHON\nprint(word.title())  # Python\nprint(len(word))    # 6"},
+    {"type":"text","text":"You can pick one letter with its position. Counting starts at 0. A negative number counts from the end. A slice like `[0:3]` takes a part."},
+    {"type":"code","code":"print(word[0])    # p\nprint(word[-1])   # n\nprint(word[0:3])  # pyt"},
+    {"type":"tip","text":"An f-string is like a template literal in JavaScript. `f\"{name}\"` in Python is `${name}` in JavaScript."}
+  ],
+  "examples": [
+    {"title":"Clean up text","code":"text = \"  hello  \"\nprint(text.strip())\nprint(text.strip().upper())"},
+    {"title":"Take a slice","code":"word = \"programming\"\nprint(word[0:7])\nprint(word[-3:])"}
+  ],
+  "exercises": [
+    {
+      "prompt": "Make a variable `first` with the text `Ada` and a variable `last` with the text `Lovelace`.\n\nMake `full` by joining them with a space between. Print `full`.",
+      "starterCode": "# Write your code below\n",
+      "tests": [
+        {
+          "call": "full",
+          "returns": "'Ada Lovelace'",
+          "label": "The variable full"
+        },
+        {
+          "output": "Ada Lovelace"
+        }
+      ],
+      "hints": [
+        "Join with `+`.",
+        "The space is a string too: `\" \"`."
+      ],
+      "solution": "first = \"Ada\"\nlast = \"Lovelace\"\nfull = first + \" \" + last\nprint(full)"
+    },
+    {
+      "prompt": "The variables `name` and `age` are set for you. Use an f-string to print this sentence:\n\n`Sam is 12 years old`",
+      "starterCode": "name = \"Sam\"\nage = 12\n\n# Print the sentence below\n",
+      "tests": [
+        {
+          "output": "Sam is 12 years old"
+        }
+      ],
+      "hints": [
+        "Start with `print(f\"`.",
+        "Put the variables in curly brackets: `{name}` and `{age}`."
+      ],
+      "solution": "name = \"Sam\"\nage = 12\n\nprint(f\"{name} is {age} years old\")"
+    }
+  ],
+  "quiz": [
+    {"question":"What is `\"ab\" + \"cd\"`?","options":["ab cd","An error","abcd","abab"],"answer":2,"explanation":"`+` joins strings together, with no space added."},
+    {"question":"What does `len(\"hello\")` give?","options":["4","5","6","hello"],"answer":1,"explanation":"`len()` counts the characters. \"hello\" has 5."},
+    {"question":"What does `\"python\"[0]` give?","options":["y","n","An error","p"],"answer":3,"explanation":"Counting starts at 0, so position 0 is the first letter."}
+  ]
+}

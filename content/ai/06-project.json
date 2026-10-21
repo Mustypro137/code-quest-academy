@@ -1,0 +1,213 @@
+{
+  "title": "Mini project: customer message sorter",
+  "explanation": [
+    {
+      "type": "text",
+      "text": "Time to combine the whole module. You will build a **message sorter**. It takes customer messages (fake ones) and sorts them into labels: `billing`, `shipping`, `technical` or `other`. The model is a parameter, so you test with a fake model and later use a real one."
+    },
+    {
+      "type": "text",
+      "text": "The pipeline has five small steps. You build one function in each exercise:"
+    },
+    {
+      "type": "list",
+      "items": [
+        "`build_classify_prompt(message)`: make the prompt.",
+        "`classify(model, message)`: ask the model, read the JSON, check the label.",
+        "`classify_with_retry(model, message, tries)`: try again if the answer is bad.",
+        "`sort_messages(model, messages)`: group all messages by label.",
+        "`make_report(groups)`: print a short report."
+      ]
+    },
+    {
+      "type": "text",
+      "text": "Each exercise gives you the earlier functions, so you can focus on one step."
+    },
+    {
+      "type": "tip",
+      "text": "The fake model in the first example reads only the text **after** `Message:`. The prompt also lists every label, so reading the whole prompt would match every word."
+    },
+    {
+      "type": "tip",
+      "text": "The sorter must never crash. A bad reply becomes `\"unknown\"`, and you can read the unknown ones yourself."
+    },
+    {
+      "type": "pc",
+      "title": "use a real model for your sorter",
+      "text": "Save your pipeline functions in sorter.py. Add the ask_claude function from lesson 5. Start with 5 fake messages and read the \"unknown\" ones yourself.",
+      "code": "# at the bottom of sorter.py\nmessages = [\n    \"I was charged twice this month\",\n    \"My parcel has not arrived\",\n    \"The app closes when I open it\",\n    \"Can I change my email address?\",\n    \"Thanks, all good now!\",\n]\n\ngroups = sort_messages(ask_claude, messages)   # was: sort_messages(fake_model, messages)\nprint(make_report(groups))\nfor label, items in groups.items():\n    print(label, items)"
+    }
+  ],
+  "examples": [
+    {
+      "title": "The full pipeline, with a fake model",
+      "code": "import json\n\nLABELS = [\"billing\", \"shipping\", \"technical\", \"other\"]\n\ndef build_classify_prompt(message):\n    labels = \", \".join(LABELS)\n    return (\n        f\"Sort this customer message into one label: {labels}.\\n\"\n        'Reply with JSON only, like {\"label\": \"billing\"}.\\n\\n'\n        f\"Message: {message}\"\n    )\n\ndef parse_reply(text):\n    try:\n        data = json.loads(text)\n    except json.JSONDecodeError:\n        return None\n    return data if isinstance(data, dict) else None\n\ndef classify(model, message):\n    data = parse_reply(model(build_classify_prompt(message)))\n    if data and data.get(\"label\") in LABELS:\n        return data[\"label\"]\n    return \"unknown\"\n\ndef fake_model(prompt):\n    text = prompt.split(\"Message:\")[1].lower()\n    if \"refund\" in text or \"charge\" in text:\n        return '{\"label\": \"billing\"}'\n    if \"order\" in text or \"delivery\" in text:\n        return '{\"label\": \"shipping\"}'\n    if \"error\" in text or \"crash\" in text:\n        return '{\"label\": \"technical\"}'\n    return \"Sorry, no idea\"\n\nmessages = [\n    \"I want a refund for my last charge\",\n    \"Where is my order?\",\n    \"The app shows an error on start\",\n    \"Do you have a gift card?\",\n]\nfor m in messages:\n    print(classify(fake_model, m), \"<-\", m)"
+    },
+    {
+      "title": "See the prompt the model gets",
+      "code": "LABELS = [\"billing\", \"shipping\", \"technical\", \"other\"]\nmessage = \"Where is my order?\"\nlabels = \", \".join(LABELS)\nprint(f\"Sort this customer message into one label: {labels}.\")\nprint('Reply with JSON only, like {\"label\": \"billing\"}.')\nprint()\nprint(f\"Message: {message}\")"
+    }
+  ],
+  "exercises": [
+    {
+      "prompt": "Write `build_classify_prompt(message)`. The prompt must:\n\n- ask the model to sort the message into one of the labels\n- list every label in `LABELS`\n- say to reply with JSON only, like `{\"label\": \"billing\"}`\n- end with the line `Message:` and the message, like `Message: Where is my order?`",
+      "starterCode": "LABELS = [\"billing\", \"shipping\", \"technical\", \"other\"]\n\ndef build_classify_prompt(message):\n    # your code here\n    pass",
+      "tests": [
+        {
+          "call": "build_classify_prompt('Where is my order?').endswith('Message: Where is my order?')",
+          "returns": "True"
+        },
+        {
+          "call": "all(label in build_classify_prompt('x') for label in LABELS)",
+          "returns": "True"
+        },
+        {
+          "call": "'JSON' in build_classify_prompt('x')",
+          "returns": "True"
+        }
+      ],
+      "hints": [
+        "Join the labels: `\", \".join(LABELS)`.",
+        "Build the text with an f-string. Put `f\"Message: {message}\"` at the very end."
+      ],
+      "solution": "LABELS = [\"billing\", \"shipping\", \"technical\", \"other\"]\n\ndef build_classify_prompt(message):\n    labels = \", \".join(LABELS)\n    return (\n        f\"Sort this customer message into one label: {labels}.\\n\"\n        'Reply with JSON only, like {\"label\": \"billing\"}.\\n\\n'\n        f\"Message: {message}\"\n    )"
+    },
+    {
+      "prompt": "Write `classify(model, message)`.\n\n1. Build the prompt.\n2. Call the model with it.\n3. Parse the reply with `parse_reply`.\n4. Return the label if it is in `LABELS`. Otherwise return `\"unknown\"`.\n\nThe helpers are already written.",
+      "starterCode": "import json\n\nLABELS = [\"billing\", \"shipping\", \"technical\", \"other\"]\n\ndef build_classify_prompt(message):\n    labels = \", \".join(LABELS)\n    return (\n        f\"Sort this customer message into one label: {labels}.\\n\"\n        'Reply with JSON only, like {\"label\": \"billing\"}.\\n\\n'\n        f\"Message: {message}\"\n    )\n\ndef parse_reply(text):\n    try:\n        data = json.loads(text)\n    except json.JSONDecodeError:\n        return None\n    return data if isinstance(data, dict) else None\n\ndef classify(model, message):\n    # your code here\n    pass",
+      "tests": [
+        {
+          "call": "classify(good, 'x')",
+          "returns": "'billing'",
+          "setup": "def good(p):\n    return '{\"label\": \"billing\"}'"
+        },
+        {
+          "call": "classify(bad, 'x')",
+          "returns": "'unknown'",
+          "setup": "def bad(p):\n    return 'Sure! billing'"
+        },
+        {
+          "call": "classify(odd, 'x')",
+          "returns": "'unknown'",
+          "setup": "def odd(p):\n    return '{\"label\": \"pizza\"}'"
+        },
+        {
+          "call": "(classify(spy, 'Hi'), seen[0] == build_classify_prompt('Hi'))",
+          "returns": "('other', True)",
+          "setup": "seen = []\ndef spy(p):\n    seen.append(p)\n    return '{\"label\": \"other\"}'"
+        }
+      ],
+      "hints": [
+        "`reply = model(build_classify_prompt(message))`, then `data = parse_reply(reply)`.",
+        "`data` can be `None`. Check it before `data.get(\"label\")`."
+      ],
+      "solution": "import json\n\nLABELS = [\"billing\", \"shipping\", \"technical\", \"other\"]\n\ndef build_classify_prompt(message):\n    labels = \", \".join(LABELS)\n    return (\n        f\"Sort this customer message into one label: {labels}.\\n\"\n        'Reply with JSON only, like {\"label\": \"billing\"}.\\n\\n'\n        f\"Message: {message}\"\n    )\n\ndef parse_reply(text):\n    try:\n        data = json.loads(text)\n    except json.JSONDecodeError:\n        return None\n    return data if isinstance(data, dict) else None\n\ndef classify(model, message):\n    data = parse_reply(model(build_classify_prompt(message)))\n    if data and data.get(\"label\") in LABELS:\n        return data[\"label\"]\n    return \"unknown\""
+    },
+    {
+      "prompt": "Models sometimes give a bad answer once and a good one the next time. Write `classify_with_retry(model, message, tries=2)`. Call `classify` up to `tries` times. Return the first label that is not `\"unknown\"`. If every try is unknown, return `\"unknown\"`.\n\nStop calling the model as soon as you get a good label.",
+      "starterCode": "import json\n\nLABELS = [\"billing\", \"shipping\", \"technical\", \"other\"]\n\ndef build_classify_prompt(message):\n    labels = \", \".join(LABELS)\n    return (\n        f\"Sort this customer message into one label: {labels}.\\n\"\n        'Reply with JSON only, like {\"label\": \"billing\"}.\\n\\n'\n        f\"Message: {message}\"\n    )\n\ndef parse_reply(text):\n    try:\n        data = json.loads(text)\n    except json.JSONDecodeError:\n        return None\n    return data if isinstance(data, dict) else None\n\ndef classify(model, message):\n    data = parse_reply(model(build_classify_prompt(message)))\n    if data and data.get(\"label\") in LABELS:\n        return data[\"label\"]\n    return \"unknown\"\n\ndef classify_with_retry(model, message, tries=2):\n    # your code here\n    pass",
+      "tests": [
+        {
+          "call": "(classify_with_retry(flaky, 'x'), len(calls))",
+          "returns": "('shipping', 2)",
+          "setup": "calls = []\ndef flaky(p):\n    calls.append(1)\n    return 'oops' if len(calls) == 1 else '{\"label\": \"shipping\"}'"
+        },
+        {
+          "call": "(classify_with_retry(flaky, 'x', 1), len(calls))",
+          "returns": "('unknown', 1)",
+          "setup": "calls = []\ndef flaky(p):\n    calls.append(1)\n    return 'oops' if len(calls) == 1 else '{\"label\": \"shipping\"}'"
+        },
+        {
+          "call": "(classify_with_retry(bad, 'x', 3), len(calls))",
+          "returns": "('unknown', 3)",
+          "setup": "calls = []\ndef bad(p):\n    calls.append(1)\n    return 'no'"
+        },
+        {
+          "call": "(classify_with_retry(good, 'x', 5), len(calls))",
+          "returns": "('billing', 1)",
+          "setup": "calls = []\ndef good(p):\n    calls.append(1)\n    return '{\"label\": \"billing\"}'"
+        }
+      ],
+      "hints": [
+        "Use `for _ in range(tries):`.",
+        "Inside the loop, `return` the label as soon as it is not `\"unknown\"`. After the loop, return `\"unknown\"`."
+      ],
+      "solution": "import json\n\nLABELS = [\"billing\", \"shipping\", \"technical\", \"other\"]\n\ndef build_classify_prompt(message):\n    labels = \", \".join(LABELS)\n    return (\n        f\"Sort this customer message into one label: {labels}.\\n\"\n        'Reply with JSON only, like {\"label\": \"billing\"}.\\n\\n'\n        f\"Message: {message}\"\n    )\n\ndef parse_reply(text):\n    try:\n        data = json.loads(text)\n    except json.JSONDecodeError:\n        return None\n    return data if isinstance(data, dict) else None\n\ndef classify(model, message):\n    data = parse_reply(model(build_classify_prompt(message)))\n    if data and data.get(\"label\") in LABELS:\n        return data[\"label\"]\n    return \"unknown\"\n\ndef classify_with_retry(model, message, tries=2):\n    for _ in range(tries):\n        label = classify(model, message)\n        if label != \"unknown\":\n            return label\n    return \"unknown\""
+    },
+    {
+      "prompt": "Write `sort_messages(model, messages)`. It returns a dictionary. Each key is a label and each value is the list of messages with that label, in the order they came. Use `classify_with_retry` for each message.",
+      "starterCode": "import json\n\nLABELS = [\"billing\", \"shipping\", \"technical\", \"other\"]\n\ndef build_classify_prompt(message):\n    labels = \", \".join(LABELS)\n    return (\n        f\"Sort this customer message into one label: {labels}.\\n\"\n        'Reply with JSON only, like {\"label\": \"billing\"}.\\n\\n'\n        f\"Message: {message}\"\n    )\n\ndef parse_reply(text):\n    try:\n        data = json.loads(text)\n    except json.JSONDecodeError:\n        return None\n    return data if isinstance(data, dict) else None\n\ndef classify(model, message):\n    data = parse_reply(model(build_classify_prompt(message)))\n    if data and data.get(\"label\") in LABELS:\n        return data[\"label\"]\n    return \"unknown\"\n\ndef classify_with_retry(model, message, tries=2):\n    for _ in range(tries):\n        label = classify(model, message)\n        if label != \"unknown\":\n            return label\n    return \"unknown\"\n\ndef sort_messages(model, messages):\n    # your code here\n    pass",
+      "tests": [
+        {
+          "call": "sort_messages(kw, ['Refund me', 'Where is my order?', 'Refund again', 'Hello'])",
+          "returns": "{'billing': ['Refund me', 'Refund again'], 'shipping': ['Where is my order?'], 'unknown': ['Hello']}",
+          "setup": "def kw(p):\n    text = p.split(\"Message:\")[1].lower()\n    if \"refund\" in text:\n        return '{\"label\": \"billing\"}'\n    if \"order\" in text:\n        return '{\"label\": \"shipping\"}'\n    return \"no idea\""
+        },
+        {
+          "call": "sort_messages(kw, [])",
+          "returns": "{}",
+          "setup": "def kw(p):\n    return \"no idea\""
+        }
+      ],
+      "hints": [
+        "Start with `groups = {}`.",
+        "`groups.setdefault(label, []).append(message)` makes the list the first time and adds to it."
+      ],
+      "solution": "import json\n\nLABELS = [\"billing\", \"shipping\", \"technical\", \"other\"]\n\ndef build_classify_prompt(message):\n    labels = \", \".join(LABELS)\n    return (\n        f\"Sort this customer message into one label: {labels}.\\n\"\n        'Reply with JSON only, like {\"label\": \"billing\"}.\\n\\n'\n        f\"Message: {message}\"\n    )\n\ndef parse_reply(text):\n    try:\n        data = json.loads(text)\n    except json.JSONDecodeError:\n        return None\n    return data if isinstance(data, dict) else None\n\ndef classify(model, message):\n    data = parse_reply(model(build_classify_prompt(message)))\n    if data and data.get(\"label\") in LABELS:\n        return data[\"label\"]\n    return \"unknown\"\n\ndef classify_with_retry(model, message, tries=2):\n    for _ in range(tries):\n        label = classify(model, message)\n        if label != \"unknown\":\n            return label\n    return \"unknown\"\n\ndef sort_messages(model, messages):\n    groups = {}\n    for message in messages:\n        label = classify_with_retry(model, message)\n        groups.setdefault(label, []).append(message)\n    return groups"
+    },
+    {
+      "prompt": "Write `make_report(groups)`. It takes the dictionary from `sort_messages` and returns a text report:\n\n- one line per label, as `label: count`\n- the label with the most messages first. For the same count, sort by label name\n- a last line `Total: N`\n\nFor example:\n\n```\nbilling: 2\nshipping: 1\nunknown: 1\nTotal: 4\n```",
+      "starterCode": "def make_report(groups):\n    # your code here\n    pass",
+      "tests": [
+        {
+          "call": "make_report({'unknown': ['d'], 'billing': ['a', 'b'], 'shipping': ['c']})",
+          "returns": "'billing: 2\\nshipping: 1\\nunknown: 1\\nTotal: 4'"
+        },
+        {
+          "call": "make_report({})",
+          "returns": "'Total: 0'"
+        }
+      ],
+      "hints": [
+        "Sort with `sorted(groups.items(), key=lambda item: (-len(item[1]), item[0]))`.",
+        "Collect the lines in a list, add the Total line, and join with `\"\\n\"`."
+      ],
+      "solution": "def make_report(groups):\n    lines = []\n    total = 0\n    for label, items in sorted(groups.items(), key=lambda item: (-len(item[1]), item[0])):\n        lines.append(f\"{label}: {len(items)}\")\n        total += len(items)\n    lines.append(f\"Total: {total}\")\n    return \"\\n\".join(lines)"
+    }
+  ],
+  "quiz": [
+    {
+      "question": "Why does `classify` return \"unknown\" for a bad reply and not crash?",
+      "options": [
+        "Python cannot crash",
+        "Model output can be wrong, so the program must survive it",
+        "The model fixes it later",
+        "Unknown is the best label"
+      ],
+      "answer": 1,
+      "explanation": "Model output is not trusted. A safe value keeps the program running, and you can check the unknown ones yourself."
+    },
+    {
+      "question": "What is the benefit of passing the model as a parameter?",
+      "options": [
+        "The code runs faster",
+        "You can swap a fake for a real model without changing the other code",
+        "The model becomes free",
+        "Python needs it"
+      ],
+      "answer": 1,
+      "explanation": "The sorter only calls `model(prompt)`. Any function with the same shape works, fake or real."
+    },
+    {
+      "question": "Before you run this sorter with a real model on real customer messages, what should you do?",
+      "options": [
+        "Nothing, it is safe",
+        "Get permission and check the privacy rules, and test with fake data first",
+        "Post the messages on LinkedIn",
+        "Put your key in the code"
+      ],
+      "answer": 1,
+      "explanation": "Customer messages are private. Test with fake data and only send real data when you are allowed to."
+    }
+  ]
+}

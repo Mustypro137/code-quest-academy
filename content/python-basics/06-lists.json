@@ -1,0 +1,68 @@
+{
+  "title": "Lists: many values in one",
+  "explanation": [
+    {"type":"text","text":"A list holds many values in order. Use square brackets and commas."},
+    {"type":"code","code":"fruits = [\"apple\", \"banana\", \"cherry\"]\nprint(fruits)\nprint(fruits[0])    # apple\nprint(len(fruits))   # 3"},
+    {"type":"text","text":"Counting starts at 0, like with strings. `fruits[-1]` is the last item."},
+    {"type":"text","text":"You can change a list after you make it."},
+    {"type":"code","code":"fruits = [\"apple\", \"banana\", \"cherry\"]\nfruits.append(\"mango\")   # add to the end\nfruits[0] = \"pear\"       # replace an item\nfruits.remove(\"banana\")  # remove an item\nprint(fruits)"},
+    {"type":"text","text":"Use `in` to ask if something is in the list. It gives `True` or `False`."},
+    {"type":"code","code":"print(\"pear\" in fruits)  # True"},
+    {"type":"text","text":"Some built-in tools work well with lists of numbers."},
+    {"type":"code","code":"numbers = [4, 1, 9]\nprint(sum(numbers))     # 14\nprint(max(numbers))     # 9\nprint(sorted(numbers))  # [1, 4, 9]"},
+    {"type":"tip","text":"A list is like an array in JavaScript. `.push()` in JavaScript is `.append()` in Python."}
+  ],
+  "examples": [
+    {"title":"Build a list","code":"shopping = []\nshopping.append(\"milk\")\nshopping.append(\"eggs\")\nprint(shopping)\nprint(len(shopping))"},
+    {"title":"Pick parts of a list","code":"numbers = [10, 20, 30, 40, 50]\nprint(numbers[1:4])\nprint(numbers[-1])"}
+  ],
+  "exercises": [
+    {
+      "prompt": "Make a list called `colors` with three items: `red`, `green` and `blue`. Then add `yellow` to the end. Print the list.",
+      "starterCode": "# Write your code below\n",
+      "tests": [
+        {
+          "call": "colors",
+          "returns": "['red', 'green', 'blue', 'yellow']",
+          "label": "The list colors"
+        },
+        {
+          "output": "['red', 'green', 'blue', 'yellow']"
+        }
+      ],
+      "hints": [
+        "Write `colors = [\"red\", \"green\", \"blue\"]`.",
+        "Use `colors.append(...)` to add an item."
+      ],
+      "solution": "colors = [\"red\", \"green\", \"blue\"]\ncolors.append(\"yellow\")\nprint(colors)"
+    },
+    {
+      "prompt": "The list `numbers` is set for you. Make `total` the sum of all the numbers and `biggest` the largest number. Print `total`, then `biggest`, on separate lines.",
+      "starterCode": "numbers = [4, 8, 15, 16, 23, 42]\n\n# Your code below\n",
+      "tests": [
+        {
+          "call": "total",
+          "returns": "108",
+          "label": "The variable total"
+        },
+        {
+          "call": "biggest",
+          "returns": "42",
+          "label": "The variable biggest"
+        },
+        {
+          "output": "108\n42"
+        }
+      ],
+      "hints": [
+        "Use the built-in `sum()` and `max()`."
+      ],
+      "solution": "numbers = [4, 8, 15, 16, 23, 42]\n\ntotal = sum(numbers)\nbiggest = max(numbers)\nprint(total)\nprint(biggest)"
+    }
+  ],
+  "quiz": [
+    {"question":"What is `[10, 20, 30][1]`?","options":["10","20","30","An error"],"answer":1,"explanation":"Counting starts at 0, so position 1 is the second item."},
+    {"question":"Which line adds an item to the end of a list?","options":["list.add(x)","list.push(x)","list.insert(x)","list.append(x)"],"answer":3,"explanation":"In Python the method is called `append`."},
+    {"question":"What does `len([1, 2, 3, 4])` give?","options":["4","3","5","1"],"answer":0,"explanation":"`len()` counts the items in the list."}
+  ]
+}

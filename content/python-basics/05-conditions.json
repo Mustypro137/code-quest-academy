@@ -1,0 +1,54 @@
+{
+  "title": "Conditions: making choices",
+  "explanation": [
+    {"type":"text","text":"A program can choose what to do. Use `if` to run code only when something is true."},
+    {"type":"code","code":"age = 15\nif age >= 18:\n    print(\"Adult\")\nelse:\n    print(\"Young\")"},
+    {"type":"text","text":"The `if` line ends with a colon `:`. The lines that belong to it are indented by 4 spaces. Python uses indentation, not curly brackets `{}`."},
+    {"type":"text","text":"These symbols compare two values: `==` equal, `!=` not equal, `<` less, `>` more, `<=` less or equal, `>=` more or equal."},
+    {"type":"text","text":"Use `elif` (short for \"else if\") to check more than one case. Python tries them from top to bottom and runs the first one that is true."},
+    {"type":"code","code":"score = 75\nif score >= 90:\n    print(\"A\")\nelif score >= 70:\n    print(\"B\")\nelse:\n    print(\"C\")"},
+    {"type":"text","text":"Join conditions with `and`, `or` and `not`."},
+    {"type":"code","code":"age = 20\nhas_ticket = True\nif age >= 18 and has_ticket:\n    print(\"Welcome\")"},
+    {"type":"tip","text":"One `=` stores a value. Two `==` compare. Mixing them up is a very common mistake."},
+    {"type":"tip","text":"`True` and `False` start with a capital letter in Python."}
+  ],
+  "examples": [
+    {"title":"Even or odd","code":"n = 7\nif n % 2 == 0:\n    print(\"even\")\nelse:\n    print(\"odd\")"},
+    {"title":"Try changing the number","code":"temperature = 18\nif temperature > 25:\n    print(\"Hot\")\nelif temperature > 15:\n    print(\"Warm\")\nelse:\n    print(\"Cold\")"}
+  ],
+  "exercises": [
+    {
+      "prompt": "The variable `temperature` is set for you. If it is above 25, print `Hot`. Otherwise, print `Nice`.\n\nThen change the number to 10 and run it again, to see the other branch.",
+      "starterCode": "temperature = 30\n\n# Your code below\n",
+      "tests": [
+        {
+          "output": "Hot"
+        }
+      ],
+      "hints": [
+        "Start with `if temperature > 25:`.",
+        "Do not forget the colon, and indent the `print` line."
+      ],
+      "solution": "temperature = 30\n\nif temperature > 25:\n    print(\"Hot\")\nelse:\n    print(\"Nice\")"
+    },
+    {
+      "prompt": "The variable `score` is set to 82. Print `A` if the score is 90 or more, `B` if it is 70 or more, and `C` for anything lower.",
+      "starterCode": "score = 82\n\n# Your code below\n",
+      "tests": [
+        {
+          "output": "B"
+        }
+      ],
+      "hints": [
+        "You need `if`, `elif` and `else`.",
+        "Check the highest grade first."
+      ],
+      "solution": "score = 82\n\nif score >= 90:\n    print(\"A\")\nelif score >= 70:\n    print(\"B\")\nelse:\n    print(\"C\")"
+    }
+  ],
+  "quiz": [
+    {"question":"Which symbol checks if two values are equal?","options":["=","==","=>",":="],"answer":1,"explanation":"`==` compares. A single `=` stores a value."},
+    {"question":"What must an `if` line end with?","options":["A semicolon ;","A curly bracket {","Nothing","A colon :"],"answer":3,"explanation":"The colon tells Python that an indented block comes next."},
+    {"question":"If `x = 5`, which part runs for `if x > 10:`?","options":["The if part","The else part","Both","Neither"],"answer":1,"explanation":"5 is not more than 10, so the condition is false and `else` runs."}
+  ]
+}

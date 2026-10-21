@@ -1,0 +1,104 @@
+{
+  "title": "Build your portfolio",
+  "explanation": [
+    {
+      "type": "text",
+      "text": "A portfolio is a small, tidy collection of your best work with clear explanations. For you it can be your GitHub profile plus a few LinkedIn posts. You do not need a fancy website."
+    },
+    {
+      "type": "text",
+      "text": "**How many projects?** Three good ones are enough. Choose projects that are different from each other, for example: a data cleaner, an AI helper, and a small tool you made for fun. Pin your best repositories on your GitHub profile so they show first."
+    },
+    {
+      "type": "text",
+      "text": "**Each project needs a \"front page\".** Someone should understand it in one minute. That page is your README (see the LinkedIn module, lesson 4). It answers:"
+    },
+    {
+      "type": "list",
+      "items": [
+        "What is it, in one sentence?",
+        "What problem does it solve?",
+        "How do I run it? (copy-and-paste steps)",
+        "What does the output look like? (a short example or screenshot with fake data)",
+        "What did you learn, and what would you improve next?"
+      ]
+    },
+    {
+      "type": "text",
+      "text": "**Ready-to-share checklist.** Before you show a project to anyone:"
+    },
+    {
+      "type": "list",
+      "items": [
+        "It runs from a fresh folder using only the steps in the README.",
+        "It has a few tests, and they pass.",
+        "It handles bad input without a scary traceback.",
+        "There are no keys, passwords or real private data in the files or in the history.",
+        "The folder and the commit messages are tidy."
+      ]
+    },
+    {
+      "type": "tip",
+      "text": "Be honest about what you did. If you followed a tutorial, say so, then say what you changed or added. Honest and specific is strong. Claims you cannot back up are not."
+    },
+    {
+      "type": "text",
+      "text": "**Keep it alive.** Improve one project at a time and write a short post when you finish a step. Use the LinkedIn lessons: turn each project into a simple post with a link to the repository."
+    },
+    {
+      "type": "template",
+      "title": "Portfolio entry",
+      "text": "Use this for each project, in the README or in a LinkedIn Featured link. Fill in your own true details.",
+      "code": "[Project name]\n[One sentence: takes X and gives Y for Z.]\n\nBuilt with: Python, [libraries you really used]\nLink: [repository address]\n\nWhat it does:\n- [feature 1]\n- [feature 2]\n\nWhat I learned: [one or two honest sentences]\nWhat I would improve next: [one honest sentence]"
+    }
+  ],
+  "examples": [
+    {
+      "title": "A weak entry and a better one",
+      "run": false,
+      "wrap": true,
+      "code": "Weak: \"Cool Python project. Check it out!\"\nBetter: \"Customer List Cleaner: a Python script that fixes names, phones and emails in a messy CSV file and writes a short report. Built with fake data. I learned to test edge cases like empty lines.\""
+    },
+    {
+      "title": "A weak and a better \"what I learned\"",
+      "run": false,
+      "wrap": true,
+      "code": "Weak: \"I learned a lot about coding.\"\nBetter: \"I learned to keep bad rows in a problems list instead of crashing, and to write a test before fixing a bug.\""
+    }
+  ],
+  "quiz": [
+    {
+      "question": "How many projects do you need for a start?",
+      "options": [
+        "Fifty",
+        "Three good ones are enough",
+        "None, only a CV",
+        "One, never updated"
+      ],
+      "answer": 1,
+      "explanation": "A few clear, different, finished projects show more than a long list of weak ones."
+    },
+    {
+      "question": "What is the first thing a project README should do?",
+      "options": [
+        "Show a long history of your life",
+        "Say what the project is in one sentence",
+        "List every Python function",
+        "Hide how to run it"
+      ],
+      "answer": 1,
+      "explanation": "The first sentence tells the reader what it is, so they can decide quickly if they care."
+    },
+    {
+      "question": "You followed a tutorial to build a project. What is the honest thing to say?",
+      "options": [
+        "Say you invented it alone",
+        "Say you followed a tutorial and explain what you changed or added",
+        "Hide the project",
+        "Delete the commit history"
+      ],
+      "answer": 1,
+      "explanation": "Honest and specific is strong. Tutorials are a normal way to learn, and your own changes show your growth."
+    }
+  ]
+}

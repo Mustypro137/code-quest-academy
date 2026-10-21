@@ -1,0 +1,164 @@
+{
+  "title": "Mini project: customer list cleaner",
+  "explanation": [
+    {"type":"text","text":"Now put it all together. Here is a real job: you get a customer list from a spreadsheet. It is messy. You must clean it, remove the duplicates, find who has not paid on time, and write a short report."},
+    {"type":"text","text":"This is the messy file. Look closely. Can you spot the problems?"},
+    {"type":"code","code":"name,email,phone,amount_due,due_date,paid\n  ada   lovelace ,ADA@Example.com ,(555) 123-4567,$120.50,2026-09-01,no\nSam Okoro,sam@example.com,555.987.6543,80,2026-10-30,no\nMIA CHEN,mia.chen@example,5551112222,200.00,2026-08-15,yes\nada lovelace,ada@example.com,555-123-4567,$120.50,2026-09-01,no\nTom  Baker,tom@example.com,,99.99,2026-09-20,no\npriya nair,Priya@Example.com,555 444 3333,\"$1,250.00\",2026-10-01,no\nLeo Park,leo@example.com,5550001111,45,2026-10-10,yes"},
+    {"type":"text","text":"The problems: extra spaces and capital letters in names, a duplicate customer (Ada appears twice), a bad email (`mia.chen@example`), phone numbers written in several different styles (and one empty), `$` signs and a comma in amounts."},
+    {"type":"text","text":"The rules we will follow:"},
+    {"type":"text","text":"1. Names are tidy: one space between words, a capital letter on each word."},
+    {"type":"text","text":"2. Emails are lowercase. A bad email becomes `None`."},
+    {"type":"text","text":"3. A phone number is 10 digits, or `None`."},
+    {"type":"text","text":"4. An amount is a number. A paid value is `True` or `False`."},
+    {"type":"text","text":"5. Two customers with the same cleaned email are the same person. Keep the first one. A customer with no email is always kept, because we cannot tell if they are a duplicate."},
+    {"type":"text","text":"6. A customer is late when they have **not paid** and the due date is **before today**."},
+    {"type":"text","text":"You will build the job in six small functions, one exercise each. Each exercise gives you the helper functions from the earlier lessons, so you can focus on one new piece. In the last one you put it all together into a report."},
+    {"type":"tip","text":"Professional programmers build jobs like this: small functions, each easy to test, then joined together. If one piece is wrong, you know exactly where to look."},
+    {"type":"pc","title":"run it on a real file","text":"Export your own customer list as `customers.csv` with the columns `name`, `email`, `phone`, `amount_due`, `due_date` (like `2026-09-01`) and `paid` (`yes` or `no`). Put it next to this script. The script **only reads** your file. It writes two new files: `clean_customers.csv` and `report.txt`.","code":"import csv\nimport re\nfrom datetime import date\n\nEMAIL = r\"[^@\\s]+@[^@\\s]+\\.[^@\\s]+\"\n\ndef clean_name(text):\n    return \" \".join(text.split()).title()\n\ndef clean_email(text):\n    email = text.strip().lower()\n    if re.fullmatch(EMAIL, email):\n        return email\n    return None\n\ndef clean_phone(text):\n    digits = \"\"\n    for ch in text:\n        if ch.isdigit():\n            digits = digits + ch\n    if len(digits) == 10:\n        return digits\n    return None\n\ndef parse_amount(text):\n    return float(text.strip().replace(\"$\", \"\").replace(\",\", \"\"))\n\ndef clean_row(row):\n    return {\n        \"name\": clean_name(row[\"name\"]),\n        \"email\": clean_email(row[\"email\"]),\n        \"phone\": clean_phone(row[\"phone\"]),\n        \"amount\": parse_amount(row[\"amount_due\"]),\n        \"due\": row[\"due_date\"].strip(),\n        \"paid\": row[\"paid\"].strip().lower() == \"yes\",\n    }\n\ndef remove_duplicates(rows):\n    seen = []\n    unique = []\n    for row in rows:\n        email = row[\"email\"]\n        if email is not None and email in seen:\n            continue\n        seen.append(email)\n        unique.append(row)\n    return unique\n\ndef days_between(start, end):\n    return (date.fromisoformat(end) - date.fromisoformat(start)).days\n\ndef money(x):\n    return f\"${x:,.2f}\"\n\ndef days_late(item):\n    return item[1]\n\ndef late_customers(rows, today):\n    late = []\n    for row in rows:\n        days = days_between(row[\"due\"], today)\n        if not row[\"paid\"] and days > 0:\n            late.append((row[\"name\"], days, row[\"amount\"]))\n    late.sort(key=days_late, reverse=True)\n    return late\n\ndef make_report(rows, today):\n    unpaid_count = 0\n    unpaid_total = 0\n    for row in rows:\n        if not row[\"paid\"]:\n            unpaid_count = unpaid_count + 1\n            unpaid_total = unpaid_total + row[\"amount\"]\n\n    late = late_customers(rows, today)\n    late_total = 0\n    for name, days, amount in late:\n        late_total = late_total + amount\n\n    lines = [\n        f\"CUSTOMER REPORT - {today}\",\n        f\"Customers: {len(rows)}\",\n        f\"Unpaid: {unpaid_count} customers, {money(unpaid_total)}\",\n        f\"Late: {len(late)} customers, {money(late_total)}\",\n        \"\",\n        \"LATE PAYMENTS\",\n    ]\n    for name, days, amount in late:\n        lines.append(f\"{name:<15}{days:>3} days {money(amount):>11}\")\n    return \"\\n\".join(lines)\n\ntoday = date.today().isoformat()\n\nwith open(\"customers.csv\", newline=\"\") as f:      # your original file is only READ\n    rows = remove_duplicates([clean_row(r) for r in csv.DictReader(f)])\n\nwith open(\"clean_customers.csv\", \"w\", newline=\"\") as f:\n    writer = csv.DictWriter(f, fieldnames=[\"name\", \"email\", \"phone\", \"amount\", \"due\", \"paid\"])\n    writer.writeheader()\n    for row in rows:\n        writer.writerow(row)\n\nreport = make_report(rows, today)\nwith open(\"report.txt\", \"w\") as f:\n    f.write(report)\nprint(report)"}
+  ],
+  "examples": [
+    {"title":"Look at the messy file","code":"import csv\nfrom pathlib import Path\n\nPath(\"customers.csv\").write_text(\"\"\"name,email,phone,amount_due,due_date,paid\n  ada   lovelace ,ADA@Example.com ,(555) 123-4567,$120.50,2026-09-01,no\nSam Okoro,sam@example.com,555.987.6543,80,2026-10-30,no\nMIA CHEN,mia.chen@example,5551112222,200.00,2026-08-15,yes\nada lovelace,ada@example.com,555-123-4567,$120.50,2026-09-01,no\nTom  Baker,tom@example.com,,99.99,2026-09-20,no\npriya nair,Priya@Example.com,555 444 3333,\"$1,250.00\",2026-10-01,no\nLeo Park,leo@example.com,5550001111,45,2026-10-10,yes\n\"\"\")\n\nwith open(\"customers.csv\", newline=\"\") as f:\n    for row in csv.DictReader(f):\n        print(row)"},
+    {"title":"The finished cleaner (your goal)","code":"import csv\nimport re\nfrom datetime import date\nfrom pathlib import Path\n\nPath(\"customers.csv\").write_text(\"\"\"name,email,phone,amount_due,due_date,paid\n  ada   lovelace ,ADA@Example.com ,(555) 123-4567,$120.50,2026-09-01,no\nSam Okoro,sam@example.com,555.987.6543,80,2026-10-30,no\nMIA CHEN,mia.chen@example,5551112222,200.00,2026-08-15,yes\nada lovelace,ada@example.com,555-123-4567,$120.50,2026-09-01,no\nTom  Baker,tom@example.com,,99.99,2026-09-20,no\npriya nair,Priya@Example.com,555 444 3333,\"$1,250.00\",2026-10-01,no\nLeo Park,leo@example.com,5550001111,45,2026-10-10,yes\n\"\"\")\n\nEMAIL = r\"[^@\\s]+@[^@\\s]+\\.[^@\\s]+\"\n\ndef clean_name(text):\n    return \" \".join(text.split()).title()\n\ndef clean_email(text):\n    email = text.strip().lower()\n    if re.fullmatch(EMAIL, email):\n        return email\n    return None\n\ndef clean_phone(text):\n    digits = \"\"\n    for ch in text:\n        if ch.isdigit():\n            digits = digits + ch\n    if len(digits) == 10:\n        return digits\n    return None\n\ndef parse_amount(text):\n    return float(text.strip().replace(\"$\", \"\").replace(\",\", \"\"))\n\ndef clean_row(row):\n    return {\n        \"name\": clean_name(row[\"name\"]),\n        \"email\": clean_email(row[\"email\"]),\n        \"phone\": clean_phone(row[\"phone\"]),\n        \"amount\": parse_amount(row[\"amount_due\"]),\n        \"due\": row[\"due_date\"].strip(),\n        \"paid\": row[\"paid\"].strip().lower() == \"yes\",\n    }\n\ndef remove_duplicates(rows):\n    seen = []\n    unique = []\n    for row in rows:\n        email = row[\"email\"]\n        if email is not None and email in seen:\n            continue\n        seen.append(email)\n        unique.append(row)\n    return unique\n\ndef days_between(start, end):\n    return (date.fromisoformat(end) - date.fromisoformat(start)).days\n\ndef money(x):\n    return f\"${x:,.2f}\"\n\ndef days_late(item):\n    return item[1]\n\ndef late_customers(rows, today):\n    late = []\n    for row in rows:\n        days = days_between(row[\"due\"], today)\n        if not row[\"paid\"] and days > 0:\n            late.append((row[\"name\"], days, row[\"amount\"]))\n    late.sort(key=days_late, reverse=True)\n    return late\n\ndef make_report(rows, today):\n    unpaid_count = 0\n    unpaid_total = 0\n    for row in rows:\n        if not row[\"paid\"]:\n            unpaid_count = unpaid_count + 1\n            unpaid_total = unpaid_total + row[\"amount\"]\n\n    late = late_customers(rows, today)\n    late_total = 0\n    for name, days, amount in late:\n        late_total = late_total + amount\n\n    lines = [\n        f\"CUSTOMER REPORT - {today}\",\n        f\"Customers: {len(rows)}\",\n        f\"Unpaid: {unpaid_count} customers, {money(unpaid_total)}\",\n        f\"Late: {len(late)} customers, {money(late_total)}\",\n        \"\",\n        \"LATE PAYMENTS\",\n    ]\n    for name, days, amount in late:\n        lines.append(f\"{name:<15}{days:>3} days {money(amount):>11}\")\n    return \"\\n\".join(lines)\n\nwith open(\"customers.csv\", newline=\"\") as f:\n    raw_rows = list(csv.DictReader(f))\nrows = remove_duplicates([clean_row(r) for r in raw_rows])\n\nprint(\"Rows read:\", len(raw_rows), \"| after removing duplicates:\", len(rows))\nprint()\nprint(make_report(rows, \"2026-10-20\"))"}
+  ],
+  "exercises": [
+    {
+      "prompt": "**Step 1 of 6.** Write `clean_email(text)`. Remove spaces around the address and make it lowercase. If the result is not a valid address (use the `EMAIL` pattern), return `None`.",
+      "starterCode": "import re\n\nEMAIL = r\"[^@\\s]+@[^@\\s]+\\.[^@\\s]+\"\n\ndef clean_email(text):\n    # your code here\n    pass\n",
+      "tests": [
+        {
+          "call": "clean_email('  ADA@Example.com ')",
+          "returns": "'ada@example.com'"
+        },
+        {
+          "call": "clean_email('mia.chen@example')",
+          "returns": "None"
+        },
+        {
+          "call": "clean_email('')",
+          "returns": "None"
+        },
+        {
+          "call": "clean_email('tom@example.com')",
+          "returns": "'tom@example.com'"
+        }
+      ],
+      "hints": [
+        "`text.strip().lower()` cleans the text.",
+        "`re.fullmatch(EMAIL, email)` is `None` when the address is not valid."
+      ],
+      "solution": "import re\n\nEMAIL = r\"[^@\\s]+@[^@\\s]+\\.[^@\\s]+\"\n\ndef clean_email(text):\n    email = text.strip().lower()\n    if re.fullmatch(EMAIL, email):\n        return email\n    return None"
+    },
+    {
+      "prompt": "**Step 2 of 6.** Write `parse_amount(text)`. It turns text like `\"$1,250.00\"` or `\"80\"` into a number (a float).",
+      "starterCode": "def parse_amount(text):\n    # your code here\n    pass\n",
+      "tests": [
+        {
+          "call": "parse_amount('$120.50')",
+          "returns": "120.5"
+        },
+        {
+          "call": "parse_amount('80')",
+          "returns": "80.0"
+        },
+        {
+          "call": "parse_amount('$1,250.00')",
+          "returns": "1250.0"
+        },
+        {
+          "call": "parse_amount(' 45 ')",
+          "returns": "45.0"
+        }
+      ],
+      "hints": [
+        "Remove the `$` and the `,` with `replace()`.",
+        "Then use `float(...)`. Do not forget `strip()` for the spaces."
+      ],
+      "solution": "def parse_amount(text):\n    return float(text.strip().replace(\"$\", \"\").replace(\",\", \"\"))"
+    },
+    {
+      "prompt": "**Step 3 of 6.** The cleaning functions are given. Write `clean_row(row)`. It takes one row from the CSV file (a dictionary) and returns a new dictionary with these keys: `name`, `email`, `phone`, `amount` (a number), `due` (the date text, without spaces) and `paid` (`True` when the file says `yes`, in any capital letters).",
+      "starterCode": "import re\n\n# GIVEN: these helpers come from earlier lessons. Do not change them.\n\nEMAIL = r\"[^@\\s]+@[^@\\s]+\\.[^@\\s]+\"\n\ndef clean_name(text):\n    return \" \".join(text.split()).title()\n\ndef clean_email(text):\n    email = text.strip().lower()\n    if re.fullmatch(EMAIL, email):\n        return email\n    return None\n\ndef clean_phone(text):\n    digits = \"\"\n    for ch in text:\n        if ch.isdigit():\n            digits = digits + ch\n    if len(digits) == 10:\n        return digits\n    return None\n\ndef parse_amount(text):\n    return float(text.strip().replace(\"$\", \"\").replace(\",\", \"\"))\n\n# YOUR TURN\ndef clean_row(row):\n    # your code here\n    pass\n",
+      "tests": [
+        {
+          "call": "clean_row({'name': '  ada   lovelace ', 'email': 'ADA@Example.com ', 'phone': '(555) 123-4567', 'amount_due': '$120.50', 'due_date': '2026-09-01', 'paid': 'no'})",
+          "returns": "{'name': 'Ada Lovelace', 'email': 'ada@example.com', 'phone': '5551234567', 'amount': 120.5, 'due': '2026-09-01', 'paid': False}",
+          "label": "Cleaning the Ada row gives"
+        },
+        {
+          "call": "clean_row({'name': 'MIA CHEN', 'email': 'mia.chen@example', 'phone': '', 'amount_due': '200.00', 'due_date': ' 2026-08-15', 'paid': ' Yes'})",
+          "returns": "{'name': 'Mia Chen', 'email': None, 'phone': None, 'amount': 200.0, 'due': '2026-08-15', 'paid': True}",
+          "label": "Cleaning the Mia row gives"
+        }
+      ],
+      "hints": [
+        "Use the helper functions: `clean_name(row[\"name\"])`, and so on.",
+        "For `paid`: `row[\"paid\"].strip().lower() == \"yes\"` is already `True` or `False`."
+      ],
+      "solution": "import re\n\nEMAIL = r\"[^@\\s]+@[^@\\s]+\\.[^@\\s]+\"\n\ndef clean_name(text):\n    return \" \".join(text.split()).title()\n\ndef clean_email(text):\n    email = text.strip().lower()\n    if re.fullmatch(EMAIL, email):\n        return email\n    return None\n\ndef clean_phone(text):\n    digits = \"\"\n    for ch in text:\n        if ch.isdigit():\n            digits = digits + ch\n    if len(digits) == 10:\n        return digits\n    return None\n\ndef parse_amount(text):\n    return float(text.strip().replace(\"$\", \"\").replace(\",\", \"\"))\n\ndef clean_row(row):\n    return {\n        \"name\": clean_name(row[\"name\"]),\n        \"email\": clean_email(row[\"email\"]),\n        \"phone\": clean_phone(row[\"phone\"]),\n        \"amount\": parse_amount(row[\"amount_due\"]),\n        \"due\": row[\"due_date\"].strip(),\n        \"paid\": row[\"paid\"].strip().lower() == \"yes\",\n    }"
+    },
+    {
+      "prompt": "**Step 4 of 6.** Write `remove_duplicates(rows)`. `rows` is a list of clean rows. Return a new list that keeps only the first row for each email.\n\nRows with no email (`None`) are always kept.",
+      "starterCode": "def remove_duplicates(rows):\n    # your code here\n    pass\n",
+      "tests": [
+        {
+          "setup": "rows = [{'name': 'A', 'email': 'a@x.com'}, {'name': 'B', 'email': None}, {'name': 'A again', 'email': 'a@x.com'}, {'name': 'C', 'email': None}]",
+          "call": "[r['name'] for r in remove_duplicates(rows)]",
+          "returns": "['A', 'B', 'C']",
+          "label": "The names left after removing duplicates"
+        },
+        {
+          "call": "remove_duplicates([])",
+          "returns": "[]"
+        }
+      ],
+      "hints": [
+        "Keep a list `seen` of the emails you have already met.",
+        "Skip a row when its email is not `None` and is already in `seen`. Use `continue`."
+      ],
+      "solution": "def remove_duplicates(rows):\n    seen = []\n    unique = []\n    for row in rows:\n        email = row[\"email\"]\n        if email is not None and email in seen:\n            continue\n        seen.append(email)\n        unique.append(row)\n    return unique"
+    },
+    {
+      "prompt": "**Step 5 of 6.** `days_between` is given. Write `late_customers(rows, today)`. Return a list of `(name, days_late, amount)` for every customer who has **not paid** and whose due date is **before** `today`. Put the one who is latest first.",
+      "starterCode": "from datetime import date\n\n# GIVEN: these helpers come from earlier lessons. Do not change them.\n\ndef days_between(start, end):\n    return (date.fromisoformat(end) - date.fromisoformat(start)).days\n\n# YOUR TURN\ndef late_customers(rows, today):\n    # your code here\n    pass\n",
+      "tests": [
+        {
+          "setup": "rows = [{'name': 'Ada', 'amount': 120.5, 'due': '2026-09-01', 'paid': False}, {'name': 'Sam', 'amount': 80.0, 'due': '2026-10-30', 'paid': False}, {'name': 'Mia', 'amount': 200.0, 'due': '2026-08-15', 'paid': True}, {'name': 'Tom', 'amount': 99.99, 'due': '2026-09-20', 'paid': False}, {'name': 'Priya', 'amount': 1250.0, 'due': '2026-10-01', 'paid': False}]",
+          "call": "late_customers(rows, '2026-10-20')",
+          "returns": "[('Ada', 49, 120.5), ('Tom', 30, 99.99), ('Priya', 19, 1250.0)]",
+          "label": "The late customers on 2026-10-20"
+        },
+        {
+          "call": "late_customers([], '2026-10-20')",
+          "returns": "[]"
+        }
+      ],
+      "hints": [
+        "Loop over the rows. Work out `days = days_between(row[\"due\"], today)`.",
+        "A row is late when `not row[\"paid\"]` and `days > 0`. Sort with a small function: `late.sort(key=days_late, reverse=True)`."
+      ],
+      "solution": "from datetime import date\n\ndef days_between(start, end):\n    return (date.fromisoformat(end) - date.fromisoformat(start)).days\n\ndef days_late(item):\n    return item[1]\n\ndef late_customers(rows, today):\n    late = []\n    for row in rows:\n        days = days_between(row[\"due\"], today)\n        if not row[\"paid\"] and days > 0:\n            late.append((row[\"name\"], days, row[\"amount\"]))\n    late.sort(key=days_late, reverse=True)\n    return late"
+    },
+    {
+      "prompt": "**Step 6 of 6.** Everything else is given, and the messy file has been cleaned into `rows` for you. Write `make_report(rows, today)`. **Return** this text (do not print it):\n\n```\nCUSTOMER REPORT - 2026-10-20\nCustomers: 6\nUnpaid: 4 customers, $1,550.49\nLate: 3 customers, $1,470.49\n\nLATE PAYMENTS\nAda Lovelace    49 days     $120.50\nTom Baker       30 days      $99.99\nPriya Nair      19 days   $1,250.00\n```\n\nThe first line shows `today`. Every number comes from `rows`. A name takes 15 spaces on the left, the days take 3 on the right, then the word `days`, then the money takes 11 on the right.",
+      "starterCode": "import csv\nimport re\nfrom datetime import date\nfrom pathlib import Path\n\n# GIVEN: these helpers come from earlier lessons. Do not change them.\n\nPath(\"customers.csv\").write_text(\"\"\"name,email,phone,amount_due,due_date,paid\n  ada   lovelace ,ADA@Example.com ,(555) 123-4567,$120.50,2026-09-01,no\nSam Okoro,sam@example.com,555.987.6543,80,2026-10-30,no\nMIA CHEN,mia.chen@example,5551112222,200.00,2026-08-15,yes\nada lovelace,ada@example.com,555-123-4567,$120.50,2026-09-01,no\nTom  Baker,tom@example.com,,99.99,2026-09-20,no\npriya nair,Priya@Example.com,555 444 3333,\"$1,250.00\",2026-10-01,no\nLeo Park,leo@example.com,5550001111,45,2026-10-10,yes\n\"\"\")\n\nEMAIL = r\"[^@\\s]+@[^@\\s]+\\.[^@\\s]+\"\n\ndef clean_name(text):\n    return \" \".join(text.split()).title()\n\ndef clean_email(text):\n    email = text.strip().lower()\n    if re.fullmatch(EMAIL, email):\n        return email\n    return None\n\ndef clean_phone(text):\n    digits = \"\"\n    for ch in text:\n        if ch.isdigit():\n            digits = digits + ch\n    if len(digits) == 10:\n        return digits\n    return None\n\ndef parse_amount(text):\n    return float(text.strip().replace(\"$\", \"\").replace(\",\", \"\"))\n\ndef clean_row(row):\n    return {\n        \"name\": clean_name(row[\"name\"]),\n        \"email\": clean_email(row[\"email\"]),\n        \"phone\": clean_phone(row[\"phone\"]),\n        \"amount\": parse_amount(row[\"amount_due\"]),\n        \"due\": row[\"due_date\"].strip(),\n        \"paid\": row[\"paid\"].strip().lower() == \"yes\",\n    }\n\ndef remove_duplicates(rows):\n    seen = []\n    unique = []\n    for row in rows:\n        email = row[\"email\"]\n        if email is not None and email in seen:\n            continue\n        seen.append(email)\n        unique.append(row)\n    return unique\n\ndef days_between(start, end):\n    return (date.fromisoformat(end) - date.fromisoformat(start)).days\n\ndef money(x):\n    return f\"${x:,.2f}\"\n\ndef days_late(item):\n    return item[1]\n\ndef late_customers(rows, today):\n    late = []\n    for row in rows:\n        days = days_between(row[\"due\"], today)\n        if not row[\"paid\"] and days > 0:\n            late.append((row[\"name\"], days, row[\"amount\"]))\n    late.sort(key=days_late, reverse=True)\n    return late\n\nwith open(\"customers.csv\", newline=\"\") as f:\n    raw_rows = list(csv.DictReader(f))\nrows = remove_duplicates([clean_row(r) for r in raw_rows])\n\n# YOUR TURN\ndef make_report(rows, today):\n    # your code here\n    pass\n\n\nprint(make_report(rows, \"2026-10-20\"))\n",
+      "tests": [
+        {
+          "call": "make_report(rows, '2026-10-20')",
+          "returns": "'CUSTOMER REPORT - 2026-10-20\\nCustomers: 6\\nUnpaid: 4 customers, $1,550.49\\nLate: 3 customers, $1,470.49\\n\\nLATE PAYMENTS\\nAda Lovelace    49 days     $120.50\\nTom Baker       30 days      $99.99\\nPriya Nair      19 days   $1,250.00'",
+          "label": "The report for 2026-10-20"
+        }
+      ],
+      "hints": [
+        "First count the unpaid customers and add up their amounts. Then use `late_customers(rows, today)` for the late ones.",
+        "Build a list `lines` with the first six lines. Then add one line for each late customer: `f\"{name:<15}{days:>3} days {money(amount):>11}\"`.",
+        "Finish with `return \"\\n\".join(lines)`."
+      ],
+      "solution": "import csv\nimport re\nfrom datetime import date\nfrom pathlib import Path\n\nPath(\"customers.csv\").write_text(\"\"\"name,email,phone,amount_due,due_date,paid\n  ada   lovelace ,ADA@Example.com ,(555) 123-4567,$120.50,2026-09-01,no\nSam Okoro,sam@example.com,555.987.6543,80,2026-10-30,no\nMIA CHEN,mia.chen@example,5551112222,200.00,2026-08-15,yes\nada lovelace,ada@example.com,555-123-4567,$120.50,2026-09-01,no\nTom  Baker,tom@example.com,,99.99,2026-09-20,no\npriya nair,Priya@Example.com,555 444 3333,\"$1,250.00\",2026-10-01,no\nLeo Park,leo@example.com,5550001111,45,2026-10-10,yes\n\"\"\")\n\nEMAIL = r\"[^@\\s]+@[^@\\s]+\\.[^@\\s]+\"\n\ndef clean_name(text):\n    return \" \".join(text.split()).title()\n\ndef clean_email(text):\n    email = text.strip().lower()\n    if re.fullmatch(EMAIL, email):\n        return email\n    return None\n\ndef clean_phone(text):\n    digits = \"\"\n    for ch in text:\n        if ch.isdigit():\n            digits = digits + ch\n    if len(digits) == 10:\n        return digits\n    return None\n\ndef parse_amount(text):\n    return float(text.strip().replace(\"$\", \"\").replace(\",\", \"\"))\n\ndef clean_row(row):\n    return {\n        \"name\": clean_name(row[\"name\"]),\n        \"email\": clean_email(row[\"email\"]),\n        \"phone\": clean_phone(row[\"phone\"]),\n        \"amount\": parse_amount(row[\"amount_due\"]),\n        \"due\": row[\"due_date\"].strip(),\n        \"paid\": row[\"paid\"].strip().lower() == \"yes\",\n    }\n\ndef remove_duplicates(rows):\n    seen = []\n    unique = []\n    for row in rows:\n        email = row[\"email\"]\n        if email is not None and email in seen:\n            continue\n        seen.append(email)\n        unique.append(row)\n    return unique\n\ndef days_between(start, end):\n    return (date.fromisoformat(end) - date.fromisoformat(start)).days\n\ndef money(x):\n    return f\"${x:,.2f}\"\n\ndef days_late(item):\n    return item[1]\n\ndef late_customers(rows, today):\n    late = []\n    for row in rows:\n        days = days_between(row[\"due\"], today)\n        if not row[\"paid\"] and days > 0:\n            late.append((row[\"name\"], days, row[\"amount\"]))\n    late.sort(key=days_late, reverse=True)\n    return late\n\nwith open(\"customers.csv\", newline=\"\") as f:\n    raw_rows = list(csv.DictReader(f))\nrows = remove_duplicates([clean_row(r) for r in raw_rows])\n\ndef make_report(rows, today):\n    unpaid_count = 0\n    unpaid_total = 0\n    for row in rows:\n        if not row[\"paid\"]:\n            unpaid_count = unpaid_count + 1\n            unpaid_total = unpaid_total + row[\"amount\"]\n\n    late = late_customers(rows, today)\n    late_total = 0\n    for name, days, amount in late:\n        late_total = late_total + amount\n\n    lines = [\n        f\"CUSTOMER REPORT - {today}\",\n        f\"Customers: {len(rows)}\",\n        f\"Unpaid: {unpaid_count} customers, {money(unpaid_total)}\",\n        f\"Late: {len(late)} customers, {money(late_total)}\",\n        \"\",\n        \"LATE PAYMENTS\",\n    ]\n    for name, days, amount in late:\n        lines.append(f\"{name:<15}{days:>3} days {money(amount):>11}\")\n    return \"\\n\".join(lines)\n\nprint(make_report(rows, \"2026-10-20\"))"
+    }
+  ],
+  "quiz": [
+    {"question":"Why clean the emails BEFORE you look for duplicates?","options":["Python cannot compare raw text","It makes the file smaller","`ADA@Example.com` and `ada@example.com` only match once they are cleaned","Duplicates are always at the top"],"answer":2,"explanation":"Cleaning makes the same address look the same, so the match works."},
+    {"question":"Why does `remove_duplicates` keep rows that have no email?","options":["Empty emails are valid","They are always paid","Python keeps empty values","It cannot tell if they are the same person, so deleting them could lose a real customer"],"answer":3,"explanation":"Without an email we have nothing to compare, so the safe choice is to keep them."},
+    {"question":"Why does the script write a NEW file instead of changing `customers.csv`?","options":["Python cannot edit CSV files","New files are faster","You keep the original in case the cleaning has a mistake","Excel needs a new name"],"answer":2,"explanation":"If a rule is wrong, you can fix it and run again on the untouched original."}
+  ]
+}

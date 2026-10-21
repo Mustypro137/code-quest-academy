@@ -1,0 +1,23 @@
+{
+  "title": "Turn a project into a LinkedIn post",
+  "explanation": [
+    {"type":"text","text":"A post about a project works best as a short story with five parts:"},
+    {"type":"list","items":["**Hook**: one strong first line. It shows before \"see more\", so it must make people want to read on.","**Problem**: what was wrong or slow or messy?","**What I did**: the steps, in plain words. Three or four short lines is enough.","**Result**: what changed, with a true number or example if you have one.","**What I learned** and a question for the reader. A question invites replies."]},
+    {"type":"text","text":"Your Customer List Cleaner is a good project to write about. A messy list, a clear problem, a script that fixes it, and a short report at the end."},
+    {"type":"text","text":"Be honest about what it is. If you built it to practise, say \"I built a practice project\". That is a fine thing to say. People respect learners who build things. They do not respect pretending."},
+    {"type":"text","text":"**Privacy rule.** Never put real customer names, emails, phone numbers or anything private from a job or client in a post or screenshot. Use fake practice data, like the data in the lessons. Do not share secrets from an employer either."},
+    {"type":"text","text":"Keep paragraphs short, with blank lines between them, so the post is easy to read on a phone. A link to your code or a screenshot of the report (made from fake data) makes the post more convincing. Use only a few hashtags."},
+    {"type":"tip","text":"Write it, then cut a third of it. Then read it out loud. Most first drafts are too long."},
+    {"type":"template","title":"Project post","text":"Fill in the brackets with true details. Delete anything that is not true for you.","code":"[A hook: one strong line about the problem or the result]\n\n[The problem, in one or two short lines.]\n\nSo I built [what you built]. It:\n- [step or feature 1]\n- [step or feature 2]\n- [step or feature 3]\n\nResult: [what changed. Use a number only if it is true.]\n\nWhat I learned: [one real lesson].\n\nCode and notes: [link]\n\n[A question for the reader?]\n\n#Python #Automation"}
+  ],
+  "examples": [
+    {"title":"First line: weak","run":false,"wrap":true,"code":"I am excited to share my new project!"},
+    {"title":"First line: better","run":false,"wrap":true,"code":"Messy spreadsheets waste hours. So I taught Python to clean one for me."},
+    {"title":"A full example (an example to adapt: use your own real details)","run":false,"wrap":true,"code":"Messy spreadsheets waste hours. So I taught Python to clean one for me.\n\nI built a practice project: a customer list with extra spaces, duplicate customers, bad emails and phone numbers written five different ways.\n\nMy Python script:\n- fixes names, emails and phone numbers\n- removes duplicates\n- finds who is late on payment\n- writes a short report\n\nWhat I learned: small functions that do one job are easy to test. And you must clean the emails BEFORE you look for duplicates, or the duplicates stay hidden.\n\nAll the data is fake practice data.\n\nWhat boring task would you automate first?\n\n#Python #Automation"}
+  ],
+  "quiz": [
+    {"question":"Which order works well for a project post?","options":["Result, then random facts, then a list of tools","Problem, what I did, result, what I learned","What I learned only","A list of every tool I used"],"answer":1,"explanation":"It tells a short story, and the reader follows it easily."},
+    {"question":"What should you NEVER put in a post about a data project?","options":["Fake practice data","A screenshot of the report made from fake data","A link to your code","Real customer names and emails"],"answer":3,"explanation":"Private data does not belong in public. Use fake data."},
+    {"question":"Your project was a practice project. What should your post say?","options":["That it was for a real client","Nothing about it","That it is a practice project","That you are an expert"],"answer":2,"explanation":"Honest posts build trust. Learners who build things are respected."}
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "title": "Present your project: a README",
+  "explanation": [
+    {"type":"text","text":"A README is the front page of a project. On GitHub, it is the first thing people see. Visitors decide in a few seconds if your project is worth their time, so the README matters as much as the code."},
+    {"type":"text","text":"A good README answers these questions in order:"},
+    {"type":"list","items":["**What is it?** One line at the top.","**Why does it exist?** The problem it solves.","**What does it do?** A short list of features.","**How do I run it?** Clear steps that someone new can follow.","**What does it look like?** Show example output.","**What did you learn, and what is next?** Short and honest."]},
+    {"type":"text","text":"Write for a person who has never seen your project. \"Run it\" is not enough. Say what to type and where."},
+    {"type":"text","text":"README files are usually written in **Markdown**, a simple way to format text. A line that starts with `#` is a heading, a line that starts with `-` is a list item, and three backticks around lines make a code block."},
+    {"type":"text","text":"Show real output, but use fake practice data. Seeing the result tells the reader more than a paragraph of description."},
+    {"type":"tip","text":"Test your own instructions. Make a new empty folder, follow your README exactly as written, and see if it works. If you get stuck, the reader will too."},
+    {"type":"template","title":"README","text":"A README for the Customer List Cleaner. Change the file names and details to match your own project, and keep only what is true.","code":"# Customer List Cleaner\n\nA Python script that cleans a messy customer list and reports who is late on payment.\n\n## The problem\nExported customer lists are messy: extra spaces, mixed capital letters, duplicate customers, bad emails, and phone numbers in many styles.\n\n## What it does\n- Tidies names, emails and phone numbers\n- Removes duplicate customers (same cleaned email)\n- Finds customers who have not paid on time\n- Writes a clean CSV file and a short text report\n\n## How to run it\n1. Install Python 3.\n2. Put your file in the same folder and name it `customers.csv`.\n3. Open a terminal in the folder and type:\n\n```\npython clean_customers.py\n```\n\nYour original file is never changed. The script writes `clean_customers.csv` and `report.txt`.\n\n## Example output\n```\nCUSTOMER REPORT - 2026-10-20\nCustomers: 6\nLate: 3 customers\n```\n\nAll data in this project is fake practice data.\n\n## What I learned\n[One or two true lessons]\n\n## Next steps\n[What you want to add next]"}
+  ],
+  "examples": [
+    {"title":"Not enough","run":false,"wrap":true,"code":"Run it."},
+    {"title":"Clear","run":false,"wrap":true,"code":"Open a terminal in the folder and type: python clean_customers.py"},
+    {"title":"Opening line: weak","run":false,"wrap":true,"code":"This is my project for my Python course."},
+    {"title":"Opening line: better","run":false,"wrap":true,"code":"A Python script that cleans a messy customer list and reports who is late on payment."}
+  ],
+  "quiz": [
+    {"question":"What should a README tell the reader first?","options":["Your life story","What the project does, in one line","The licence text","Every file name"],"answer":1,"explanation":"People decide in seconds. Start with what it is."},
+    {"question":"Which \"how to run\" instruction is best?","options":["Just run it.","It works on my computer.","See the code.","Open a terminal in the folder and type: python clean_customers.py"],"answer":3,"explanation":"It says exactly what to type and where."},
+    {"question":"Why show example output in a README?","options":["It makes the README longer","GitHub requires it","Readers see what the project does without running it","It hides bugs"],"answer":2,"explanation":"A picture of the result tells more than a paragraph."}
+  ]
+}

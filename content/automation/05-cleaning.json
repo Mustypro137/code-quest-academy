@@ -1,0 +1,80 @@
+{
+  "title": "Cleaning messy text",
+  "explanation": [
+    {"type":"text","text":"Real data is messy: `\"  ada   lovelace \"`, `\"ADA@Example.com\"`, `\"(555) 123-4567\"`. Cleaning means making data the same everywhere, so you can count it, compare it and find duplicates."},
+    {"type":"text","text":"Start with strings tools you know. `split()` with no argument splits on any spaces and drops the empty pieces. `join()` puts the pieces back together."},
+    {"type":"code","code":"text = \"  ada   lovelace  \"\nprint(text.strip())                       # 'ada   lovelace'\nprint(text.split())                       # ['ada', 'lovelace']\nprint(\" \".join(text.split()))             # 'ada lovelace'\nprint(\" \".join(text.split()).title())     # 'Ada Lovelace'"},
+    {"type":"text","text":"Emails do not care about capital letters, so make them lowercase. Then `ADA@Example.com` and `ada@example.com` are the same, and you can spot duplicates."},
+    {"type":"code","code":"email = \"  ADA@Example.com \"\nprint(email.strip().lower())   # 'ada@example.com'"},
+    {"type":"text","text":"Use `replace()` to remove characters. Use a loop with `isdigit()` to keep only the digits."},
+    {"type":"code","code":"amount = \"$1,250.00\"\nprint(float(amount.replace(\"$\", \"\").replace(\",\", \"\")))   # 1250.0\n\nphone = \"(555) 123-4567\"\ndigits = \"\"\nfor ch in phone:\n    if ch.isdigit():\n        digits = digits + ch\nprint(digits)   # 5551234567"},
+    {"type":"text","text":"A **regular expression** (regex) is a pattern for text. `re.fullmatch(pattern, text)` gives a match if the WHOLE text fits the pattern, and `None` if it does not."},
+    {"type":"code","code":"import re\n\nEMAIL = r\"[^@\\s]+@[^@\\s]+\\.[^@\\s]+\"\nprint(bool(re.fullmatch(EMAIL, \"ada@example.com\")))    # True\nprint(bool(re.fullmatch(EMAIL, \"mia.chen@example\")))   # False"},
+    {"type":"text","text":"Read the pattern in pieces: `[^@\\s]+` means \"one or more characters that are not `@` and not a space\". Then `@`. Then the same again. Then a dot (`\\.`). Then the same again. It is a simple check. It will not catch every bad address, but it catches most mistakes."},
+    {"type":"tip","text":"When a value is bad, return `None` instead of guessing. Then you can find the bad rows later and fix them by hand."},
+    {"type":"tip","text":"Never clean a file \"in place\". Write the clean data to a new file and keep the original, in case your cleaning has a mistake."},
+    {"type":"pc","title":"clean a contacts file","text":"Put a `contacts.csv` file with the columns `name` and `email` next to this script. It writes `contacts_clean.csv` and tells you how many emails were bad. Your original file is never changed.","code":"import csv\nimport re\n\nEMAIL = r\"[^@\\s]+@[^@\\s]+\\.[^@\\s]+\"\n\ndef clean_name(text):\n    return \" \".join(text.split()).title()\n\ndef clean_email(text):\n    email = text.strip().lower()\n    if re.fullmatch(EMAIL, email):\n        return email\n    return None\n\nproblems = 0\nwith open(\"contacts.csv\", newline=\"\") as src, open(\"contacts_clean.csv\", \"w\", newline=\"\") as out:\n    writer = csv.DictWriter(out, fieldnames=[\"name\", \"email\"])\n    writer.writeheader()\n    for row in csv.DictReader(src):\n        email = clean_email(row[\"email\"])\n        if email is None:\n            problems = problems + 1\n        writer.writerow({\"name\": clean_name(row[\"name\"]), \"email\": email})\n\nprint(\"Done.\", problems, \"rows had a bad email. Your original file was not changed.\")"}
+  ],
+  "examples": [
+    {"title":"Tidy names","code":"for name in [\"  ada   lovelace \", \"MIA CHEN\", \"tom  baker\"]:\n    print(\" \".join(name.split()).title())"},
+    {"title":"Fix an email and check it","code":"import re\n\npattern = r\"[^@\\s]+@[^@\\s]+\\.[^@\\s]+\"\nfor email in [\"  ADA@Example.com \", \"mia.chen@example\", \"tom@example.com\"]:\n    cleaned = email.strip().lower()\n    if re.fullmatch(pattern, cleaned):\n        print(cleaned, \"ok\")\n    else:\n        print(cleaned, \"BAD\")"},
+    {"title":"Keep only the digits","code":"for phone in [\"(555) 123-4567\", \"555.987.6543\", \"555 444 3333\"]:\n    digits = \"\"\n    for ch in phone:\n        if ch.isdigit():\n            digits = digits + ch\n    print(digits)"}
+  ],
+  "exercises": [
+    {
+      "prompt": "Write a function `clean_name(text)`. Remove extra spaces (at the start, at the end, and between words), and give each word a capital first letter.",
+      "starterCode": "def clean_name(text):\n    # your code here\n    pass\n",
+      "tests": [
+        {
+          "call": "clean_name('  ada   lovelace ')",
+          "returns": "'Ada Lovelace'"
+        },
+        {
+          "call": "clean_name('MIA CHEN')",
+          "returns": "'Mia Chen'"
+        },
+        {
+          "call": "clean_name('')",
+          "returns": "''"
+        }
+      ],
+      "hints": [
+        "`text.split()` splits on spaces and drops the empty pieces.",
+        "Join the pieces with `\" \".join(...)`, then use `.title()`."
+      ],
+      "solution": "def clean_name(text):\n    return \" \".join(text.split()).title()"
+    },
+    {
+      "prompt": "Write a function `clean_phone(text)`. Keep only the digits. If you end up with exactly 10 digits, return them as text. If not, return `None`.",
+      "starterCode": "def clean_phone(text):\n    # your code here\n    pass\n",
+      "tests": [
+        {
+          "call": "clean_phone('(555) 123-4567')",
+          "returns": "'5551234567'"
+        },
+        {
+          "call": "clean_phone('555.987.6543')",
+          "returns": "'5559876543'"
+        },
+        {
+          "call": "clean_phone('')",
+          "returns": "None"
+        },
+        {
+          "call": "clean_phone('12345')",
+          "returns": "None"
+        }
+      ],
+      "hints": [
+        "Start with `digits = \"\"` and loop over the characters.",
+        "`ch.isdigit()` is `True` for 0 to 9. At the end check `len(digits) == 10`."
+      ],
+      "solution": "def clean_phone(text):\n    digits = \"\"\n    for ch in text:\n        if ch.isdigit():\n            digits = digits + ch\n    if len(digits) == 10:\n        return digits\n    return None"
+    }
+  ],
+  "quiz": [
+    {"question":"What does `\"  ada   lovelace \".split()` give?","options":["'ada lovelace'","An error","['ada', 'lovelace']","['  ada', 'lovelace ']"],"answer":2,"explanation":"With no argument, `split()` splits on any spaces and drops the empty pieces."},
+    {"question":"Why make emails lowercase before you compare them?","options":["So `ADA@x.com` and `ada@x.com` count as the same address","It is faster","CSV files need lowercase","Python requires it"],"answer":0,"explanation":"Capital letters do not change who owns the address."},
+    {"question":"A phone number has only 5 digits. What should a cleaning function return?","options":["A guessed number","An empty string","An error that stops the script","`None`, so you can find and fix it later"],"answer":3,"explanation":"Guessing hides the problem. `None` marks it."}
+  ]
+}

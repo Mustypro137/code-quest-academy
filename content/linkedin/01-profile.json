@@ -1,0 +1,26 @@
+{
+  "title": "Your LinkedIn profile: the basics",
+  "explanation": [
+    {"type":"text","text":"Your LinkedIn profile is a web page about you. When someone finds you, they usually read only the top part: your photo, your headline, and the first lines of your About section. So those few lines must work hard."},
+    {"type":"text","text":"**The headline** is the line under your name. Do not write only \"Student\" or \"Looking for opportunities\". Say what you do and what you build or help with."},
+    {"type":"text","text":"**The About section** can be short. A good order is:"},
+    {"type":"list","items":["Who you are and what you do now, in one or two plain sentences.","Proof: what you have built or learned. Name a real project.","What you want next, and how people can contact you."]},
+    {"type":"text","text":"Only the first lines show before the reader taps \"see more\". Put your best sentence first."},
+    {"type":"text","text":"**The Featured section** lets you pin links. Pin your best project (a GitHub page or a write-up) and your best post."},
+    {"type":"text","text":"**Skills**: list the skills you can show. If you are still learning something, say \"learning\". Honest and specific is stronger than a long list."},
+    {"type":"tip","text":"Show, do not claim. \"Built a Python script that cleans a customer list\" is stronger than \"Python expert\". A real thing you did is proof. A big word is only a claim."},
+    {"type":"tip","text":"Never copy someone else's profile text, and never write something that is not true. Employers check. A small true story beats a big false one."},
+    {"type":"template","title":"About section","text":"Fill in the brackets with your own true details, then delete any line that does not fit you.","code":"I am learning [your main skill] by building small [kind of tools] that [what they help with].\n\nMy latest project: [one sentence about a real project and what it does].\n\nI am currently learning [next thing]. I am looking for [what you want next, in plain words].\n\nYou can contact me here on LinkedIn or at [email]."}
+  ],
+  "examples": [
+    {"title":"Headline: weak","run":false,"wrap":true,"code":"Self-taught learner | Looking for opportunities"},
+    {"title":"Headline: better (change it to match you)","run":false,"wrap":true,"code":"Learning Python | Building small tools that clean and report on business data"},
+    {"title":"About opening: weak","run":false,"wrap":true,"code":"I am a hard-working person who is passionate about technology and looking for opportunities."},
+    {"title":"About opening: better (an example to adapt)","run":false,"wrap":true,"code":"I am learning Python by building small tools that save time on boring office work. My latest practice project cleans a messy customer list and finds who is late on payment."}
+  ],
+  "quiz": [
+    {"question":"Which headline tells a reader the most?","options":["Student","Looking for opportunities","Learning Python | Building small tools that clean business data","Hard worker and fast learner"],"answer":2,"explanation":"It says what you do and what you build. The others could describe anyone."},
+    {"question":"What should the first lines of your About section do?","options":["List every skill you have","Copy a famous person's About","Say how hard-working you are","Say clearly who you are and what you build"],"answer":3,"explanation":"Most people read only the first lines, so make them count."},
+    {"question":"Why is \"Built a script that cleans a customer list\" stronger than \"Python expert\"?","options":["It uses more words","It shows something real you did","It sounds more famous","LinkedIn prefers it"],"answer":1,"explanation":"A real result is proof. \"Expert\" is only a claim."}
+  ]
+}

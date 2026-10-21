@@ -1,0 +1,141 @@
+{
+  "title": "Messages: system, user, assistant",
+  "explanation": [
+    {
+      "type": "text",
+      "text": "Chat models do not take one big string. They take a **list of messages**. Each message is a dictionary with a `role` and `content`."
+    },
+    {
+      "type": "list",
+      "items": [
+        "`system`: rules for the whole chat, such as \"Be short and kind\".",
+        "`user`: what the person says.",
+        "`assistant`: what the model said before."
+      ]
+    },
+    {
+      "type": "code",
+      "code": "messages = [\n    {\"role\": \"system\", \"content\": \"You are a kind Python teacher.\"},\n    {\"role\": \"user\", \"content\": \"What is a list?\"},\n]"
+    },
+    {
+      "type": "text",
+      "text": "The model has no memory between calls. To continue a chat, you send the **whole history** again: the old messages, the model's last reply as an `assistant` message, and the new `user` message."
+    },
+    {
+      "type": "tip",
+      "text": "Some services, including Claude's, take the system text as a separate setting and not as a message. The idea is the same: it holds the rules, and the messages hold the chat. You will see it in lesson 5."
+    },
+    {
+      "type": "tip",
+      "text": "Do not change the old list by accident. Make a **new** list with `old + [new_message]`, so you still have the old one."
+    }
+  ],
+  "examples": [
+    {
+      "title": "Build a chat history",
+      "code": "messages = [\n    {\"role\": \"system\", \"content\": \"Be short.\"},\n    {\"role\": \"user\", \"content\": \"Hi\"},\n]\nmessages.append({\"role\": \"assistant\", \"content\": \"Hello!\"})\nmessages.append({\"role\": \"user\", \"content\": \"What is 2 + 2?\"})\nfor m in messages:\n    print(m[\"role\"], \"->\", m[\"content\"])"
+    },
+    {
+      "title": "Count the messages by role",
+      "code": "messages = [\n    {\"role\": \"user\", \"content\": \"a\"},\n    {\"role\": \"assistant\", \"content\": \"b\"},\n    {\"role\": \"user\", \"content\": \"c\"},\n]\nusers = [m for m in messages if m[\"role\"] == \"user\"]\nprint(len(users), \"user messages\")"
+    },
+    {
+      "title": "A new list, the old one stays",
+      "code": "old = [{\"role\": \"user\", \"content\": \"Hi\"}]\nnew = old + [{\"role\": \"assistant\", \"content\": \"Hello!\"}]\nprint(len(old), len(new))"
+    }
+  ],
+  "exercises": [
+    {
+      "prompt": "Write a function `make_messages(system, user)` that returns a list of two messages: first the `system` message, then the `user` message.",
+      "starterCode": "def make_messages(system, user):\n    # your code here\n    pass",
+      "tests": [
+        {
+          "call": "make_messages('Be kind.', 'Hi')",
+          "returns": "[{'role': 'system', 'content': 'Be kind.'}, {'role': 'user', 'content': 'Hi'}]"
+        }
+      ],
+      "hints": [
+        "Each message is a dictionary: `{\"role\": ..., \"content\": ...}`.",
+        "Return a list with two dictionaries."
+      ],
+      "solution": "def make_messages(system, user):\n    return [\n        {\"role\": \"system\", \"content\": system},\n        {\"role\": \"user\", \"content\": user},\n    ]"
+    },
+    {
+      "prompt": "Write a function `add_turn(messages, role, content)` that returns a **new** list with the extra message at the end. The old list must stay the same.",
+      "starterCode": "def add_turn(messages, role, content):\n    # your code here\n    pass",
+      "tests": [
+        {
+          "call": "add_turn(m, 'assistant', 'b')",
+          "returns": "[{'role': 'user', 'content': 'a'}, {'role': 'assistant', 'content': 'b'}]",
+          "setup": "m = [{'role': 'user', 'content': 'a'}]"
+        },
+        {
+          "call": "len(m)",
+          "returns": "1",
+          "setup": "m = [{'role': 'user', 'content': 'a'}]\nadd_turn(m, 'user', 'b')"
+        }
+      ],
+      "hints": [
+        "`messages + [new_message]` makes a new list.",
+        "Do not use `append`: it changes the old list."
+      ],
+      "solution": "def add_turn(messages, role, content):\n    return messages + [{\"role\": role, \"content\": content}]"
+    },
+    {
+      "prompt": "Write a function `count_role(messages, role)` that returns how many messages have that role.",
+      "starterCode": "def count_role(messages, role):\n    # your code here\n    pass",
+      "tests": [
+        {
+          "call": "count_role(m, 'user')",
+          "returns": "2",
+          "setup": "m = [{'role': 'user', 'content': 'a'}, {'role': 'assistant', 'content': 'b'}, {'role': 'user', 'content': 'c'}]"
+        },
+        {
+          "call": "count_role(m, 'system')",
+          "returns": "0",
+          "setup": "m = [{'role': 'user', 'content': 'a'}]"
+        }
+      ],
+      "hints": [
+        "Loop over the messages and count the matches.",
+        "`sum(1 for m in messages if m[\"role\"] == role)` does it in one line."
+      ],
+      "solution": "def count_role(messages, role):\n    return sum(1 for m in messages if m[\"role\"] == role)"
+    }
+  ],
+  "quiz": [
+    {
+      "question": "Which role holds the rules for the whole chat?",
+      "options": [
+        "user",
+        "assistant",
+        "system",
+        "rules"
+      ],
+      "answer": 2,
+      "explanation": "The system message sets the rules. The user and assistant messages are the chat itself."
+    },
+    {
+      "question": "The model has no memory between calls. How do you continue a chat?",
+      "options": [
+        "Send the whole history again",
+        "Send only the newest message",
+        "Restart Python",
+        "Use a bigger number"
+      ],
+      "answer": 0,
+      "explanation": "You send the old messages and the new one each time. The history is your job."
+    },
+    {
+      "question": "What does `old + [new_message]` do?",
+      "options": [
+        "Changes the old list",
+        "Makes a new list and keeps the old one",
+        "Deletes the old list",
+        "Gives an error"
+      ],
+      "answer": 1,
+      "explanation": "Adding two lists makes a new list. The old list is unchanged."
+    }
+  ]
+}

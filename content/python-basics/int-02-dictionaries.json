@@ -1,0 +1,61 @@
+{
+  "title": "Dictionaries: store data with names",
+  "explanation": [
+    { "type": "text", "text": "A dictionary stores pairs of a key and a value. You find a value by its key, like finding a word in a real dictionary." },
+    { "type": "code", "code": "person = {\"name\": \"Amara\", \"age\": 30}\nprint(person[\"name\"])\nperson[\"city\"] = \"Lagos\"" },
+    { "type": "text", "text": "Use `.get()` when a key might be missing. It gives back `None` (or a default you choose) instead of an error." },
+    { "type": "tip", "text": "Loop over keys and values together with `for key, value in person.items():`." }
+  ],
+  "examples": [
+    { "title": "Count words", "code": "words = [\"a\", \"b\", \"a\"]\ncounts = {}\nfor w in words:\n    counts[w] = counts.get(w, 0) + 1\nprint(counts)  # {'a': 2, 'b': 1}" }
+  ],
+  "exercises": [
+    {
+      "prompt": "Make a dictionary called `book` with two keys: `title` with the value `Dune`, and `year` with the value `1965`.\n\nThen print the title.",
+      "starterCode": "# Write your code below\n",
+      "tests": [
+        {
+          "call": "book",
+          "returns": "{'title': 'Dune', 'year': 1965}",
+          "label": "The dictionary book"
+        },
+        {
+          "output": "Dune"
+        }
+      ],
+      "hints": [
+        "A dictionary uses curly brackets: `{ key: value }`.",
+        "Read a value with `book[\"title\"]`."
+      ],
+      "solution": "book = {\"title\": \"Dune\", \"year\": 1965}\nprint(book[\"title\"])"
+    },
+    {
+      "prompt": "Write a function `count_letters(word)` that returns a dictionary with how many times each letter appears.\n\nFor example `count_letters(\"aab\")` gives `{\"a\": 2, \"b\": 1}`.",
+      "starterCode": "def count_letters(word):\n    # your code here\n    pass\n",
+      "tests": [
+        {
+          "call": "count_letters('aab')",
+          "returns": "{'a': 2, 'b': 1}"
+        },
+        {
+          "call": "count_letters('')",
+          "returns": "{}"
+        },
+        {
+          "call": "count_letters('hello')",
+          "returns": "{'h': 1, 'e': 1, 'l': 2, 'o': 1}"
+        }
+      ],
+      "hints": [
+        "Start with an empty dictionary: `counts = {}`.",
+        "Loop over the letters. Use `counts.get(letter, 0) + 1`."
+      ],
+      "solution": "def count_letters(word):\n    counts = {}\n    for letter in word:\n        counts[letter] = counts.get(letter, 0) + 1\n    return counts"
+    }
+  ],
+  "quiz": [
+    { "question": "If `p = {\"name\": \"Amara\", \"age\": 30}`, what is `p[\"age\"]`?", "options": ["name", "30", "Amara", "An error"], "answer": 1, "explanation": "You look up a value by its key. The key \"age\" has the value 30." },
+    { "question": "Which is the safest way to read a key that might be missing?", "options": ["p[\"city\"]", "p.city", "p.get(\"city\")", "p(\"city\")"], "answer": 2, "explanation": "`.get()` gives back `None` instead of an error when the key is missing." },
+    { "question": "What does a dictionary store?", "options": ["Pairs of a key and a value", "Only numbers", "Only text", "Only functions"], "answer": 0, "explanation": "Each item is a key with its value." }
+  ]
+}
