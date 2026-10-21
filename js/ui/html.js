@@ -22,3 +22,9 @@ export function inline(text) {
     ? `<code>${esc(part.slice(1, -1))}</code>`
     : esc(part).replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>'))).join('');
 }
+
+// A progress bar. `percent` is 0 to 100. `label` tells screen readers what it measures.
+export function bar(percent, label) {
+  const p = Math.max(0, Math.min(100, Math.round(percent)));
+  return `<div class="bar" role="progressbar" aria-label="${esc(label)}" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${p}"><span style="width:${p}%"></span></div>`;
+}

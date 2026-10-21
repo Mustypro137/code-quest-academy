@@ -1,7 +1,13 @@
-import { getTheme, setTheme } from './store.js';
+import { setTheme } from './store.js';
 import { loadModules, loadLesson } from './content.js';
-import { renderHome, renderModule, renderMessage } from './ui/home.js';
+import { applyAppearance, effectiveTheme } from './appearance.js';
+import { renderModule, renderMessage } from './ui/home.js';
+import { renderDashboard } from './ui/dashboard.js';
+import { renderRoadmap } from './ui/roadmap.js';
+import { renderProgress } from './ui/progress.js';
+import { renderSettings } from './ui/settings.js';
 import { renderLesson } from './ui/lesson.js';
+import { initRewards } from './ui/rewards.js';
 import { focusScrollable } from './ui/html.js';
 
 const main = document.getElementById('main');
@@ -11,15 +17,24 @@ const notFound = () => renderMessage(main, 'Page not found', 'That page does not
 // Each handler loads its data, then returns a function that draws the page.
 // This lets route() drop the result if the user already moved on.
 const routes = [
-  { pattern: /^\/?$/, handler: async () => {
+  { nav: '/', pattern: /^\/?$/, handler: async () => {
     const modules = await loadModules();
-    return () => renderHome(main, modules, route);
+    return () => renderDashboard(main, modules);
   } },
-  { pattern: /^\/module\/([\w-]+)$/, handler: async (id) => {
+  { nav: '/roadmap', pattern: /^\/roadmap$/, handler: async () => {
+    const modules = await loadModules();
+    return () => renderRoadmap(main, modules);
+  } },
+  { nav: '/progress', pattern: /^\/progress$/, handler: async () => {
+    const modules = await loadModules();
+    return () => renderProgress(main, modules);
+  } },
+  { nav: '/settings', pattern: /^\/settings$/, handler: async () => () => renderSettings(main, route) },
+  { nav: '/roadmap', pattern: /^\/module\/([\w-]+)$/, handler: async (id) => {
     const module = (await loadModules()).find((m) => m.id === id);
     return module ? () => renderModule(main, module) : notFound;
   } },
-  { pattern: /^\/lesson\/([\w-]+)\/([\w-]+)$/, handler: async (moduleId, lessonId) => {
+  { nav: '/roadmap', pattern: /^\/lesson\/([\w-]+)\/([\w-]+)$/, handler: async (moduleId, lessonId) => {
     const module = (await loadModules()).find((m) => m.id === moduleId);
     if (!module?.lessons.some((l) => l.id === lessonId)) return notFound;
     const lesson = await loadLesson(moduleId, lessonId);
@@ -29,17 +44,26 @@ const routes = [
 
 let latest = 0;
 
+function markNav(active) {
+  document.querySelectorAll('.nav a').forEach((a) => {
+    if (a.getAttribute('href') === `#${active}`) a.setAttribute('aria-current', 'page');
+    else a.removeAttribute('aria-current');
+  });
+}
+
 async function route() {
   const mine = ++latest;
   const path = location.hash.slice(1);
   main.setAttribute('aria-busy', 'true');
   if (!main.firstChild) main.innerHTML = '<p class="loading">Loading…</p>';
   let draw = notFound;
+  let nav = null;
   try {
-    for (const { pattern, handler } of routes) {
+    for (const { pattern, handler, nav: section } of routes) {
       const match = path.match(pattern);
       if (match) {
         draw = await handler(...match.slice(1));
+        nav = section;
         break;
       }
     }
@@ -48,6 +72,7 @@ async function route() {
     draw = () => renderMessage(main, 'Could not load', 'Check that the local server is running, then refresh.');
   }
   if (mine !== latest) return;
+  markNav(nav);
   draw();
   main.removeAttribute('aria-busy');
   focusScrollable(main);
@@ -55,19 +80,14 @@ async function route() {
   window.scrollTo(0, 0);
 }
 
-function currentTheme() {
-  const set = document.documentElement.dataset.theme;
-  if (set) return set;
-  return matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-}
-
+// The top bar button flips between light and dark. Settings has the full choice, including "system".
 document.getElementById('theme-toggle').addEventListener('click', () => {
-  const next = currentTheme() === 'dark' ? 'light' : 'dark';
-  document.documentElement.dataset.theme = next;
-  setTheme(next);
+  setTheme(effectiveTheme() === 'dark' ? 'light' : 'dark');
+  applyAppearance();
 });
 
-if (getTheme()) document.documentElement.dataset.theme = getTheme();
+applyAppearance();
 window.addEventListener('hashchange', route);
 window.addEventListener('resize', () => focusScrollable(main));
+loadModules().then(initRewards).catch(() => {});
 route();

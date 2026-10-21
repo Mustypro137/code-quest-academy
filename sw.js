@@ -7,11 +7,12 @@ const CACHE = 'cqa-v1';
 
 const SHELL = [
   './', 'index.html', 'manifest.webmanifest',
-  'css/base.css', 'css/components.css',
-  'js/app.js', 'js/content.js', 'js/store.js',
+  'css/base.css', 'css/components.css', 'css/screens.css',
+  'js/app.js', 'js/content.js', 'js/store.js', 'js/path.js', 'js/achievements.js', 'js/appearance.js',
   'js/python/runner.js', 'js/python/worker.js',
   'js/ui/backup.js', 'js/ui/codebox.js', 'js/ui/exercise.js', 'js/ui/home.js',
   'js/ui/html.js', 'js/ui/lesson.js', 'js/ui/quiz.js', 'js/ui/typing.js',
+  'js/ui/dashboard.js', 'js/ui/roadmap.js', 'js/ui/progress.js', 'js/ui/settings.js', 'js/ui/rewards.js',
   'icons/icon-192.png', 'icons/icon-512.png',
 ];
 

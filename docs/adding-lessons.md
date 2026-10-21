@@ -118,6 +118,10 @@ Rules that keep exercises fair:
 If a lesson will not open, look at the browser console (F12). Most problems are a missing comma in the JSON,
 or a lesson `id` that does not match the file name.
 
+## Roadmap order
+Lessons are shown on the roadmap in the order of `content/index.json`. A lesson is "up next" when the one before it
+is done, and "locked" until then. Locks are only a suggestion: a locked lesson can always be opened.
+
 ## Offline support (service worker)
 `sw.js` caches the site so it works offline. Lessons are found from `content/index.json`, so a new lesson needs
 no change. But **a new file in `js/` or `css/` must be added to the `SHELL` list in `sw.js`**, or it will not work

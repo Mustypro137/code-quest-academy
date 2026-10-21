@@ -4,6 +4,7 @@ import { mountCodeBox, warmUp } from './codebox.js';
 import { mountExercise } from './exercise.js';
 import { mountTyping } from './typing.js';
 import { isDone, completeLesson } from '../store.js';
+import { lessonStates } from '../path.js';
 
 function copyBox(heading, b, buttonLabel, preClass) {
   return `
@@ -49,18 +50,31 @@ export function renderLesson(root, module, lessonId, lesson) {
         : `<div class="codebox" data-i="${i}"></div>`}
     </section>`).join('');
 
+  // Locks are only a suggestion: a locked lesson opens, with a note.
+  const lockNote = lessonStates(module)[i] === 'locked' ? `
+    <p class="notice" role="note">🔒 The roadmap suggests finishing
+      <a href="#/lesson/${esc(module.id)}/${esc(prev.id)}">“${esc(prev.title)}”</a> first. You can still read this lesson.</p>` : '';
+  const hasPractice = Boolean(lesson.exercises?.length);
+
   root.innerHTML = `
-    <p><a href="#/module/${esc(module.id)}">← ${esc(module.title)}</a></p>
+    <p><a href="#/roadmap">← Roadmap</a> · <a href="#/module/${esc(module.id)}">${esc(module.title)}</a></p>
+    ${lockNote}
+    ${hasPractice ? `<div class="jump" role="group" aria-label="Jump to">
+      <button class="btn btn-ghost" type="button" data-jump=".lesson">📖 Learn</button>
+      <button class="btn btn-ghost" type="button" data-jump=".exercises">🧪 Practise</button>
+    </div>` : ''}
+    <div class="lesson-layout${hasPractice ? ' two' : ''}">
     <article class="lesson">
       <h1>${esc(lesson.title)}</h1>
       ${lesson.explanation.map(block).join('')}
       ${examples ? `<h2>Examples</h2>${examples}` : ''}
     </article>
-    ${lesson.exercises?.length ? `
-    <section class="exercises">
-      <h2>Exercises</h2>
+    ${hasPractice ? `
+    <section class="exercises" aria-labelledby="practice-h">
+      <h2 id="practice-h">Exercises</h2>
       ${lesson.exercises.map(() => '<section class="exercise"></section>').join('')}
     </section>` : ''}
+    </div>
     ${lesson.quiz?.length ? '<section class="quiz"></section>' : ''}
     <div class="complete-box" role="status"></div>
     <nav class="lesson-nav" aria-label="Lesson navigation">
@@ -81,6 +95,12 @@ export function renderLesson(root, module, lessonId, lesson) {
   if (boxes.length || exerciseEls.length) warmUp().catch(() => {});
   if (lesson.quiz?.length) renderQuiz(root.querySelector('.quiz'), module.id, lessonId, lesson.quiz);
   root.querySelectorAll('.pc-box').forEach(wireCopy);
+  root.querySelectorAll('[data-jump]').forEach((button) => button.addEventListener('click', () => {
+    const target = root.querySelector(button.dataset.jump);
+    target.setAttribute('tabindex', '-1');
+    target.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+    target.focus({ preventScroll: true });
+  }));
   renderCompleteBox(root.querySelector('.complete-box'), module.id, lessonId);
 }
 

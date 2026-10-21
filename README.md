@@ -22,15 +22,20 @@ I built it to learn by small steps: read a short lesson, run an example, solve a
 ## Features
 - **Runnable examples and exercises.** Edit code, press Run (or Ctrl+Enter). Exercises have tests, hints, and a
   solution that unlocks after 2 failed tries. Code that runs longer than 10 seconds is stopped.
+- **Dashboard, roadmap and progress.** A "continue" card, a level ring (level N starts at 50 x N x (N-1) XP), a
+  learning path with done, up-next and locked lessons (locks are only a suggestion), an active-days calendar and
+  11 achievements.
 - **Progress.** XP, a daily streak, solved exercises and best quiz scores, saved in your browser.
+- **Settings.** Dark, light or system theme, reduce motion, "Unlock everything", backup and restore, offline
+  status, and reset with a confirmation.
 - **Backup.** Download your progress from the home page and restore it later or on another device.
 - **Works offline.** No server code and no outside services. Pyodide is included in the repository, and a service
   worker caches the site, so after one visit it opens without internet. You can install it as an app from the
   browser menu.
 - **Typing trainer.** Drills show each letter as right or wrong while you type, then your WPM and accuracy. Your
   best speed is saved.
-- **Accessible.** Light and dark themes, keyboard support, large touch targets on phones. Pages were checked
-  with axe-core.
+- **Accessible.** Dark navy design with a light option, keyboard support, large touch targets, reduced-motion
+  support. Pages were checked with axe-core on desktop, tablet and phone in both themes.
 - **Real-PC lessons.** Code that cannot run in a browser (files, email, API calls, Git) is shown with a Copy
   button, so you can run it on your own computer.
 
@@ -53,13 +58,14 @@ Open http://localhost:8000. Or use the VS Code "Live Server" extension.
 ```
 index.html          app shell
 sw.js, manifest.webmanifest, icons/   offline support and install
-css/                base.css (colours, themes), components.css (everything else)
+css/                base.css (design tokens, themes, app shell), components.css (lesson parts), screens.css (screens)
 js/
   app.js            router and start-up
   store.js          the only file that uses localStorage (progress, XP, streak, backup)
   content.js        loads lesson files
   python/           worker.js (runs Python), runner.js (talks to the worker)
-  ui/               home, lesson, quiz, exercise, codebox, backup
+  path.js           lesson states (done, current, locked); achievements.js, appearance.js
+  ui/               dashboard, roadmap, progress, settings, rewards, lesson, quiz, exercise, codebox, typing, backup
 content/
   index.json        list of modules and lessons
   <module>/<lesson>.json

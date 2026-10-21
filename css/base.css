@@ -1,43 +1,45 @@
+/* Design tokens. Dark navy is the default; light is the optional theme (html[data-theme="light"]).
+   Every text colour below was checked for 4.5:1 contrast on the surfaces it is used on. */
 :root {
-  --bg: #f6f7fb;
-  --surface: #ffffff;
-  --text: #1d2233;
-  --muted: #5d6479;
-  --border: #e1e4ee;
-  --accent: #5b4bdb;
-  --accent-text: #ffffff;
-  --danger: #b3261e;
-  --success: #17683a;
-  --radius: 14px;
-  --shadow: 0 2px 10px rgba(30, 34, 60, 0.08);
-}
-
-:root[data-theme="dark"] {
-  --bg: #12141f;
-  --surface: #1c1f2e;
+  --bg: #0b1020;
+  --surface: #141a30;
+  --surface-2: #1b2340;
   --text: #eceef7;
-  --muted: #9aa1b8;
-  --border: #2d3147;
+  --muted: #a3abc4;
+  --border: #2a3356;
   --accent: #8b7dff;
-  --accent-text: #12141f;
+  --accent-text: #0b1020;
+  --accent-2: #22d3ee;
   --danger: #ff8a80;
   --success: #5ed08a;
-  --shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+  --warning: #fbbf24;
+  --radius: 14px;
+  --shadow: 0 2px 12px rgba(0, 0, 0, 0.35);
+  --glow: 0 0 0 1px rgba(139, 125, 255, 0.55), 0 0 20px rgba(139, 125, 255, 0.22);
+  --gradient: linear-gradient(90deg, #8b7dff, #22d3ee);
+  --hero: linear-gradient(135deg, #1b2340 0%, #241d52 100%);
+  --topbar-h: 3.75rem;
+  color-scheme: dark;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme]) {
-    --bg: #12141f;
-    --surface: #1c1f2e;
-    --text: #eceef7;
-    --muted: #9aa1b8;
-    --border: #2d3147;
-    --accent: #8b7dff;
-    --accent-text: #12141f;
-    --danger: #ff8a80;
-    --success: #5ed08a;
-    --shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
-  }
+:root[data-theme="light"] {
+  --bg: #f5f6fc;
+  --surface: #ffffff;
+  --surface-2: #eef0fa;
+  --text: #1d2233;
+  --muted: #565e75;
+  --border: #d9dcee;
+  --accent: #5b4bdb;
+  --accent-text: #ffffff;
+  --accent-2: #0e7490;
+  --danger: #b3261e;
+  --success: #17683a;
+  --warning: #92400e;
+  --shadow: 0 2px 10px rgba(30, 34, 60, 0.08);
+  --glow: 0 0 0 1px rgba(91, 75, 219, 0.45), 0 0 16px rgba(91, 75, 219, 0.15);
+  --gradient: linear-gradient(90deg, #5b4bdb, #0e7490);
+  --hero: linear-gradient(135deg, #eef0fa 0%, #e3deff 100%);
+  color-scheme: light;
 }
 
 * { box-sizing: border-box; }
@@ -49,19 +51,11 @@ body {
   font: 1rem/1.6 system-ui, -apple-system, "Segoe UI", sans-serif;
 }
 
-main {
-  max-width: 960px;
-  margin: 0 auto;
-  padding: 1.5rem 1rem 4rem;
-}
-
-main:focus { outline: none; }
-
 h1, h2, h3 { line-height: 1.25; }
 a { color: var(--accent); }
-code { background: var(--border); padding: 0.1em 0.35em; border-radius: 6px; }
+code { background: var(--surface-2); padding: 0.1em 0.35em; border-radius: 6px; }
 
-:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+:focus-visible { outline: 3px solid var(--accent-2); outline-offset: 2px; }
 
 .skip-link {
   position: absolute;
@@ -70,6 +64,123 @@ code { background: var(--border); padding: 0.1em 0.35em; border-radius: 6px; }
   background: var(--accent);
   color: var(--accent-text);
   padding: 0.5rem 1rem;
-  z-index: 10;
+  z-index: 20;
 }
 .skip-link:focus { left: 0; }
+
+/* ---------- App shell: top bar, navigation, content ---------- */
+.app {
+  display: grid;
+  grid-template-columns: 13.5rem minmax(0, 1fr);
+  grid-template-rows: auto 1fr;
+  grid-template-areas: "top top" "nav main";
+  min-height: 100vh;
+}
+
+.topbar {
+  grid-area: top;
+  position: sticky;
+  top: 0;
+  z-index: 8;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-height: var(--topbar-h);
+  padding: 0.5rem 1.25rem;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+}
+.brand { font-weight: 800; font-size: 1.15rem; color: var(--text); text-decoration: none; }
+.topbar-end { margin-left: auto; display: flex; align-items: center; gap: 0.75rem; }
+
+.xp-chip {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  min-height: 44px;
+  padding: 0 0.85rem;
+  color: var(--text);
+  text-decoration: none;
+  font-weight: 700;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+}
+.xp-chip:hover { border-color: var(--accent); }
+.xp-chip .bar { width: 5rem; }
+.xp-chip { white-space: nowrap; }
+
+.nav {
+  grid-area: nav;
+  position: sticky;
+  top: var(--topbar-h);
+  align-self: start;
+  height: calc(100vh - var(--topbar-h));
+  padding: 1rem 0.75rem;
+  border-right: 1px solid var(--border);
+}
+.nav ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.25rem; }
+.nav a {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-height: 44px;
+  padding: 0.5rem 0.85rem;
+  color: var(--muted);
+  text-decoration: none;
+  font-weight: 600;
+  border-radius: 10px;
+  transition: background 0.15s, color 0.15s;
+}
+.nav a:hover { background: var(--surface-2); color: var(--text); }
+.nav a[aria-current="page"] { background: var(--surface-2); color: var(--text); box-shadow: inset 3px 0 0 var(--accent); }
+.nav .ico { font-size: 1.25rem; line-height: 1; }
+
+main {
+  grid-area: main;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1.5rem 1.25rem 4rem;
+}
+main:focus { outline: none; }
+
+/* Tablet: the navigation shrinks to icons. The labels stay for screen readers. */
+@media (max-width: 1023px) {
+  .app { grid-template-columns: 4.5rem minmax(0, 1fr); }
+  .nav { padding: 1rem 0.5rem; }
+  .nav a { justify-content: center; padding: 0.5rem; }
+  .nav .label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+}
+
+/* Phone: the navigation becomes a tab bar at the bottom. */
+@media (max-width: 700px) {
+  .app { grid-template-columns: minmax(0, 1fr); grid-template-areas: "top" "main"; }
+  .topbar { padding: 0.5rem 0.75rem; }
+  .brand-long { display: none; }
+  .xp-chip .bar { display: none; }
+  .nav {
+    position: fixed;
+    inset: auto 0 0 0;
+    z-index: 9;
+    height: auto;
+    padding: 0.25rem 0.5rem calc(0.25rem + env(safe-area-inset-bottom));
+    background: var(--surface);
+    border-right: 0;
+    border-top: 1px solid var(--border);
+  }
+  .nav ul { grid-template-columns: repeat(4, 1fr); }
+  .nav a { flex-direction: column; gap: 0.1rem; padding: 0.35rem 0.25rem; font-size: 0.875rem; }
+  .nav .label { position: static; width: auto; height: auto; clip: auto; overflow: visible; }
+  main { padding: 1rem 0.75rem 6rem; }
+}
+
+/* ---------- Motion: off when the system or the Settings switch asks for it ---------- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition: none !important; animation: none !important; scroll-behavior: auto !important; }
+}
+:root[data-motion="reduce"] *, :root[data-motion="reduce"] *::before, :root[data-motion="reduce"] *::after {
+  transition: none !important;
+  animation: none !important;
+  scroll-behavior: auto !important;
+}

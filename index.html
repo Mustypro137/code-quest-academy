@@ -6,32 +6,55 @@
   <title>CodeQuest Academy</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%E2%9A%94%EF%B8%8F%3C/text%3E%3C/svg%3E">
   <link rel="manifest" href="manifest.webmanifest">
-  <meta name="theme-color" content="#5b4bdb">
+  <meta name="theme-color" content="#0b1020">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <link rel="stylesheet" href="css/base.css">
   <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/screens.css">
   <script>
-    // Apply saved theme before first paint to avoid a flash.
+    // Apply the saved theme and motion setting before first paint to avoid a flash.
+    // Dark is the default. Keep this in step with js/appearance.js.
     try {
-      var t = JSON.parse(localStorage.getItem('cqa.progress') || '{}').theme;
-      if (t) document.documentElement.dataset.theme = t;
-    } catch (e) {}
+      var saved = JSON.parse(localStorage.getItem('cqa.progress') || '{}');
+      var t = saved.theme || 'dark';
+      if (t === 'system') t = matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+      document.documentElement.dataset.theme = t === 'light' ? 'light' : 'dark';
+      document.documentElement.dataset.motion = saved.settings && saved.settings.reduceMotion ? 'reduce' : 'full';
+    } catch (e) {
+      document.documentElement.dataset.theme = 'dark';
+    }
   </script>
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
-
-  <header class="site-header">
-    <a class="brand" href="#/">⚔️ CodeQuest Academy</a>
-    <button id="theme-toggle" class="btn btn-ghost" type="button" aria-label="Switch light/dark theme">🌓</button>
-  </header>
 
   <div id="file-warning" class="banner" hidden>
     This page was opened as a file. Python will not work this way.
     Start a local server instead (see README), then open <code>http://localhost:8000</code>.
   </div>
 
-  <main id="main" tabindex="-1"></main>
+  <div class="app">
+    <header class="topbar">
+      <a class="brand" href="#/">⚔️ CodeQuest<span class="brand-long"> Academy</span></a>
+      <div class="topbar-end">
+        <a id="xp-chip" class="xp-chip" href="#/progress"><span>Lv 1</span></a>
+        <button id="theme-toggle" class="btn btn-ghost" type="button" aria-label="Switch light/dark theme">🌓</button>
+      </div>
+    </header>
+
+    <nav class="nav" aria-label="Main">
+      <ul>
+        <li><a href="#/"><span class="ico" aria-hidden="true">🏠</span><span class="label">Home</span></a></li>
+        <li><a href="#/roadmap"><span class="ico" aria-hidden="true">🗺️</span><span class="label">Roadmap</span></a></li>
+        <li><a href="#/progress"><span class="ico" aria-hidden="true">📊</span><span class="label">Progress</span></a></li>
+        <li><a href="#/settings"><span class="ico" aria-hidden="true">⚙️</span><span class="label">Settings</span></a></li>
+      </ul>
+    </nav>
+
+    <main id="main" tabindex="-1"></main>
+  </div>
+
+  <div id="toasts" class="toasts" role="status" aria-live="polite"></div>
 
   <script type="module" src="js/app.js"></script>
   <noscript>CodeQuest Academy needs JavaScript.</noscript>
