@@ -1,0 +1,169 @@
+{
+  "title": "Merge many CSV files into one",
+  "explanation": [
+    {
+      "type": "text",
+      "text": "A common job: you get one CSV file for each month (`2026-01.csv`, `2026-02.csv`, and so on) and you want **one table** with everything, so you can add things up. Python can do this in a few lines."
+    },
+    {
+      "type": "text",
+      "text": "**Step 1: find the files.** `Path(\".\").glob(\"*.csv\")` gives every CSV file in the folder. Use `sorted(...)` so the order is always the same."
+    },
+    {
+      "type": "code",
+      "code": "from pathlib import Path\n\nfor path in sorted(Path(\".\").glob(\"*.csv\")):\n    print(path.name, path.stem)   # name: 2026-01.csv   stem: 2026-01"
+    },
+    {
+      "type": "tip",
+      "text": "Name your files **year-month**, like `2026-01.csv`. Then sorting the names also sorts the months in time order. With names like `jan.csv` and `feb.csv`, February would come before January."
+    },
+    {
+      "type": "text",
+      "text": "**Step 2: read each file and add a column.** After you merge, you can no longer see which file a row came from. So add a `month` column from the file name."
+    },
+    {
+      "type": "code",
+      "code": "rows = []\nfor path in sorted(Path(\".\").glob(\"*.csv\")):\n    with open(path, newline=\"\") as f:\n        for row in csv.DictReader(f):\n            row[\"month\"] = path.stem\n            rows.append(row)"
+    },
+    {
+      "type": "text",
+      "text": "**Step 3: use the merged table.** Now it is a normal list of dictionaries. Add up amounts per month, per product, or per customer."
+    },
+    {
+      "type": "text",
+      "text": "**Things that go wrong**"
+    },
+    {
+      "type": "list",
+      "items": [
+        "A file has the columns in a different order. `DictReader` does not mind: it uses the column names.",
+        "A file is missing a column. Use `row.get(\"amount\", \"0\")` so one bad file does not stop everything.",
+        "Every file has its own header line. With `DictReader` you read each file separately, so headers are not copied by mistake.",
+        "Amounts are text. Turn them into numbers with `float(...)` before you add them."
+      ]
+    },
+    {
+      "type": "pc",
+      "title": "merge all monthly files",
+      "text": "Put your monthly files in a folder named monthly. Run this next to it. It writes a new file all_months.csv and never changes the originals. Use copies of your files the first time.",
+      "code": "import csv\nfrom pathlib import Path\n\nrows = []\nfor path in sorted(Path(\"monthly\").glob(\"*.csv\")):\n    with open(path, newline=\"\", encoding=\"utf-8\") as f:\n        for row in csv.DictReader(f):\n            row[\"month\"] = path.stem\n            rows.append(row)\n\nif not rows:\n    raise SystemExit(\"No CSV files found in the monthly folder.\")\n\n# Collect every column name that appears in any file, keeping the first-seen order.\ncolumns = []\nfor row in rows:\n    for name in row:\n        if name not in columns:\n            columns.append(name)\n\nwith open(\"all_months.csv\", \"w\", newline=\"\", encoding=\"utf-8\") as f:\n    writer = csv.DictWriter(f, fieldnames=columns, restval=\"\")\n    writer.writeheader()\n    writer.writerows(rows)\n\nprint(\"Merged\", len(rows), \"rows into all_months.csv\")"
+    }
+  ],
+  "examples": [
+    {
+      "title": "Find the files in order",
+      "code": "from pathlib import Path\n\nPath(\"2026-01.csv\").write_text(\"item,amount\\nTea,10\\nCake,25\\n\")\nPath(\"2026-02.csv\").write_text(\"item,amount\\nTea,12\\nJuice,8\\n\")\n\nfor path in sorted(Path(\".\").glob(\"*.csv\")):\n    print(path.name, \"->\", path.stem)"
+    },
+    {
+      "title": "Merge the rows and add a month column",
+      "code": "import csv\nfrom pathlib import Path\n\nPath(\"2026-01.csv\").write_text(\"item,amount\\nTea,10\\nCake,25\\n\")\nPath(\"2026-02.csv\").write_text(\"item,amount\\nTea,12\\nJuice,8\\n\")\n\nrows = []\nfor path in sorted(Path(\".\").glob(\"*.csv\")):\n    with open(path, newline=\"\") as f:\n        for row in csv.DictReader(f):\n            row[\"month\"] = path.stem\n            rows.append(row)\n\nfor row in rows:\n    print(row)"
+    },
+    {
+      "title": "Total per month",
+      "code": "rows = [\n    {\"item\": \"Tea\", \"amount\": \"10\", \"month\": \"2026-01\"},\n    {\"item\": \"Cake\", \"amount\": \"25\", \"month\": \"2026-01\"},\n    {\"item\": \"Tea\", \"amount\": \"12\", \"month\": \"2026-02\"},\n]\ntotals = {}\nfor row in rows:\n    month = row[\"month\"]\n    totals[month] = totals.get(month, 0) + float(row[\"amount\"])\nprint(totals)"
+    }
+  ],
+  "exercises": [
+    {
+      "prompt": "Write `merge_rows(files)`. `files` is a dictionary: the key is a file name without `.csv` (such as `2026-01`) and the value is the list of row dictionaries from that file.\n\nReturn one list with all the rows. Go through the files in sorted name order. Each row in the result is a **copy** with an extra key `\"month\"` set to the file name. The original rows must not change.",
+      "starterCode": "def merge_rows(files):\n    # your code here\n    pass",
+      "tests": [
+        {
+          "call": "merge_rows({'2026-02': [{'item': 'b', 'amount': '2'}], '2026-01': [{'item': 'a', 'amount': '1'}]})",
+          "returns": "[{'item': 'a', 'amount': '1', 'month': '2026-01'}, {'item': 'b', 'amount': '2', 'month': '2026-02'}]"
+        },
+        {
+          "call": "(merge_rows(f), f)",
+          "returns": "([{'a': 1, 'month': 'x'}], {'x': [{'a': 1}]})",
+          "setup": "f = {'x': [{'a': 1}]}"
+        },
+        {
+          "call": "merge_rows({})",
+          "returns": "[]"
+        }
+      ],
+      "hints": [
+        "Loop over `sorted(files)` to get the names in order.",
+        "`{**row, \"month\": name}` makes a new dictionary with the extra key."
+      ],
+      "solution": "def merge_rows(files):\n    merged = []\n    for name in sorted(files):\n        for row in files[name]:\n            merged.append({**row, \"month\": name})\n    return merged"
+    },
+    {
+      "prompt": "Write `total_by_month(rows)`. Each row has `\"month\"` and `\"amount\"` (text). Return a dictionary: month to the total amount as a number, rounded to 2 decimals. For no rows, return an empty dictionary.",
+      "starterCode": "def total_by_month(rows):\n    # your code here\n    pass",
+      "tests": [
+        {
+          "call": "total_by_month([{'month': '2026-01', 'amount': '10'}, {'month': '2026-01', 'amount': '25.5'}, {'month': '2026-02', 'amount': '12'}])",
+          "returns": "{'2026-01': 35.5, '2026-02': 12.0}"
+        },
+        {
+          "call": "total_by_month([])",
+          "returns": "{}"
+        }
+      ],
+      "hints": [
+        "Start with `totals = {}` and use `totals.get(month, 0)`.",
+        "Convert with `float(row[\"amount\"])`. Round at the end with `round(total, 2)`."
+      ],
+      "solution": "def total_by_month(rows):\n    totals = {}\n    for row in rows:\n        month = row[\"month\"]\n        totals[month] = totals.get(month, 0) + float(row[\"amount\"])\n    return {month: round(total, 2) for month, total in totals.items()}"
+    },
+    {
+      "prompt": "Two monthly files are made for you. Read **every** `.csv` file in the folder, in name order, into a list called `rows`. Each row needs an extra key `\"month\"` with the file name without `.csv`.",
+      "starterCode": "import csv\nfrom pathlib import Path\n\nPath(\"2026-01.csv\").write_text(\"item,amount\\nTea,10\\nCake,25\\n\")\nPath(\"2026-02.csv\").write_text(\"item,amount\\nTea,12\\n\")\n\nrows = []\n# your code here",
+      "tests": [
+        {
+          "call": "len(rows)",
+          "returns": "3"
+        },
+        {
+          "call": "[r['month'] for r in rows]",
+          "returns": "['2026-01', '2026-01', '2026-02']"
+        },
+        {
+          "call": "rows[2]",
+          "returns": "{'item': 'Tea', 'amount': '12', 'month': '2026-02'}"
+        }
+      ],
+      "hints": [
+        "Loop over `sorted(Path(\".\").glob(\"*.csv\"))`.",
+        "`path.stem` is the file name without `.csv`."
+      ],
+      "solution": "import csv\nfrom pathlib import Path\n\nPath(\"2026-01.csv\").write_text(\"item,amount\\nTea,10\\nCake,25\\n\")\nPath(\"2026-02.csv\").write_text(\"item,amount\\nTea,12\\n\")\n\nrows = []\nfor path in sorted(Path(\".\").glob(\"*.csv\")):\n    with open(path, newline=\"\") as f:\n        for row in csv.DictReader(f):\n            row[\"month\"] = path.stem\n            rows.append(row)"
+    }
+  ],
+  "quiz": [
+    {
+      "question": "Why name monthly files like `2026-01.csv`?",
+      "options": [
+        "Python needs this name",
+        "Sorting the names also sorts the months in time order",
+        "It makes the files smaller",
+        "Excel needs it"
+      ],
+      "answer": 1,
+      "explanation": "With year first, alphabetical order is also time order. `feb.csv` would come before `jan.csv`."
+    },
+    {
+      "question": "Why add a `month` column when you merge?",
+      "options": [
+        "To make the file bigger",
+        "To remember which file each row came from",
+        "Because CSV needs it",
+        "To sort faster"
+      ],
+      "answer": 1,
+      "explanation": "After merging, the file name is gone. A `month` column keeps that information."
+    },
+    {
+      "question": "A file has no `amount` column. What keeps the script from crashing?",
+      "options": [
+        "`row[\"amount\"]`",
+        "`row.get(\"amount\", \"0\")`",
+        "Delete the file",
+        "Use `print`"
+      ],
+      "answer": 1,
+      "explanation": "`.get` gives a default value when the key is missing, so one odd file does not stop the job."
+    }
+  ]
+}

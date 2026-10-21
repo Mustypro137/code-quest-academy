@@ -1,0 +1,179 @@
+{
+  "title": "Excel files with Python",
+  "explanation": [
+    {
+      "type": "text",
+      "text": "Many people work in Excel. Python can read and write Excel files (`.xlsx`), so your scripts can produce a tidy report that your boss or client opens in a normal way. The package that does this is **openpyxl**. It needs to be installed (`pip install openpyxl`), so the Excel code is for your PC."
+    },
+    {
+      "type": "text",
+      "text": "Even without openpyxl, there are things you can do right here:"
+    },
+    {
+      "type": "list",
+      "items": [
+        "**CSV opens in Excel.** If your script writes a CSV file, Excel can open it. For names with accents, write with `encoding=\"utf-8-sig\"` so Excel reads the letters correctly.",
+        "**Prepare a table.** Excel sheets are rows of cells. A list of lists (the first list is the header) maps straight onto a sheet.",
+        "**Cell names.** Column 1 is `A`, column 26 is `Z`, column 27 is `AA`. You will need to turn numbers into letters for formulas."
+      ]
+    },
+    {
+      "type": "text",
+      "text": "**With openpyxl** the main ideas are simple: a **workbook** has **sheets**, a sheet has **cells**. You `append` rows, set styles, and `save`."
+    },
+    {
+      "type": "tip",
+      "text": "Always save to a **new file name** (such as `report.xlsx`) and keep your original. Saving with openpyxl can drop some Excel features, such as charts or pictures, from a file you opened."
+    },
+    {
+      "type": "tip",
+      "text": "Formulas such as `=SUM(B2:B3)` are saved as text. Excel calculates them when you open the file. If you read the file back with Python you see the formula text, not the result."
+    },
+    {
+      "type": "pc",
+      "title": "write and read an Excel file",
+      "text": "Run \"pip install openpyxl\" once. This writes a new report.xlsx with a bold header, a wider column, money format and a real Excel formula. It does not change any other file.",
+      "code": "# pip install openpyxl\nfrom openpyxl import Workbook, load_workbook\nfrom openpyxl.styles import Font\n\nwb = Workbook()\nws = wb.active\nws.title = \"Report\"\n\nws.append([\"Customer\", \"Amount due\"])\nws.append([\"Ada\", 120.5])\nws.append([\"Sam\", 80])\nws.append([\"Total\", \"=SUM(B2:B3)\"])       # a real Excel formula\n\nfor cell in ws[1]:\n    cell.font = Font(bold=True)             # bold header\nws.column_dimensions[\"A\"].width = 20        # wider first column\nfor row in ws.iter_rows(min_row=2, min_col=2, max_col=2):\n    row[0].number_format = \"#,##0.00\"       # 2 decimals with thousands separator\n\nwb.save(\"report.xlsx\")\nprint(\"Saved report.xlsx\")\n\n# Read it back\nwb = load_workbook(\"report.xlsx\")\nfor row in wb.active.iter_rows(values_only=True):\n    print(row)"
+    }
+  ],
+  "examples": [
+    {
+      "title": "Rows to a table (list of lists)",
+      "code": "rows = [\n    {\"name\": \"Ada\", \"due\": 120.5},\n    {\"name\": \"Sam\", \"due\": 80},\n]\ncolumns = [\"name\", \"due\"]\ntable = [columns] + [[row[c] for c in columns] for row in rows]\nfor line in table:\n    print(line)"
+    },
+    {
+      "title": "A CSV that Excel opens correctly",
+      "code": "import csv\nfrom pathlib import Path\n\nwith open(\"report.csv\", \"w\", newline=\"\", encoding=\"utf-8-sig\") as f:\n    writer = csv.writer(f)\n    writer.writerow([\"name\", \"city\"])\n    writer.writerow([\"José\", \"São Paulo\"])\n\nprint(Path(\"report.csv\").read_bytes()[:3])   # the 3 bytes Excel looks for"
+    },
+    {
+      "title": "Column numbers to letters",
+      "code": "print(chr(64 + 1), chr(64 + 2), chr(64 + 26))   # A B Z\nprint(divmod(27 - 1, 26))                      # for AA, we need more than one letter"
+    }
+  ],
+  "exercises": [
+    {
+      "prompt": "Write `to_table(rows, columns)`. `rows` is a list of dictionaries. Return a list of lists: the first list is `columns` (the header), then one list per row with the values in the order of `columns`. A missing value becomes an empty string `\"\"`.",
+      "starterCode": "def to_table(rows, columns):\n    # your code here\n    pass",
+      "tests": [
+        {
+          "call": "to_table([{'a': 1, 'b': 2}, {'a': 3, 'b': 4}], ['a', 'b'])",
+          "returns": "[['a', 'b'], [1, 2], [3, 4]]"
+        },
+        {
+          "call": "to_table([{'a': 1}], ['a', 'b'])",
+          "returns": "[['a', 'b'], [1, '']]"
+        },
+        {
+          "call": "to_table([], ['a'])",
+          "returns": "[['a']]"
+        }
+      ],
+      "hints": [
+        "Start with `[columns]`.",
+        "For each row, `[row.get(c, \"\") for c in columns]`."
+      ],
+      "solution": "def to_table(rows, columns):\n    return [columns] + [[row.get(c, \"\") for c in columns] for row in rows]"
+    },
+    {
+      "prompt": "Write `column_total(table, name)`. `table` is a list of lists with the header in the first list. Return the sum of the numbers (`int` or `float`) in the column called `name`. Ignore values that are not numbers. If the column does not exist, return `0`.",
+      "starterCode": "def column_total(table, name):\n    # your code here\n    pass",
+      "tests": [
+        {
+          "call": "column_total([['a', 'b'], [1, 2.5], [3, 'x']], 'a')",
+          "returns": "4"
+        },
+        {
+          "call": "column_total([['a', 'b'], [1, 2.5], [3, 'x']], 'b')",
+          "returns": "2.5"
+        },
+        {
+          "call": "column_total([['a', 'b'], [1, 2]], 'zzz')",
+          "returns": "0"
+        },
+        {
+          "call": "column_total([['a']], 'a')",
+          "returns": "0"
+        }
+      ],
+      "hints": [
+        "Find the column position with `table[0].index(name)`. Check first that the name is in `table[0]`.",
+        "Loop over `table[1:]` and add only values where `isinstance(value, (int, float))`."
+      ],
+      "solution": "def column_total(table, name):\n    if name not in table[0]:\n        return 0\n    position = table[0].index(name)\n    total = 0\n    for row in table[1:]:\n        value = row[position]\n        if isinstance(value, (int, float)) and not isinstance(value, bool):\n            total += value\n    return total"
+    },
+    {
+      "prompt": "Write `col_letter(n)`. It turns a column number into the Excel letters: `1` is `\"A\"`, `26` is `\"Z\"`, `27` is `\"AA\"`, `28` is `\"AB\"`, `52` is `\"AZ\"`, `53` is `\"BA\"`.",
+      "starterCode": "def col_letter(n):\n    # your code here\n    pass",
+      "tests": [
+        {
+          "call": "col_letter(1)",
+          "returns": "'A'"
+        },
+        {
+          "call": "col_letter(26)",
+          "returns": "'Z'"
+        },
+        {
+          "call": "col_letter(27)",
+          "returns": "'AA'"
+        },
+        {
+          "call": "col_letter(28)",
+          "returns": "'AB'"
+        },
+        {
+          "call": "col_letter(52)",
+          "returns": "'AZ'"
+        },
+        {
+          "call": "col_letter(53)",
+          "returns": "'BA'"
+        },
+        {
+          "call": "col_letter(702)",
+          "returns": "'ZZ'"
+        }
+      ],
+      "hints": [
+        "`divmod(n - 1, 26)` gives a quotient and a rest. The rest is the last letter (`chr(65 + rest)` where 65 is \"A\").",
+        "Repeat with the quotient while `n` is more than 0, and put each new letter in front."
+      ],
+      "solution": "def col_letter(n):\n    letters = \"\"\n    while n > 0:\n        n, rest = divmod(n - 1, 26)\n        letters = chr(65 + rest) + letters\n    return letters"
+    }
+  ],
+  "quiz": [
+    {
+      "question": "Which package reads and writes `.xlsx` files?",
+      "options": [
+        "openpyxl",
+        "csvplus",
+        "excelpy3",
+        "It is built in"
+      ],
+      "answer": 0,
+      "explanation": "`openpyxl` is the common choice. You install it with `pip install openpyxl`."
+    },
+    {
+      "question": "Why save the result to a new file name?",
+      "options": [
+        "Excel needs it",
+        "You keep your original, and nothing is lost",
+        "It is faster",
+        "Python only saves new names"
+      ],
+      "answer": 1,
+      "explanation": "Keeping the original is safe, and saving can drop some features of the file you opened."
+    },
+    {
+      "question": "You read back a cell that has `=SUM(B2:B3)`. What does Python show?",
+      "options": [
+        "The result of the sum",
+        "The formula text",
+        "An error",
+        "Nothing"
+      ],
+      "answer": 1,
+      "explanation": "openpyxl keeps the formula text. Excel calculates the result when the file is opened."
+    }
+  ]
+}

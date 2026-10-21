@@ -55,6 +55,10 @@ Everything except `title` and `explanation` is optional.
   - `{ "type": "list", "items": ["first point", "second point"] }` is a bullet list.
   - `{ "type": "template", "title": "About section", "text": "How to use it", "code": "..." }` is text the
     learner can copy and fill in, such as a post or a README. It has a Copy button and long lines wrap.
+- `{ "type": "typing", "title": "Home row", "text": "asdf jkl;" }` is a typing drill. The learner types the text,
+  and sees WPM and accuracy. A try is saved as a best only at 95% accuracy or more. Use `
+` for a new line.
+  Drills are numbered in the order they appear in the lesson. They give no XP.
 - `**double stars**` make bold text. `` `backticks` `` make inline code. Use backticks around anything with `**`
   in it, such as `2 ** 3`, so it is never read as bold.
 - Writing lessons (no code) can leave out `exercises`. Use examples with `"run": false, "wrap": true` to show
@@ -111,3 +115,8 @@ Rules that keep exercises fair:
 
 If a lesson will not open, look at the browser console (F12). Most problems are a missing comma in the JSON,
 or a lesson `id` that does not match the file name.
+
+## Offline support (service worker)
+`sw.js` caches the site so it works offline. Lessons are found from `content/index.json`, so a new lesson needs
+no change. But **a new file in `js/` or `css/` must be added to the `SHELL` list in `sw.js`**, or it will not work
+offline the first time. Pages are loaded network-first, so changes show up when you are online.

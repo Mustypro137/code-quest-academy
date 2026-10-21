@@ -1,0 +1,168 @@
+{
+  "title": "Write and send email with Python",
+  "explanation": [
+    {
+      "type": "text",
+      "text": "Python can write emails for you: a reminder for each late customer, a weekly report to yourself. Building the message works right here in the browser. **Sending** it needs the internet and your email account, so that part is for your PC."
+    },
+    {
+      "type": "text",
+      "text": "**Build a message.** The `EmailMessage` class holds the sender, the receiver, the subject and the text."
+    },
+    {
+      "type": "code",
+      "code": "from email.message import EmailMessage\n\nmsg = EmailMessage()\nmsg[\"From\"] = \"me@example.com\"\nmsg[\"To\"] = \"friend@example.com\"\nmsg[\"Subject\"] = \"Hello\"\nmsg.set_content(\"Hi! This email was written by Python.\")"
+    },
+    {
+      "type": "text",
+      "text": "**Mail merge.** One template, many people. `str.format_map` fills the `{name}` holes from a dictionary:"
+    },
+    {
+      "type": "code",
+      "code": "template = \"Hi {name}, you owe {amount}.\"\nperson = {\"name\": \"Ada\", \"amount\": \"$5\"}\nprint(template.format_map(person))"
+    },
+    {
+      "type": "text",
+      "text": "**Sending safely**"
+    },
+    {
+      "type": "list",
+      "items": [
+        "**Start with a dry run.** The script prints what it would send, and sends nothing until you change one setting.",
+        "**Send the first test to yourself.**",
+        "**Never write your password in the file.** Many providers ask for an \"app password\" for scripts. Keep it in an environment variable, like the API key in the AI module.",
+        "**Only email people who agreed to get email from you.** Sending many emails to strangers can get your account blocked, and it can break rules.",
+        "**Check your provider's help page** for the server name and port to use."
+      ]
+    },
+    {
+      "type": "tip",
+      "text": "The sending code is the same for every provider. Only the server name, the port and the login change."
+    },
+    {
+      "type": "pc",
+      "title": "send an email (safe by default)",
+      "text": "DRY_RUN is True, so this only prints. Fill in the server details from your email provider's help page, save the app password in an environment variable named EMAIL_APP_PASSWORD, send a first test to yourself, then set DRY_RUN to False.",
+      "code": "import os\nimport smtplib\nfrom email.message import EmailMessage\n\nDRY_RUN = True                       # change to False only when you are ready to send\nSMTP_HOST = \"smtp.example.com\"       # your provider's server name\nSMTP_PORT = 587\nSENDER = \"you@example.com\"\nPASSWORD = os.environ.get(\"EMAIL_APP_PASSWORD\", \"\")   # never write the password in the file\n\ndef make_message(to, subject, body):\n    msg = EmailMessage()\n    msg[\"From\"] = SENDER\n    msg[\"To\"] = to\n    msg[\"Subject\"] = subject\n    msg.set_content(body)\n    return msg\n\ndef send(msg):\n    if DRY_RUN:\n        print(\"DRY RUN: would send to\", msg[\"To\"], \"-\", msg[\"Subject\"])\n        return\n    with smtplib.SMTP(SMTP_HOST, SMTP_PORT) as server:\n        server.starttls()\n        server.login(SENDER, PASSWORD)\n        server.send_message(msg)\n        print(\"Sent to\", msg[\"To\"])\n\nsend(make_message(SENDER, \"Test from Python\", \"Hello from my script.\"))"
+    }
+  ],
+  "examples": [
+    {
+      "title": "Build a message and look at it",
+      "code": "from email.message import EmailMessage\n\nmsg = EmailMessage()\nmsg[\"From\"] = \"me@example.com\"\nmsg[\"To\"] = \"friend@example.com\"\nmsg[\"Subject\"] = \"Hello\"\nmsg.set_content(\"Hi! This email was written by Python.\")\n\nprint(msg[\"Subject\"], \"->\", msg[\"To\"])\nprint(msg.get_content())"
+    },
+    {
+      "title": "Mail merge",
+      "code": "template = \"Hi {name}, your order {order} is ready.\"\npeople = [\n    {\"name\": \"Ada\", \"order\": \"#101\"},\n    {\"name\": \"Sam\", \"order\": \"#102\"},\n]\nfor person in people:\n    print(template.format_map(person))"
+    },
+    {
+      "title": "Check an address before using it",
+      "code": "import re\n\ndef looks_like_email(text):\n    return re.fullmatch(r\"[^@\\s]+@[^@\\s]+\\.[^@\\s]+\", text.strip()) is not None\n\nfor address in [\"ada@example.com\", \"ada@\", \"no spaces@x.com\"]:\n    print(address, looks_like_email(address))"
+    }
+  ],
+  "exercises": [
+    {
+      "prompt": "Write `make_message(sender, to, subject, body)`. It returns an `EmailMessage` with the `From`, `To` and `Subject` headers set and the body as its content.",
+      "starterCode": "from email.message import EmailMessage\n\ndef make_message(sender, to, subject, body):\n    # your code here\n    pass",
+      "tests": [
+        {
+          "call": "m['Subject']",
+          "returns": "'Hi'",
+          "setup": "m = make_message('a@x.com', 'b@y.com', 'Hi', 'Body text')"
+        },
+        {
+          "call": "(m['From'], m['To'])",
+          "returns": "('a@x.com', 'b@y.com')",
+          "setup": "m = make_message('a@x.com', 'b@y.com', 'Hi', 'Body text')"
+        },
+        {
+          "call": "m.get_content().strip()",
+          "returns": "'Body text'",
+          "setup": "m = make_message('a@x.com', 'b@y.com', 'Hi', 'Body text')"
+        }
+      ],
+      "hints": [
+        "`msg = EmailMessage()`, then `msg[\"From\"] = sender` and so on.",
+        "`msg.set_content(body)` sets the text. Do not forget `return msg`."
+      ],
+      "solution": "from email.message import EmailMessage\n\ndef make_message(sender, to, subject, body):\n    msg = EmailMessage()\n    msg[\"From\"] = sender\n    msg[\"To\"] = to\n    msg[\"Subject\"] = subject\n    msg.set_content(body)\n    return msg"
+    },
+    {
+      "prompt": "Write `mail_merge(template, people)`. `people` is a list of dictionaries. Return a list of texts: the template filled in for each person, in the same order.",
+      "starterCode": "def mail_merge(template, people):\n    # your code here\n    pass",
+      "tests": [
+        {
+          "call": "mail_merge('Hi {name}, you owe {amount}.', [{'name': 'Ada', 'amount': '$5'}, {'name': 'Sam', 'amount': '$7'}])",
+          "returns": "['Hi Ada, you owe $5.', 'Hi Sam, you owe $7.']"
+        },
+        {
+          "call": "mail_merge('Hello {name}!', [])",
+          "returns": "[]"
+        }
+      ],
+      "hints": [
+        "`template.format_map(person)` fills the holes from one dictionary.",
+        "Use a list comprehension."
+      ],
+      "solution": "def mail_merge(template, people):\n    return [template.format_map(person) for person in people]"
+    },
+    {
+      "prompt": "Write `valid_recipients(addresses)`. Remove spaces at the ends, make everything lowercase, keep only addresses that look like `name@site.tld` (no spaces, one `@`, a dot after it), and remove repeats. Keep the first-seen order.",
+      "starterCode": "import re\n\ndef valid_recipients(addresses):\n    # your code here\n    pass",
+      "tests": [
+        {
+          "call": "valid_recipients([' Ada@X.com', 'bad', 'ada@x.com', 'b@y.org'])",
+          "returns": "['ada@x.com', 'b@y.org']"
+        },
+        {
+          "call": "valid_recipients(['a@b', 'no spaces@x.com'])",
+          "returns": "[]"
+        },
+        {
+          "call": "valid_recipients([])",
+          "returns": "[]"
+        }
+      ],
+      "hints": [
+        "`re.fullmatch(r\"[^@\\s]+@[^@\\s]+\\.[^@\\s]+\", address)` checks the shape.",
+        "Keep a result list and add an address only if it is not in the list yet."
+      ],
+      "solution": "import re\n\ndef valid_recipients(addresses):\n    result = []\n    for address in addresses:\n        address = address.strip().lower()\n        if re.fullmatch(r\"[^@\\s]+@[^@\\s]+\\.[^@\\s]+\", address) and address not in result:\n            result.append(address)\n    return result"
+    }
+  ],
+  "quiz": [
+    {
+      "question": "What is a \"dry run\"?",
+      "options": [
+        "Running with no internet",
+        "The script shows what it would send, but sends nothing",
+        "A fast run",
+        "Running twice"
+      ],
+      "answer": 1,
+      "explanation": "A dry run lets you check the result safely before anything real happens."
+    },
+    {
+      "question": "Where should your email password or app password live?",
+      "options": [
+        "In the script",
+        "In an environment variable",
+        "In the email subject",
+        "On LinkedIn"
+      ],
+      "answer": 1,
+      "explanation": "An environment variable keeps the secret out of your code, so you cannot share it by mistake."
+    },
+    {
+      "question": "Who should you email with a script?",
+      "options": [
+        "Anyone you find online",
+        "Only people who agreed to hear from you",
+        "Strangers, many at once",
+        "Nobody, ever"
+      ],
+      "answer": 1,
+      "explanation": "Only email people who agreed. Mass emails to strangers can block your account."
+    }
+  ]
+}

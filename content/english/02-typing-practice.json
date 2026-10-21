@@ -1,0 +1,80 @@
+{
+  "title": "Typing practice",
+  "explanation": [
+    {
+      "type": "text",
+      "text": "Short drills, one after another. For each one, click in the box and start typing. The timer starts on your first key and stops when you have typed all the text. You see your **speed in WPM** and your **accuracy**."
+    },
+    {
+      "type": "list",
+      "items": [
+        "Look at the text, **not your hands**.",
+        "Green letters are correct. Red wavy letters are mistakes. The grey block is the next letter.",
+        "A try is saved as your best only when accuracy is **95% or more**. Speed does not count if you rush and make mistakes.",
+        "Do each drill a few times. Your best speed is saved in this browser."
+      ]
+    },
+    {
+      "type": "tip",
+      "text": "Do not delete and fix every small mistake with a panic. Stay calm, keep the same rhythm, and slow down a little. Calm typing gets faster by itself."
+    },
+    {
+      "type": "typing",
+      "title": "Home row",
+      "text": "asdf jkl; asdf jkl; fads lads flask salad"
+    },
+    {
+      "type": "typing",
+      "title": "Everyday words",
+      "text": "the quick brown fox jumps over the lazy dog"
+    },
+    {
+      "type": "typing",
+      "title": "A technical sentence",
+      "text": "A function takes an input and returns an output."
+    },
+    {
+      "type": "typing",
+      "title": "Quotes and brackets",
+      "text": "print(\"Hello, World!\")"
+    },
+    {
+      "type": "typing",
+      "title": "A dictionary",
+      "text": "data = {\"name\": \"Ada\", \"scores\": [90, 85]}"
+    },
+    {
+      "type": "typing",
+      "title": "Two lines of code",
+      "text": "for i in range(3):\n    print(i)"
+    },
+    {
+      "type": "tip",
+      "text": "In the last drill, press **Enter** at the end of the first line, then type 4 spaces. Spaces count as characters too."
+    }
+  ],
+  "quiz": [
+    {
+      "question": "A typing try is saved as your best when…",
+      "options": [
+        "you finish at any speed",
+        "accuracy is 95% or more and the speed beats your best",
+        "you type the fastest of all",
+        "you use copy and paste"
+      ],
+      "answer": 1,
+      "explanation": "Speed only counts when it is accurate. Below 95% accuracy the try is not saved."
+    },
+    {
+      "question": "What should you look at while you type?",
+      "options": [
+        "Your hands",
+        "The screen",
+        "The ceiling",
+        "The keyboard letters"
+      ],
+      "answer": 1,
+      "explanation": "Looking at the screen trains your fingers to find the keys by feel."
+    }
+  ]
+}

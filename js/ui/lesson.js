@@ -2,6 +2,7 @@ import { esc, inline } from './html.js';
 import { renderQuiz } from './quiz.js';
 import { mountCodeBox, warmUp } from './codebox.js';
 import { mountExercise } from './exercise.js';
+import { mountTyping } from './typing.js';
 import { isDone, completeLesson } from '../store.js';
 
 function copyBox(heading, b, buttonLabel, preClass) {
@@ -24,6 +25,8 @@ function block(b) {
     case 'pc': return copyBox(`💻 Take it to your PC: ${b.title}`, b, 'Copy code', '');
     // Text the learner can copy and fill in, such as a post or a README. Long lines wrap.
     case 'template': return copyBox(`📝 Template: ${b.title}`, b, 'Copy template', ' wrap');
+    // Typing drill (mounted after the page is drawn).
+    case 'typing': return '<section class="typing"></section>';
     case 'list': return `<ul>${b.items.map((item) => `<li>${inline(item)}</li>`).join('')}</ul>`;
     default: return '';
   }
@@ -67,6 +70,8 @@ export function renderLesson(root, module, lessonId, lesson) {
   document.title = `${lesson.title} · CodeQuest Academy`;
   const boxes = root.querySelectorAll('.example .codebox');
   boxes.forEach((el) => mountCodeBox(el, lesson.examples[el.dataset.i].code));
+  const drills = lesson.explanation.filter((b) => b.type === 'typing');
+  root.querySelectorAll('.typing').forEach((el, i) => mountTyping(el, module.id, lessonId, i, drills[i]));
   const exerciseEls = root.querySelectorAll('.exercise');
   exerciseEls.forEach((el, i) => mountExercise(el, module.id, lessonId, i, lesson.exercises[i]));
   // Start loading Python now; errors show when the learner presses Run.

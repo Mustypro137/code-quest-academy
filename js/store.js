@@ -7,6 +7,7 @@
 //   streak     days in a row, as of lastActive
 //   quiz       { "<moduleId>/<lessonId>": { best, total } }  (best score so far)
 //   exercises  { "<moduleId>/<lessonId>/<number>": "YYYY-MM-DD" }  (date first solved)
+//   typing     { "<moduleId>/<lessonId>/<number>": best words per minute }  (saved at 95%+ accuracy)
 //   lastActive "YYYY-MM-DD" (local date)
 //   lastExport "YYYY-MM-DD"
 const KEY = 'cqa.progress';
@@ -14,6 +15,7 @@ const APP = 'codequest-academy';
 export const LESSON_XP = 10;
 export const QUIZ_XP = 2; // per point of improvement over your best score
 export const EXERCISE_XP = 15;
+export const MIN_TYPING_ACCURACY = 95; // a typing try is only saved as a best at this accuracy or more
 
 const DATE = /^\d{4}-\d{2}-\d{2}$/;
 const LESSON_KEY = /^[\w-]+\/[\w-]+$/;
@@ -47,6 +49,12 @@ function clean(raw) {
       if (EXERCISE_KEY.test(k) && typeof v === 'string' && DATE.test(v)) exercises[k] = v;
     }
   }
+  const typing = {};
+  if (r.typing && typeof r.typing === 'object') {
+    for (const [k, v] of Object.entries(r.typing)) {
+      if (EXERCISE_KEY.test(k) && typeof v === 'number' && v > 0 && v <= 500) typing[k] = v;
+    }
+  }
   const quiz = {};
   if (r.quiz && typeof r.quiz === 'object') {
     for (const [k, v] of Object.entries(r.quiz)) {
@@ -60,6 +68,7 @@ function clean(raw) {
     completed,
     quiz,
     exercises,
+    typing,
     xp: whole(r.xp),
     streak: whole(r.streak),
     lastActive: date(r.lastActive),
@@ -135,6 +144,23 @@ export function completeExercise(moduleId, lessonId, number) {
   touchStreak(data);
   save(data);
   return EXERCISE_XP;
+}
+
+// Best typing speed (WPM) for a drill, or undefined if none was saved.
+export function getTypingBest(moduleId, lessonId, number) {
+  return load().typing[`${moduleId}/${lessonId}/${number}`];
+}
+
+// Saves a finished typing try if its accuracy is high enough and it beats the best.
+// No XP: it only counts as activity for the streak. Returns { isNewBest }.
+export function recordTyping(moduleId, lessonId, number, wpm, accuracy) {
+  const data = load();
+  const key = `${moduleId}/${lessonId}/${number}`;
+  touchStreak(data);
+  const isNewBest = accuracy >= MIN_TYPING_ACCURACY && wpm > 0 && wpm <= 500 && wpm > (data.typing[key] ?? 0);
+  if (isNewBest) data.typing[key] = wpm;
+  save(data);
+  return { isNewBest };
 }
 
 // Best quiz result for a lesson, or undefined if never taken.

@@ -8,3 +8,5 @@ Python for the browser, saved here so the site works offline.
 - Checked against the SHA-256 hashes published by jsDelivr when downloaded.
 
 Extra Python packages (such as numpy) are not included. Add them only when a lesson needs them.
+
+License: Pyodide is released under the Mozilla Public License 2.0 (https://github.com/pyodide/pyodide).

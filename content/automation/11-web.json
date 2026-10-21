@@ -1,0 +1,165 @@
+{
+  "title": "Get data from the web",
+  "explanation": [
+    {
+      "type": "text",
+      "text": "Python can download web pages and data for you. Downloading needs the internet, so that code is for your PC. But **reading** what you downloaded works right here, with text you paste in. That is the harder part, so let us practise it."
+    },
+    {
+      "type": "text",
+      "text": "**Build a URL.** Many web addresses carry settings after a `?`, like `search?q=python&page=2`. `urlencode` makes that part and handles spaces and special characters for you."
+    },
+    {
+      "type": "code",
+      "code": "from urllib.parse import urlencode\n\nparams = {\"q\": \"python tips\", \"page\": 2}\nprint(\"https://example.com/search?\" + urlencode(params))"
+    },
+    {
+      "type": "text",
+      "text": "**Read a web page (HTML).** HTML is text with tags like `<a href=\"...\">`. Python's `html.parser` goes through the tags one by one. You write what to do when a tag starts."
+    },
+    {
+      "type": "code",
+      "code": "from html.parser import HTMLParser\n\nclass LinkFinder(HTMLParser):\n    def __init__(self):\n        super().__init__()\n        self.links = []\n\n    def handle_starttag(self, tag, attrs):\n        if tag == \"a\":\n            for name, value in attrs:\n                if name == \"href\":\n                    self.links.append(value)\n\nfinder = LinkFinder()\nfinder.feed('<a href=\"/home\">Home</a>')\nprint(finder.links)"
+    },
+    {
+      "type": "text",
+      "text": "**Be a good guest.** A script can send requests much faster than a person. So:"
+    },
+    {
+      "type": "list",
+      "items": [
+        "Read the site's **terms of use** and its `robots.txt` file. Some sites do not allow scraping.",
+        "Prefer an official **API** (a service made for programs, usually returning JSON) when there is one.",
+        "Wait between requests (`time.sleep(1)`) and use a timeout, so you do not hammer the server.",
+        "Do not collect private personal data.",
+        "Say who you are with a `User-Agent` header."
+      ]
+    },
+    {
+      "type": "tip",
+      "text": "`json.loads` (from the JSON lesson) is all you need for most APIs. The data comes as text, you turn it into a dictionary."
+    },
+    {
+      "type": "pc",
+      "title": "download a page and a JSON API",
+      "text": "This needs the internet. It uses only the standard library. Replace OWNER/REPO with a real public GitHub repository, for example one of your own.",
+      "code": "import json\nimport time\nimport urllib.request\n\ndef get_text(url):\n    request = urllib.request.Request(url, headers={\"User-Agent\": \"my-learning-script\"})\n    with urllib.request.urlopen(request, timeout=10) as response:\n        return response.read().decode(\"utf-8\")\n\n# A web page\nhtml = get_text(\"https://example.com\")\nprint(html[:200])\n\ntime.sleep(1)    # wait between requests\n\n# A JSON API (public GitHub data, no password needed)\ndata = json.loads(get_text(\"https://api.github.com/repos/OWNER/REPO\"))\nprint(data[\"full_name\"], \"has\", data[\"stargazers_count\"], \"stars\")"
+    }
+  ],
+  "examples": [
+    {
+      "title": "Build a URL with settings",
+      "code": "from urllib.parse import urlencode\n\nbase = \"https://example.com/search\"\nprint(base + \"?\" + urlencode({\"q\": \"hello world\", \"page\": 2}))"
+    },
+    {
+      "title": "Take a URL apart",
+      "code": "from urllib.parse import urlparse\n\nparts = urlparse(\"https://Example.com/blog/post?id=7\")\nprint(parts.scheme)\nprint(parts.netloc)\nprint(parts.path)\nprint(parts.query)"
+    },
+    {
+      "title": "Find all links in HTML",
+      "code": "from html.parser import HTMLParser\n\nclass LinkFinder(HTMLParser):\n    def __init__(self):\n        super().__init__()\n        self.links = []\n\n    def handle_starttag(self, tag, attrs):\n        if tag == \"a\":\n            for name, value in attrs:\n                if name == \"href\":\n                    self.links.append(value)\n\nhtml = '<p>See <a href=\"/a\">A</a> and <a href=\"https://x.com/b\">B</a>.</p>'\nfinder = LinkFinder()\nfinder.feed(html)\nprint(finder.links)"
+    }
+  ],
+  "exercises": [
+    {
+      "prompt": "Write `build_url(base, params)`. If `params` has items, return `base`, a `?`, and the encoded settings (use `urlencode`). If `params` is empty, return `base` alone.",
+      "starterCode": "from urllib.parse import urlencode\n\ndef build_url(base, params):\n    # your code here\n    pass",
+      "tests": [
+        {
+          "call": "build_url('https://example.com/search', {'q': 'python', 'page': 2})",
+          "returns": "'https://example.com/search?q=python&page=2'"
+        },
+        {
+          "call": "build_url('https://example.com/search', {'q': 'hello world'})",
+          "returns": "'https://example.com/search?q=hello+world'"
+        },
+        {
+          "call": "build_url('https://example.com', {})",
+          "returns": "'https://example.com'"
+        }
+      ],
+      "hints": [
+        "`urlencode(params)` gives `q=python&page=2`.",
+        "Check `if not params:` first and return `base`."
+      ],
+      "solution": "from urllib.parse import urlencode\n\ndef build_url(base, params):\n    if not params:\n        return base\n    return base + \"?\" + urlencode(params)"
+    },
+    {
+      "prompt": "Finish the `handle_starttag` method of `LinkFinder`. When the tag is `a`, find the `href` attribute and add its value to `self.links`. Ignore links without an `href`.",
+      "starterCode": "from html.parser import HTMLParser\n\nclass LinkFinder(HTMLParser):\n    def __init__(self):\n        super().__init__()\n        self.links = []\n\n    def handle_starttag(self, tag, attrs):\n        # your code here\n        pass\n\ndef extract_links(html):\n    finder = LinkFinder()\n    finder.feed(html)\n    return finder.links",
+      "tests": [
+        {
+          "call": "extract_links('<p><a href=\"/a\">A</a> text <a href=\"https://x.com/b\">B</a></p>')",
+          "returns": "['/a', 'https://x.com/b']"
+        },
+        {
+          "call": "extract_links('<a name=\"x\">no link</a>')",
+          "returns": "[]"
+        },
+        {
+          "call": "extract_links('')",
+          "returns": "[]"
+        }
+      ],
+      "hints": [
+        "`attrs` is a list of `(name, value)` pairs.",
+        "Check `tag == \"a\"`, loop over `attrs`, and look for `name == \"href\"`."
+      ],
+      "solution": "from html.parser import HTMLParser\n\nclass LinkFinder(HTMLParser):\n    def __init__(self):\n        super().__init__()\n        self.links = []\n\n    def handle_starttag(self, tag, attrs):\n        if tag == \"a\":\n            for name, value in attrs:\n                if name == \"href\" and value:\n                    self.links.append(value)\n\ndef extract_links(html):\n    finder = LinkFinder()\n    finder.feed(html)\n    return finder.links"
+    },
+    {
+      "prompt": "Write `domain(url)`. It returns the site name of a URL in lowercase, such as `example.com` for `https://Example.com/path?q=1`.",
+      "starterCode": "from urllib.parse import urlparse\n\ndef domain(url):\n    # your code here\n    pass",
+      "tests": [
+        {
+          "call": "domain('https://Example.com/path?q=1')",
+          "returns": "'example.com'"
+        },
+        {
+          "call": "domain('http://docs.python.org/3/')",
+          "returns": "'docs.python.org'"
+        }
+      ],
+      "hints": [
+        "`urlparse(url).netloc` is the site part.",
+        "Add `.lower()`."
+      ],
+      "solution": "from urllib.parse import urlparse\n\ndef domain(url):\n    return urlparse(url).netloc.lower()"
+    }
+  ],
+  "quiz": [
+    {
+      "question": "Which is usually better than scraping a web page?",
+      "options": [
+        "Guessing",
+        "An official API",
+        "Sending 1000 requests a second",
+        "Hiding who you are"
+      ],
+      "answer": 1,
+      "explanation": "An API is made for programs, is more stable, and is the polite way to get data."
+    },
+    {
+      "question": "Why wait between requests?",
+      "options": [
+        "Python is slow",
+        "So you do not overload the website",
+        "It is required by Windows",
+        "To save electricity"
+      ],
+      "answer": 1,
+      "explanation": "A script can send requests very fast. A short wait is polite and keeps you from being blocked."
+    },
+    {
+      "question": "What does `urlencode({\"q\": \"a b\"})` do with the space?",
+      "options": [
+        "Removes it",
+        "Keeps it",
+        "Turns it into a safe character, like `+`",
+        "Gives an error"
+      ],
+      "answer": 2,
+      "explanation": "Spaces and special characters must be encoded to be safe in a URL."
+    }
+  ]
+}

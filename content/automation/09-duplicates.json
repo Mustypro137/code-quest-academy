@@ -1,0 +1,167 @@
+{
+  "title": "Find duplicate files",
+  "explanation": [
+    {
+      "type": "text",
+      "text": "Folders fill up with copies: `photo.jpg`, `photo (1).jpg`, `photo copy.jpg`. File **names** can lie, so compare the **content**. If two files have exactly the same bytes, they are duplicates."
+    },
+    {
+      "type": "text",
+      "text": "Comparing big files byte by byte is slow. A **hash** is a short fingerprint of the content. The same content always gives the same hash, and different content almost never does. Python has this in the `hashlib` module."
+    },
+    {
+      "type": "code",
+      "code": "import hashlib\n\ndata = b\"hello\"\nprint(hashlib.sha256(data).hexdigest())"
+    },
+    {
+      "type": "text",
+      "text": "`b\"hello\"` is **bytes**, not text. Files are read as bytes with `path.read_bytes()`."
+    },
+    {
+      "type": "text",
+      "text": "**The plan**"
+    },
+    {
+      "type": "list",
+      "items": [
+        "Go through the files. Make a hash for each one.",
+        "Put the file names in a dictionary: hash to list of names.",
+        "Every list with **two or more** names is a group of duplicates."
+      ]
+    },
+    {
+      "type": "tip",
+      "text": "Your script should only **report** duplicates. Never let a first version delete files by itself. A person should look at the list and decide."
+    },
+    {
+      "type": "tip",
+      "text": "A small speed trick for real folders: files with different sizes cannot be duplicates, so hash only the files whose size appears more than once."
+    },
+    {
+      "type": "pc",
+      "title": "find duplicate files in a folder (report only)",
+      "text": "Set FOLDER to a folder you want to check. The script only prints a report. It does not delete or move anything. Try it on a copy of a folder first.",
+      "code": "import hashlib\nfrom pathlib import Path\n\nFOLDER = Path(\"my_folder\")      # change this to your folder\n\ndef file_hash(path):\n    digest = hashlib.sha256()\n    with open(path, \"rb\") as f:\n        for chunk in iter(lambda: f.read(1024 * 1024), b\"\"):   # read in 1 MB pieces\n            digest.update(chunk)\n    return digest.hexdigest()\n\n# 1. Group by size first: different sizes cannot be duplicates.\nby_size = {}\nfor path in FOLDER.rglob(\"*\"):\n    if path.is_file():\n        by_size.setdefault(path.stat().st_size, []).append(path)\n\n# 2. Hash only the files that share a size.\ngroups = {}\nfor size, paths in by_size.items():\n    if len(paths) > 1:\n        for path in paths:\n            groups.setdefault((size, file_hash(path)), []).append(path)\n\nduplicates = [paths for paths in groups.values() if len(paths) > 1]\nfor paths in duplicates:\n    print(\"Same content:\")\n    for path in paths:\n        print(\"  \", path)\n\nwasted = sum((len(paths) - 1) * paths[0].stat().st_size for paths in duplicates)\nprint(len(duplicates), \"groups of duplicates,\", wasted, \"bytes could be saved.\")"
+    }
+  ],
+  "examples": [
+    {
+      "title": "A hash is a fingerprint",
+      "code": "import hashlib\n\nfor data in [b\"hello\", b\"hello\", b\"hellp\"]:\n    print(hashlib.sha256(data).hexdigest()[:16])"
+    },
+    {
+      "title": "Find duplicates in a folder",
+      "code": "import hashlib\nfrom pathlib import Path\n\nPath(\"a.txt\").write_text(\"same words\")\nPath(\"b.txt\").write_text(\"same words\")\nPath(\"c.txt\").write_text(\"other words\")\n\ngroups = {}\nfor path in sorted(Path(\".\").glob(\"*.txt\")):\n    digest = hashlib.sha256(path.read_bytes()).hexdigest()\n    groups.setdefault(digest, []).append(path.name)\n\nfor names in groups.values():\n    if len(names) > 1:\n        print(\"Duplicates:\", names)"
+    },
+    {
+      "title": "Size first",
+      "code": "from pathlib import Path\n\nPath(\"a.txt\").write_text(\"12345\")\nPath(\"b.txt\").write_text(\"12345\")\nPath(\"c.txt\").write_text(\"x\")\n\nby_size = {}\nfor path in sorted(Path(\".\").glob(\"*.txt\")):\n    by_size.setdefault(path.stat().st_size, []).append(path.name)\nprint(by_size)"
+    }
+  ],
+  "exercises": [
+    {
+      "prompt": "Write `file_hash(data)`. `data` is bytes. Return its SHA-256 hash as a text of hex digits (`hexdigest()`).",
+      "starterCode": "import hashlib\n\ndef file_hash(data):\n    # your code here\n    pass",
+      "tests": [
+        {
+          "call": "file_hash(b'abc')",
+          "returns": "'ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad'"
+        },
+        {
+          "call": "file_hash(b'abc') == file_hash(b'abc')",
+          "returns": "True"
+        },
+        {
+          "call": "file_hash(b'abc') == file_hash(b'abd')",
+          "returns": "False"
+        }
+      ],
+      "hints": [
+        "`hashlib.sha256(data)` makes the hash object.",
+        "Add `.hexdigest()` to get the text."
+      ],
+      "solution": "import hashlib\n\ndef file_hash(data):\n    return hashlib.sha256(data).hexdigest()"
+    },
+    {
+      "prompt": "Write `find_duplicates(files)`. `files` is a dictionary: file name to bytes. Return a list of groups. Each group is a sorted list of names with exactly the same content. Only groups with 2 or more names count. Sort the groups too (by the list).",
+      "starterCode": "import hashlib\n\ndef find_duplicates(files):\n    # your code here\n    pass",
+      "tests": [
+        {
+          "call": "find_duplicates({'a.txt': b'hi', 'b.txt': b'hi', 'c.txt': b'yo', 'd.txt': b'hi', 'e.txt': b'yo', 'f.txt': b'x'})",
+          "returns": "[['a.txt', 'b.txt', 'd.txt'], ['c.txt', 'e.txt']]"
+        },
+        {
+          "call": "find_duplicates({'a': b'1', 'b': b'2'})",
+          "returns": "[]"
+        },
+        {
+          "call": "find_duplicates({})",
+          "returns": "[]"
+        }
+      ],
+      "hints": [
+        "Make a dictionary from hash to list of names with `setdefault`.",
+        "Keep the groups with `len(names) > 1`. Use `sorted(...)` on each group and on the final list."
+      ],
+      "solution": "import hashlib\n\ndef find_duplicates(files):\n    groups = {}\n    for name, data in files.items():\n        digest = hashlib.sha256(data).hexdigest()\n        groups.setdefault(digest, []).append(name)\n    return sorted(sorted(names) for names in groups.values() if len(names) > 1)"
+    },
+    {
+      "prompt": "Write `wasted_bytes(files)`. It tells how many bytes you could save if you kept only **one copy** of each file content. For a group of `n` identical files of size `s`, that is `(n - 1) * s`. Add the groups together.",
+      "starterCode": "import hashlib\n\ndef wasted_bytes(files):\n    # your code here\n    pass",
+      "tests": [
+        {
+          "call": "wasted_bytes({'a.txt': b'hi', 'b.txt': b'hi', 'c.txt': b'yo', 'd.txt': b'hi', 'e.txt': b'yo', 'f.txt': b'x'})",
+          "returns": "6"
+        },
+        {
+          "call": "wasted_bytes({'a': b'1', 'b': b'2'})",
+          "returns": "0"
+        },
+        {
+          "call": "wasted_bytes({})",
+          "returns": "0"
+        }
+      ],
+      "hints": [
+        "Group the files by content, like in the last exercise (you can group by the bytes themselves).",
+        "For each group add `(len(group) - 1) * size`."
+      ],
+      "solution": "import hashlib\n\ndef wasted_bytes(files):\n    groups = {}\n    for name, data in files.items():\n        digest = hashlib.sha256(data).hexdigest()\n        groups.setdefault(digest, []).append(len(data))\n    return sum((len(sizes) - 1) * sizes[0] for sizes in groups.values())"
+    }
+  ],
+  "quiz": [
+    {
+      "question": "Why compare content and not file names?",
+      "options": [
+        "Names are always the same",
+        "Two files can have different names and the same content",
+        "Python cannot read names",
+        "Content is shorter"
+      ],
+      "answer": 1,
+      "explanation": "A copy can be renamed. Only the content shows that two files are really the same."
+    },
+    {
+      "question": "What is a hash?",
+      "options": [
+        "A short fingerprint of the content",
+        "A kind of folder",
+        "A file name",
+        "A Python error"
+      ],
+      "answer": 0,
+      "explanation": "The same content always gives the same hash, and different content almost never does."
+    },
+    {
+      "question": "What should a first version of a duplicate finder do?",
+      "options": [
+        "Delete one of each pair",
+        "Only report the duplicates",
+        "Rename every file",
+        "Email the list"
+      ],
+      "answer": 1,
+      "explanation": "Report only. A person should check the list before anything is deleted."
+    }
+  ]
+}

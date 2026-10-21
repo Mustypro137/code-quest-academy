@@ -111,6 +111,26 @@
         {
           "id": "07-project",
           "title": "Mini project: customer list cleaner"
+        },
+        {
+          "id": "08-merge",
+          "title": "Merge many CSV files into one"
+        },
+        {
+          "id": "09-duplicates",
+          "title": "Find duplicate files"
+        },
+        {
+          "id": "10-email",
+          "title": "Write and send email with Python"
+        },
+        {
+          "id": "11-web",
+          "title": "Get data from the web"
+        },
+        {
+          "id": "12-excel",
+          "title": "Excel files with Python"
         }
       ]
     },
@@ -211,6 +231,10 @@
         {
           "id": "01-typing",
           "title": "Type faster and with fewer mistakes"
+        },
+        {
+          "id": "02-typing-practice",
+          "title": "Typing practice"
         },
         {
           "id": "02-reading-errors",
