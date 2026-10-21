@@ -1,5 +1,5 @@
 // Runs Python with Pyodide, away from the page, so a stuck program cannot freeze the UI.
-// Messages in:  { id, code, tests? }
+// Messages in:  { id, code, tests?, stdin? }   stdin is the text typed in the Input box: one line per input()
 // Messages out: { type: 'ready' } | { type: 'failed', message }
 //             | { type: 'done', id, output, error, results }
 //
@@ -7,6 +7,7 @@
 //   { output: "text" }                      the program must print exactly this
 //   { call: "f(2)", returns: "4" }          evaluate an expression after the program ran;
 //                                           `returns` is a Python literal
+//   { contains: "text" }                    the printed text must include this
 //   optional on a call test: setup (Python statements run first), label (name used in messages)
 importScripts('../../vendor/pyodide/pyodide.js');
 
@@ -36,7 +37,20 @@ function friendlyError(err) {
 const tidy = (s) => s.split('\n').map((l) => l.trimEnd()).join('\n').trim();
 
 const CHECK_HELPER = `
-import ast, os, shutil, tempfile
+import ast, builtins, os, shutil, tempfile
+
+# input() reads the lines from the Input box, one per call, and shows them like a terminal would.
+# When the lines run out it raises EOFError, with a message that says what to do.
+def _cqa_install_input(lines):
+    pending = list(lines)
+    def input(prompt=""):
+        print(prompt, end="")
+        if not pending:
+            raise EOFError("input() needs another line. Add one line for each input() in the Input box.")
+        line = pending.pop(0)
+        print(line)
+        return line
+    builtins.input = input
 
 # Every run gets its own empty practice folder, removed afterwards, so files from
 # one program (or one exercise) can never leak into the next.
@@ -78,6 +92,15 @@ function runTests(py, tests, globals, printed) {
             : `Your program should print:\n${t.output}\n\nBut it printed:\n${printed || '(nothing)'}`,
         };
       }
+      if ('contains' in t) {
+        const pass = printed.includes(t.contains);
+        return {
+          pass,
+          message: pass
+            ? `Your program prints "${t.contains}".`
+            : `Your program should print "${t.contains}", but it printed:\n${printed || '(nothing)'}`,
+        };
+      }
       const result = check(t.setup ?? '', t.call, t.returns, t.label ?? '', globals);
       const [pass, message] = result.toJs();
       result.destroy();
@@ -92,7 +115,7 @@ const ready = loadPyodide({ indexURL: new URL('../../vendor/pyodide/', self.loca
   .then((py) => {
     py.setStdout({ write });
     py.setStderr({ write });
-    py.setStdin({ stdin: () => undefined }); // no keyboard input yet: input() reports end of file
+    py.setStdin({ stdin: () => undefined }); // sys.stdin stays empty; input() is replaced in _cqa_install_input
     py.runPython(CHECK_HELPER);
     postMessage({ type: 'ready' });
     return py;
@@ -101,7 +124,15 @@ const ready = loadPyodide({ indexURL: new URL('../../vendor/pyodide/', self.loca
     postMessage({ type: 'failed', message: String(err && err.message ? err.message : err) });
   });
 
-self.onmessage = async ({ data: { id, code, tests } }) => {
+// "a\nb\n" -> ["a", "b"]. One trailing newline does not make an extra empty line.
+function inputLines(stdin) {
+  if (!stdin) return [];
+  const lines = stdin.replaceAll('\r\n', '\n').split('\n');
+  if (lines.at(-1) === '') lines.pop();
+  return lines;
+}
+
+self.onmessage = async ({ data: { id, code, tests, stdin } }) => {
   const py = await ready;
   if (!py) return;
   text = '';
@@ -110,6 +141,7 @@ self.onmessage = async ({ data: { id, code, tests } }) => {
   const globals = py.globals.get('dict')(); // fresh variables for every run
   const workDir = py.runPython('_cqa_enter()');
   try {
+    py.runPython(`_cqa_install_input(${JSON.stringify(inputLines(stdin))})`);
     await py.runPythonAsync(code, { globals });
     py.runPython('import sys; sys.stdout.flush(); sys.stderr.flush()');
     const printed = text.trimEnd();

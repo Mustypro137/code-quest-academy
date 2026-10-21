@@ -13,7 +13,7 @@ function renderPrompt(prompt) {
 
 // One exercise: prompt, code box with tests, hints, and a solution that unlocks
 // after TRIES_BEFORE_SOLUTION failed checks (or once the exercise is solved).
-// ex: { prompt, starterCode, tests, hints, solution }
+// ex: { prompt, starterCode, tests, hints, solution, input? }  (input: lines for input() calls)
 export function mountExercise(el, moduleId, lessonId, number, ex) {
   let failed = 0;
   let solved = isExerciseDone(moduleId, lessonId, number);
@@ -64,6 +64,7 @@ export function mountExercise(el, moduleId, lessonId, number, ex) {
 
   mountCodeBox(el.querySelector('.codebox'), ex.starterCode, {
     tests: ex.tests,
+    input: ex.input,
     onCheck: (passed) => {
       if (passed) {
         const gained = completeExercise(moduleId, lessonId, number);

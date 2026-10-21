@@ -42,6 +42,11 @@
           "level": "beginner"
         },
         {
+          "id": "08-input",
+          "title": "Ask the user: input()",
+          "level": "beginner"
+        },
+        {
           "id": "int-01-functions",
           "title": "Functions: reuse your code",
           "level": "intermediate"

@@ -12,7 +12,7 @@ I built it to learn by small steps: read a short lesson, run an example, solve a
 
 | Module | Lessons | Topics |
 |---|---|---|
-| Python Basics | 14 | Beginner to advanced: variables, loops, functions, dictionaries, errors, classes, generators, decorators |
+| Python Basics | 15 | Beginner to advanced: variables, loops, `input()`, functions, dictionaries, errors, classes, generators, decorators |
 | Python Automation | 12 | Files, CSV, JSON, dates, cleaning data, reports, a customer list cleaner project, merging CSVs, duplicate files, email, web data, Excel |
 | AI with Python | 6 | Prompts, messages, a fake model for testing, JSON replies, calling a real model, a message sorter project |
 | Projects & Portfolio | 6 | Choosing a project, structure, tests, error handling, Git and GitHub, building a portfolio |
@@ -71,7 +71,7 @@ docs/               adding-lessons.md
 A lesson is one JSON file, and no JavaScript changes are needed. See [docs/adding-lessons.md](docs/adding-lessons.md).
 
 ## Known limits
-- `input()` does not work in the browser runner (it reports end of file).
+- `input()` does not wait for the keyboard in the browser. Type its answers in the Input box under the code, one line for each `input()`. `sys.stdin` is empty.
 - Only the Python standard library is available. Packages such as numpy are not included yet.
 - Email, web and Excel lessons show code to copy to your own PC. They cannot run in the browser.
 - Progress lives in one browser. Use Backup to move it to another.

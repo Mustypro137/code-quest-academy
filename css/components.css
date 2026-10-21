@@ -266,3 +266,8 @@
 .typing-input { min-height: 5rem; }
 .typing-result { min-height: 1.5rem; margin: 0.75rem 0 0; font-weight: 600; }
 .typing-best { margin: 0.25rem 0 0; color: var(--muted); }
+
+/* Input box for programs that call input() */
+.stdin { margin-top: 0.5rem; }
+.stdin label { display: block; margin-bottom: 0.25rem; font-size: 0.85rem; color: var(--muted); }
+.stdin-box { min-height: 3rem; }

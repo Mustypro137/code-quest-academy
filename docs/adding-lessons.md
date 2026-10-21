@@ -66,6 +66,7 @@ Everything except `title` and `explanation` is optional.
 - If none of a module's lessons has a `level`, the module page shows one plain list with no level headings.
 - Each run gets its own empty practice folder. Exercises can create files with `open()` or `pathlib`, and
   the tests can read them, but nothing is kept after the run.
+- An example can have `"input": "Ada"` for the Input box. The box shows by itself when the code has `input(`.
 - Examples are runnable and editable by default. Use `"run": false` for code that cannot run in the browser.
 - `answer` is the position of the right option, counting from 0. Mix up the positions.
 - Write for a beginner: short sentences, simple words.
@@ -92,6 +93,7 @@ There are two kinds of test:
 | Test | Meaning |
 |---|---|
 | `{ "output": "Hello" }` | The program must print exactly this. Spaces at the end of lines and blank lines at the end are ignored. |
+| `{ "contains": "Hello, Sam!" }` | The printed text must include this. Good for programs that use `input()`, where the exact output is awkward. |
 | `{ "call": "double(4)", "returns": "8" }` | After the learner's code runs, Python evaluates `call`. The result must equal `returns`, which is a **Python literal written as text** (`"'Hi'"` for a string, `"[1, 2]"` for a list, `"None"`). |
 
 Optional on a `call` test:
@@ -104,7 +106,7 @@ A `call` can also be just a variable name, such as `"call": "total"`.
 Rules that keep exercises fair:
 - Start with `starterCode` that does **not** pass. Every exercise is checked this way.
 - Keep the `solution` correct. It is shown after 2 failed tries.
-- Do not use `input()`. It is not supported.
+- Programs can use `input()`. Give the exercise `"input": "line one\nline two"`, one line for each `input()` call. The learner sees these lines in an Input box. **Check always uses the original lines**, and Run uses what is in the box. The printed text includes each prompt and each answer, like a terminal.
 - Tests are checked after the program runs once. They cannot change a variable and run it again.
 
 ## Check your work

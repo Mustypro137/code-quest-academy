@@ -69,7 +69,10 @@ export function renderLesson(root, module, lessonId, lesson) {
     </nav>`;
   document.title = `${lesson.title} · CodeQuest Academy`;
   const boxes = root.querySelectorAll('.example .codebox');
-  boxes.forEach((el) => mountCodeBox(el, lesson.examples[el.dataset.i].code));
+  boxes.forEach((el) => {
+    const example = lesson.examples[el.dataset.i];
+    mountCodeBox(el, example.code, { input: example.input });
+  });
   const drills = lesson.explanation.filter((b) => b.type === 'typing');
   root.querySelectorAll('.typing').forEach((el, i) => mountTyping(el, module.id, lessonId, i, drills[i]));
   const exerciseEls = root.querySelectorAll('.exercise');

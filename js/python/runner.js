@@ -1,6 +1,6 @@
 // Page-side handle for the Python worker.
 //   warmUp()  starts loading Python in the background (safe to call many times)
-//   run(code, tests?) -> Promise<{ output, error, results }>   runs one program at a time
+//   run(code, tests?, stdin?) -> Promise<{ output, error, results }>   runs one program at a time
 //                        results is [{ pass, message }], one per test (see worker.js)
 // A program that runs longer than TIMEOUT_MS is stopped by killing the worker;
 // the next run starts a fresh one.
@@ -46,7 +46,7 @@ export function warmUp() {
   return ready;
 }
 
-async function execute(code, tests) {
+async function execute(code, tests, stdin) {
   await warmUp();
   const w = worker;
   return new Promise((resolve) => {
@@ -70,12 +70,12 @@ async function execute(code, tests) {
         resolve({ output, error, results });
       },
     };
-    w.postMessage({ id, code, tests });
+    w.postMessage({ id, code, tests, stdin });
   });
 }
 
-export function run(code, tests) {
-  const job = queue.then(() => execute(code, tests));
+export function run(code, tests, stdin) {
+  const job = queue.then(() => execute(code, tests, stdin));
   queue = job.catch(() => {});
   return job;
 }
