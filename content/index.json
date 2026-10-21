@@ -207,7 +207,32 @@
       "icon": "⌨️",
       "title": "Typing & Technical English",
       "blurb": "Type faster. Explain code in simple English.",
-      "lessons": []
+      "lessons": [
+        {
+          "id": "01-typing",
+          "title": "Type faster and with fewer mistakes"
+        },
+        {
+          "id": "02-reading-errors",
+          "title": "Read error messages in English"
+        },
+        {
+          "id": "03-code-words",
+          "title": "Words programmers use"
+        },
+        {
+          "id": "04-explain-code",
+          "title": "Explain your code in simple English"
+        },
+        {
+          "id": "05-ask-for-help",
+          "title": "Ask for help the right way"
+        },
+        {
+          "id": "06-docs-and-messages",
+          "title": "Read docs and write short messages"
+        }
+      ]
     }
   ]
 }

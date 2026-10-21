@@ -1,0 +1,175 @@
+{
+  "title": "Read error messages in English",
+  "explanation": [
+    {
+      "type": "text",
+      "text": "Python error messages are written in English. They look scary, but they are short and follow a pattern. Learning to read them is the most useful skill for fixing bugs fast."
+    },
+    {
+      "type": "text",
+      "text": "An error has a **name**, a colon, and a **message**:"
+    },
+    {
+      "type": "code",
+      "code": "NameError: name 'total' is not defined"
+    },
+    {
+      "type": "list",
+      "items": [
+        "`NameError` is the kind of problem.",
+        "`name 'total' is not defined` says what happened: you used `total`, but Python has never seen it."
+      ]
+    },
+    {
+      "type": "text",
+      "text": "**Read the traceback from the bottom.** A traceback is the list of lines that led to the error. The **last line** is the most useful one. The lines above tell you where: the file and the line number."
+    },
+    {
+      "type": "code",
+      "code": "Traceback (most recent call last):\n  File \"main.py\", line 3, in <module>\n    print(total)\nNameError: name 'total' is not defined"
+    },
+    {
+      "type": "text",
+      "text": "**Common errors in plain English**"
+    },
+    {
+      "type": "list",
+      "items": [
+        "`NameError`: you used a name that does not exist yet (often a typing mistake).",
+        "`TypeError`: you used the wrong type of value, such as adding a number to text.",
+        "`ValueError`: the type is right, but the value is not, such as `int(\"abc\")`.",
+        "`IndexError`: you asked for a list position that does not exist.",
+        "`KeyError`: you asked for a dictionary key that is not there.",
+        "`SyntaxError`: Python cannot read your code. Check brackets, quotes and colons.",
+        "`IndentationError`: the spaces at the start of a line are wrong."
+      ]
+    },
+    {
+      "type": "tip",
+      "text": "Do not panic and do not guess. Read the last line, find the line number, look at that line, and look at the line above it too. Many errors start one line earlier."
+    },
+    {
+      "type": "tip",
+      "text": "Copy the **whole** error message when you ask for help. Typing it from memory loses the important words."
+    }
+  ],
+  "examples": [
+    {
+      "title": "NameError",
+      "code": "try:\n    print(total)\nexcept NameError as error:\n    print(type(error).__name__ + \":\", error)"
+    },
+    {
+      "title": "TypeError and ValueError",
+      "code": "for action in [lambda: \"5\" + 5, lambda: int(\"abc\")]:\n    try:\n        action()\n    except Exception as error:\n        print(type(error).__name__ + \":\", error)"
+    },
+    {
+      "title": "IndexError and KeyError",
+      "code": "items = [\"a\", \"b\"]\nperson = {\"name\": \"Ada\"}\nfor action in [lambda: items[5], lambda: person[\"age\"]]:\n    try:\n        action()\n    except Exception as error:\n        print(type(error).__name__ + \":\", error)"
+    }
+  ],
+  "exercises": [
+    {
+      "prompt": "Write `error_name(message)`. It gets an error line such as `NameError: name 'x' is not defined` and returns only the name before the first colon (`NameError`). If there is no colon, return the whole text without spaces at the ends.",
+      "starterCode": "def error_name(message):\n    # your code here\n    pass",
+      "tests": [
+        {
+          "call": "error_name(\"NameError: name 'x' is not defined\")",
+          "returns": "'NameError'"
+        },
+        {
+          "call": "error_name('ValueError: invalid literal for int()')",
+          "returns": "'ValueError'"
+        },
+        {
+          "call": "error_name('  Oops  ')",
+          "returns": "'Oops'"
+        }
+      ],
+      "hints": [
+        "`message.split(\":\")` cuts the text at colons.",
+        "Take the first part and use `.strip()`."
+      ],
+      "solution": "def error_name(message):\n    return message.split(\":\")[0].strip()"
+    },
+    {
+      "prompt": "Write `last_line(traceback_text)`. It returns the last line that has text in it, without spaces at the ends. That is the line that names the error.",
+      "starterCode": "def last_line(traceback_text):\n    # your code here\n    pass",
+      "tests": [
+        {
+          "call": "last_line('Traceback (most recent call last):\\n  File \"x.py\", line 1, in <module>\\nNameError: name \\'y\\' is not defined\\n')",
+          "returns": "\"NameError: name 'y' is not defined\""
+        },
+        {
+          "call": "last_line('one\\n\\n  two  \\n\\n')",
+          "returns": "'two'"
+        },
+        {
+          "call": "last_line('')",
+          "returns": "''"
+        }
+      ],
+      "hints": [
+        "Split the text into lines and keep the lines that are not empty after `strip()`.",
+        "If the list is empty, return `\"\"`. Otherwise return the last item."
+      ],
+      "solution": "def last_line(traceback_text):\n    lines = [line.strip() for line in traceback_text.split(\"\\n\") if line.strip()]\n    return lines[-1] if lines else \"\""
+    },
+    {
+      "prompt": "Write `explain_error(name)`. It returns the sentence from `EXPLANATIONS` for that error name. For a name that is not in the dictionary, return `Look up this error name in the Python docs.`\n\nThe dictionary is already written for you.",
+      "starterCode": "EXPLANATIONS = {\n    \"NameError\": \"You used a name that does not exist yet.\",\n    \"TypeError\": \"You used the wrong type of value.\",\n    \"ValueError\": \"The type is right, but the value is not.\",\n    \"IndexError\": \"You asked for a list position that does not exist.\",\n    \"KeyError\": \"You asked for a dictionary key that is not there.\",\n    \"SyntaxError\": \"Python cannot read the code. Check brackets, quotes and colons.\",\n}\n\ndef explain_error(name):\n    # your code here\n    pass",
+      "tests": [
+        {
+          "call": "explain_error('NameError')",
+          "returns": "'You used a name that does not exist yet.'"
+        },
+        {
+          "call": "explain_error('KeyError')",
+          "returns": "'You asked for a dictionary key that is not there.'"
+        },
+        {
+          "call": "explain_error('ZeroDivisionError')",
+          "returns": "'Look up this error name in the Python docs.'"
+        }
+      ],
+      "hints": [
+        "`EXPLANATIONS.get(name, \"default text\")` returns the default when the key is missing."
+      ],
+      "solution": "EXPLANATIONS = {\n    \"NameError\": \"You used a name that does not exist yet.\",\n    \"TypeError\": \"You used the wrong type of value.\",\n    \"ValueError\": \"The type is right, but the value is not.\",\n    \"IndexError\": \"You asked for a list position that does not exist.\",\n    \"KeyError\": \"You asked for a dictionary key that is not there.\",\n    \"SyntaxError\": \"Python cannot read the code. Check brackets, quotes and colons.\",\n}\n\ndef explain_error(name):\n    return EXPLANATIONS.get(name, \"Look up this error name in the Python docs.\")"
+    }
+  ],
+  "quiz": [
+    {
+      "question": "Which line of a traceback is usually the most useful?",
+      "options": [
+        "The first line",
+        "The last line",
+        "A random line",
+        "The empty line"
+      ],
+      "answer": 1,
+      "explanation": "The last line names the error and says what happened. The lines above say where."
+    },
+    {
+      "question": "What does a `KeyError` mean?",
+      "options": [
+        "A list position is missing",
+        "A dictionary key is missing",
+        "The keyboard is broken",
+        "A file is missing"
+      ],
+      "answer": 1,
+      "explanation": "You asked a dictionary for a key that is not in it."
+    },
+    {
+      "question": "You ask for help with a bug. What should you copy?",
+      "options": [
+        "Only the word \"error\"",
+        "The whole error message",
+        "Nothing, just say it does not work",
+        "A photo of your keyboard"
+      ],
+      "answer": 1,
+      "explanation": "The full message has the error name, the file and the line number, so others can help you fast."
+    }
+  ]
+}

@@ -1,0 +1,91 @@
+{
+  "title": "Ask for help the right way",
+  "explanation": [
+    {
+      "type": "text",
+      "text": "Every programmer gets stuck. What matters is how you ask. A clear question gets a fast, useful answer. A vague one gets questions back or no answer at all. This works the same with a teacher, a friend, a forum, or an AI assistant."
+    },
+    {
+      "type": "text",
+      "text": "**A good question has six parts**"
+    },
+    {
+      "type": "list",
+      "items": [
+        "**Goal**: what you want to do.",
+        "**Expected**: what you thought would happen.",
+        "**Actual**: what happened instead. Paste the **whole** error message.",
+        "**Tried**: what you already tried.",
+        "**Code**: the smallest code that shows the problem, and that runs by itself.",
+        "**Setup**: your Python version and your system (for example Windows 11)."
+      ]
+    },
+    {
+      "type": "text",
+      "text": "**Make the problem small.** Delete everything that is not needed to show the bug. Many times you find the answer while you do this."
+    },
+    {
+      "type": "text",
+      "text": "**Be kind and short.** Say what you need in the first lines. Say thank you. Use simple words: the reader may not speak English as a first language, either."
+    },
+    {
+      "type": "tip",
+      "text": "Never paste secrets: API keys, passwords, or real private data. Replace them with fake values like \"YOUR-KEY-HERE\" before you share any code."
+    },
+    {
+      "type": "template",
+      "title": "Question for help",
+      "text": "Fill in each part with your own details. Delete a line if it does not apply.",
+      "code": "Title: [short and specific: what fails, and where]\n\nGoal: I want to [what you want to do].\n\nExpected: I thought [what should happen].\n\nActual: Instead, [what happens]. This is the full error:\n[paste the whole error message]\n\nI tried: [what you already tried, even if it failed]\n\nMy code (small and complete):\n[paste the smallest code that shows the problem]\n\nSetup: Python [version], [Windows 11 / other]\n\nThank you!"
+    }
+  ],
+  "examples": [
+    {
+      "title": "A weak title and a better title",
+      "run": false,
+      "wrap": true,
+      "code": "Weak: \"Help, my code doesn't work!!\"\nBetter: \"KeyError: 'age' when I read a row from my CSV with csv.DictReader\""
+    },
+    {
+      "title": "A weak question and a better one",
+      "run": false,
+      "wrap": true,
+      "code": "Weak: \"My program crashes. What is wrong?\"\nBetter: \"I want to add up the 'amount' column of customers.csv. I expected a number, but I get ValueError: could not convert string to float: '$120.50'. I tried float(row['amount']). Here is a 6-line example that shows it. Python 3.12, Windows 11.\""
+    }
+  ],
+  "quiz": [
+    {
+      "question": "Which part of a question is the most important to paste in full?",
+      "options": [
+        "Your name",
+        "The whole error message",
+        "Your whole project",
+        "A joke"
+      ],
+      "answer": 1,
+      "explanation": "The full error message tells the helper exactly what Python said."
+    },
+    {
+      "question": "Why make your example code small?",
+      "options": [
+        "It is more polite to write less",
+        "The bug is easier to see, and you may find it yourself",
+        "Big code is not allowed",
+        "It runs faster"
+      ],
+      "answer": 1,
+      "explanation": "A small example removes the noise. Often the answer shows up while you shrink it."
+    },
+    {
+      "question": "Before sharing code to get help, what should you remove?",
+      "options": [
+        "Comments",
+        "Keys, passwords and private data",
+        "Function names",
+        "Blank lines"
+      ],
+      "answer": 1,
+      "explanation": "Secrets and private data must never be shared. Use fake values."
+    }
+  ]
+}

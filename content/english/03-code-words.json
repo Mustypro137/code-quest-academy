@@ -1,0 +1,180 @@
+{
+  "title": "Words programmers use",
+  "explanation": [
+    {
+      "type": "text",
+      "text": "Every field has its own words. If you know the words of programming, documentation and tutorials get much easier to read. Here are the words you will see most. Read them, then practise with the exercises."
+    },
+    {
+      "type": "text",
+      "text": "**Things in code**"
+    },
+    {
+      "type": "list",
+      "items": [
+        "**variable**: a name that holds a value.",
+        "**string**: text in quotes.",
+        "**list**: many values in order.",
+        "**dictionary**: values stored under keys.",
+        "**function**: a named block of code you can use again.",
+        "**parameter**: a name in the function definition that receives a value.",
+        "**argument**: the real value you give when you call the function.",
+        "**loop**: code that repeats.",
+        "**condition**: a test that is true or false.",
+        "**library** (or **package**): code that other people wrote, which you can use."
+      ]
+    },
+    {
+      "type": "text",
+      "text": "**Things you do (verbs)**"
+    },
+    {
+      "type": "list",
+      "items": [
+        "You **define** a function and you **call** it.",
+        "You **pass** an argument to a function.",
+        "A function **returns** a value.",
+        "Code can **raise** an error, and you can **catch** it.",
+        "You **import** a module.",
+        "You **run** a script.",
+        "You **iterate over** a list, which means you go through it one item at a time."
+      ]
+    },
+    {
+      "type": "text",
+      "text": "**Things around the code**"
+    },
+    {
+      "type": "list",
+      "items": [
+        "**bug**: a mistake in the code.",
+        "**debug**: to find and fix bugs.",
+        "**repository** (or **repo**): a project folder tracked by Git.",
+        "**commit**: a saved step in the history of the project.",
+        "**documentation** (or **docs**): the manual that explains how something works."
+      ]
+    },
+    {
+      "type": "tip",
+      "text": "Make flashcards for words you do not know. One word, one simple definition in your own words. The last exercise builds them with Python."
+    }
+  ],
+  "examples": [
+    {
+      "title": "Parameter and argument",
+      "code": "def greet(name):       # name is a parameter\n    return \"Hello, \" + name\n\nprint(greet(\"Sam\"))     # \"Sam\" is an argument"
+    },
+    {
+      "title": "A glossary in a dictionary",
+      "code": "glossary = {\n    \"bug\": \"A mistake in the code.\",\n    \"loop\": \"Code that repeats.\",\n}\nword = \"bug\"\nprint(word + \": \" + glossary[word])"
+    }
+  ],
+  "exercises": [
+    {
+      "prompt": "Write `define(word, glossary)`. It looks the word up in the `glossary` dictionary. Ignore capital letters and spaces around the word. If the word is not there, return `Unknown word`.",
+      "starterCode": "def define(word, glossary):\n    # your code here\n    pass",
+      "tests": [
+        {
+          "call": "define('Loop', g)",
+          "returns": "'Code that repeats.'",
+          "setup": "g = {'loop': 'Code that repeats.', 'string': 'Text in quotes.'}"
+        },
+        {
+          "call": "define('  string ', g)",
+          "returns": "'Text in quotes.'",
+          "setup": "g = {'loop': 'Code that repeats.', 'string': 'Text in quotes.'}"
+        },
+        {
+          "call": "define('pizza', g)",
+          "returns": "'Unknown word'",
+          "setup": "g = {'loop': 'Code that repeats.'}"
+        }
+      ],
+      "hints": [
+        "Clean the word first: `word.strip().lower()`.",
+        "Use `glossary.get(cleaned, \"Unknown word\")`."
+      ],
+      "solution": "def define(word, glossary):\n    return glossary.get(word.strip().lower(), \"Unknown word\")"
+    },
+    {
+      "prompt": "Write `find_words(text, glossary)`. It returns a sorted list of the glossary words that appear in the text. Ignore capital letters, and ignore these marks at the ends of words: `. , ! ? ; :`",
+      "starterCode": "def find_words(text, glossary):\n    # your code here\n    pass",
+      "tests": [
+        {
+          "call": "find_words('A Loop repeats a string, and the string is text.', g)",
+          "returns": "['loop', 'string']",
+          "setup": "g = {'loop': 'x', 'string': 'y', 'bug': 'z'}"
+        },
+        {
+          "call": "find_words('Nothing here.', g)",
+          "returns": "[]",
+          "setup": "g = {'loop': 'x'}"
+        },
+        {
+          "call": "find_words('Fix the bug!', g)",
+          "returns": "['bug']",
+          "setup": "g = {'bug': 'z', 'loop': 'x'}"
+        }
+      ],
+      "hints": [
+        "Split the text into words and clean each: `word.strip(\".,!?;:\").lower()`.",
+        "Keep the glossary words that are in that set of words, and use `sorted(...)`."
+      ],
+      "solution": "def find_words(text, glossary):\n    words = {word.strip(\".,!?;:\").lower() for word in text.split()}\n    return sorted(word for word in glossary if word in words)"
+    },
+    {
+      "prompt": "Write `make_flashcards(glossary)`. It returns a list of lines in the form `word: definition`, sorted by word.",
+      "starterCode": "def make_flashcards(glossary):\n    # your code here\n    pass",
+      "tests": [
+        {
+          "call": "make_flashcards({'loop': 'Code that repeats.', 'bug': 'A mistake.'})",
+          "returns": "['bug: A mistake.', 'loop: Code that repeats.']"
+        },
+        {
+          "call": "make_flashcards({})",
+          "returns": "[]"
+        }
+      ],
+      "hints": [
+        "`sorted(glossary.items())` gives `(word, definition)` pairs in order.",
+        "Use an f-string for each line."
+      ],
+      "solution": "def make_flashcards(glossary):\n    return [f\"{word}: {meaning}\" for word, meaning in sorted(glossary.items())]"
+    }
+  ],
+  "quiz": [
+    {
+      "question": "What is the difference between a parameter and an argument?",
+      "options": [
+        "There is none",
+        "A parameter is in the function definition, an argument is the value you pass",
+        "An argument is in the definition, a parameter is the result",
+        "Parameters are only for loops"
+      ],
+      "answer": 1,
+      "explanation": "In `def f(x)`, `x` is the parameter. In `f(5)`, `5` is the argument."
+    },
+    {
+      "question": "What does \"iterate over a list\" mean?",
+      "options": [
+        "Delete the list",
+        "Go through it one item at a time",
+        "Sort it",
+        "Print its name"
+      ],
+      "answer": 1,
+      "explanation": "To iterate means to go through the items one by one, usually with a loop."
+    },
+    {
+      "question": "What is a \"bug\"?",
+      "options": [
+        "A mistake in the code",
+        "A fast computer",
+        "A kind of file",
+        "A comment"
+      ],
+      "answer": 0,
+      "explanation": "A bug is a mistake in the code. To debug is to find and fix it."
+    }
+  ]
+}

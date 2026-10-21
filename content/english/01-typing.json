@@ -1,0 +1,190 @@
+{
+  "title": "Type faster and with fewer mistakes",
+  "explanation": [
+    {
+      "type": "text",
+      "text": "Programmers type all day. Typing without looking at the keys saves time and keeps your mind on the problem. You do not need to be fast. You need to be **accurate** and relaxed."
+    },
+    {
+      "type": "text",
+      "text": "**Habits that work**"
+    },
+    {
+      "type": "list",
+      "items": [
+        "**Accuracy first.** Slow and correct is better than fast and full of mistakes. Speed comes by itself after weeks of practice.",
+        "**Home row.** Rest your fingers on `A S D F` (left hand) and `J K L ;` (right hand). Your index fingers can feel small bumps on `F` and `J`.",
+        "**Every finger has its keys.** Reach and come back to the home row. Do not hunt with two fingers.",
+        "**Short and daily.** Ten minutes every day is better than one hour once a week.",
+        "**Sit well.** Back straight, wrists relaxed, screen at eye level, and a break every half hour."
+      ]
+    },
+    {
+      "type": "text",
+      "text": "**Code has hard keys.** Programmers use symbols all the time: `( ) [ ] { } \" ' : = _ # /`. Practise these on purpose. In the exercises below you type short pieces of code exactly, character by character."
+    },
+    {
+      "type": "text",
+      "text": "**How speed is measured.** Typing speed is counted in **words per minute (WPM)**. One \"word\" is 5 characters, spaces included. So:"
+    },
+    {
+      "type": "code",
+      "code": "words = len(text) / 5\nminutes = seconds / 60\nwpm = words / minutes"
+    },
+    {
+      "type": "text",
+      "text": "**Accuracy** is the share of characters that are right: correct characters divided by the characters you should have typed, times 100."
+    },
+    {
+      "type": "tip",
+      "text": "Keep the editor's Tab key in mind: it makes 4 spaces in the code boxes here. Press Esc and then Tab to leave the box with the keyboard."
+    },
+    {
+      "type": "tip",
+      "text": "You can copy and paste to pass the typing exercises, but then you learn nothing. Type them yourself, and look at the screen, not at your hands."
+    }
+  ],
+  "examples": [
+    {
+      "title": "Work out your WPM",
+      "code": "text = \"the quick brown fox jumps over the lazy dog\"\nseconds = 20\nwords = len(text) / 5\nwpm = words / (seconds / 60)\nprint(round(wpm, 1), \"WPM\")"
+    },
+    {
+      "title": "Compare two texts, character by character",
+      "code": "target = \"print\"\ntyped = \"prnt\"\nmatches = 0\nfor i, char in enumerate(target):\n    if i < len(typed) and typed[i] == char:\n        matches += 1\nprint(matches, \"of\", len(target), \"correct\")"
+    }
+  ],
+  "exercises": [
+    {
+      "prompt": "Type this line **exactly** (quotes, comma and exclamation mark too):\n\n```\nprint(\"Hello, World!\")\n```",
+      "starterCode": "# Type the line here\n",
+      "tests": [
+        {
+          "output": "Hello, World!"
+        }
+      ],
+      "hints": [
+        "Look at the screen, not your hands.",
+        "The line starts with `print(` and ends with `)`."
+      ],
+      "solution": "print(\"Hello, World!\")"
+    },
+    {
+      "prompt": "Type this code exactly. Watch the colon, the indent (4 spaces) and the brackets:\n\n```\ndef greet(name):\n    return \"Hi, \" + name\n\nprint(greet(\"Sam\"))\n```",
+      "starterCode": "# Type the code here\n",
+      "tests": [
+        {
+          "output": "Hi, Sam"
+        }
+      ],
+      "hints": [
+        "The Tab key makes 4 spaces.",
+        "The `def` line ends with a colon."
+      ],
+      "solution": "def greet(name):\n    return \"Hi, \" + name\n\nprint(greet(\"Sam\"))"
+    },
+    {
+      "prompt": "Type this code exactly. It uses curly brackets, colons and an f-string:\n\n```\nscores = {\"Ada\": 90, \"Sam\": 85}\nfor name, score in scores.items():\n    print(f\"{name}: {score}\")\n```",
+      "starterCode": "# Type the code here\n",
+      "tests": [
+        {
+          "output": "Ada: 90\nSam: 85"
+        }
+      ],
+      "hints": [
+        "Curly brackets `{ }` hold the dictionary.",
+        "The f-string starts with `f\"` and has `{name}` and `{score}` inside."
+      ],
+      "solution": "scores = {\"Ada\": 90, \"Sam\": 85}\nfor name, score in scores.items():\n    print(f\"{name}: {score}\")"
+    },
+    {
+      "prompt": "Write `wpm(text, seconds)`. One word is 5 characters. It returns the words per minute, rounded to 1 decimal.\n\nFor example 50 characters in 60 seconds is 10 words in 1 minute, so `10.0`.",
+      "starterCode": "def wpm(text, seconds):\n    # your code here\n    pass",
+      "tests": [
+        {
+          "call": "wpm('a' * 50, 60)",
+          "returns": "10.0"
+        },
+        {
+          "call": "wpm('a' * 100, 30)",
+          "returns": "40.0"
+        },
+        {
+          "call": "wpm('abcde', 12)",
+          "returns": "5.0"
+        }
+      ],
+      "hints": [
+        "words = `len(text) / 5`, minutes = `seconds / 60`.",
+        "Divide words by minutes, then use `round(value, 1)`."
+      ],
+      "solution": "def wpm(text, seconds):\n    words = len(text) / 5\n    minutes = seconds / 60\n    return round(words / minutes, 1)"
+    },
+    {
+      "prompt": "Write `accuracy(typed, target)`. It returns the percentage of characters of `target` that were typed correctly **in the same position**, rounded to 1 decimal. Missing characters count as wrong. If `target` is empty, return `100.0`.",
+      "starterCode": "def accuracy(typed, target):\n    # your code here\n    pass",
+      "tests": [
+        {
+          "call": "accuracy('hello', 'hello')",
+          "returns": "100.0"
+        },
+        {
+          "call": "accuracy('hxllo', 'hello')",
+          "returns": "80.0"
+        },
+        {
+          "call": "accuracy('hel', 'hello')",
+          "returns": "60.0"
+        },
+        {
+          "call": "accuracy('', 'abc')",
+          "returns": "0.0"
+        },
+        {
+          "call": "accuracy('', '')",
+          "returns": "100.0"
+        }
+      ],
+      "hints": [
+        "Handle the empty target first.",
+        "Count positions `i` where `i < len(typed)` and `typed[i] == target[i]`. Then use `matches * 100 / len(target)`."
+      ],
+      "solution": "def accuracy(typed, target):\n    if not target:\n        return 100.0\n    matches = 0\n    for i, char in enumerate(target):\n        if i < len(typed) and typed[i] == char:\n            matches += 1\n    return round(matches * 100 / len(target), 1)"
+    }
+  ],
+  "quiz": [
+    {
+      "question": "What is the best way to improve typing?",
+      "options": [
+        "Type as fast as you can from day one",
+        "Be accurate first, practise a little every day",
+        "Practise once a month for 5 hours",
+        "Use only two fingers"
+      ],
+      "answer": 1,
+      "explanation": "Accuracy comes first. Speed grows from short daily practice."
+    },
+    {
+      "question": "In WPM, how many characters count as one word?",
+      "options": [
+        "3",
+        "5",
+        "10",
+        "It depends on the word"
+      ],
+      "answer": 1,
+      "explanation": "The standard is 5 characters (spaces included) per word, so the measure is fair for every text."
+    },
+    {
+      "question": "Why practise symbols like `{ } [ ] ( ) :` on purpose?",
+      "options": [
+        "Code uses them all the time",
+        "They are never used",
+        "They make the computer faster",
+        "Only managers use them"
+      ],
+      "answer": 0,
+      "explanation": "Programmers type symbols constantly, so they need to be comfortable and accurate with them."
+    }
+  ]
+}

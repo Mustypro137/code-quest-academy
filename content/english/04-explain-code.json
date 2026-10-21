@@ -1,0 +1,169 @@
+{
+  "title": "Explain your code in simple English",
+  "explanation": [
+    {
+      "type": "text",
+      "text": "Good code is also easy to explain. When you can say what a function does in one clear sentence, other people (and you, next month) understand it fast."
+    },
+    {
+      "type": "text",
+      "text": "**The one-sentence formula**"
+    },
+    {
+      "type": "code",
+      "code": "[name] takes [input] and returns [output]."
+    },
+    {
+      "type": "text",
+      "text": "Example: \"`double` takes a number and returns that number times 2.\" Short, active, and no hard words."
+    },
+    {
+      "type": "text",
+      "text": "**Comments: say why, not what.** The code already shows *what* happens. A comment helps most when it explains *why*."
+    },
+    {
+      "type": "code",
+      "code": "# Weak: add 1 to count\ncount = count + 1\n\n# Better: the header row is not data, so skip it\nrows = rows[1:]"
+    },
+    {
+      "type": "text",
+      "text": "**Docstrings.** A docstring is text in triple quotes, as the first thing inside a function. Python keeps it, and tools show it as help."
+    },
+    {
+      "type": "code",
+      "code": "def area(width, height):\n    \"\"\"Return the area of a rectangle.\"\"\"\n    return width * height\n\nprint(area.__doc__)"
+    },
+    {
+      "type": "list",
+      "items": [
+        "First line: one short sentence, starting with a verb: \"Return...\", \"Check...\", \"Convert...\".",
+        "Say what goes in and what comes out if it is not obvious.",
+        "Use the same simple words you would use to explain it to a friend."
+      ]
+    },
+    {
+      "type": "tip",
+      "text": "If you cannot explain a function in one sentence, it probably does too many things. Split it into two functions."
+    }
+  ],
+  "examples": [
+    {
+      "title": "A docstring is kept by Python",
+      "code": "def shout(text):\n    \"\"\"Return the text in capital letters.\"\"\"\n    return text.upper()\n\nprint(shout.__doc__)\nprint(shout(\"hi\"))"
+    },
+    {
+      "title": "A longer docstring",
+      "code": "def average(numbers):\n    \"\"\"Return the average of a list of numbers.\n\n    An empty list gives 0.\n    \"\"\"\n    return sum(numbers) / len(numbers) if numbers else 0\n\nprint(average.__doc__)"
+    },
+    {
+      "title": "Explain it with the formula",
+      "code": "def describe(name, takes, returns):\n    return f\"{name} takes {takes} and returns {returns}.\"\n\nprint(describe(\"len\", \"a list or text\", \"how many items it has\"))"
+    }
+  ],
+  "exercises": [
+    {
+      "prompt": "Write `describe(name, takes, returns)`. It returns the sentence `NAME takes TAKES and returns RETURNS.` (with the full stop at the end).\n\nFor example `describe(\"double\", \"a number\", \"that number times 2\")` gives `double takes a number and returns that number times 2.`",
+      "starterCode": "def describe(name, takes, returns):\n    # your code here\n    pass",
+      "tests": [
+        {
+          "call": "describe('double', 'a number', 'that number times 2')",
+          "returns": "'double takes a number and returns that number times 2.'"
+        },
+        {
+          "call": "describe('len', 'text', 'its length')",
+          "returns": "'len takes text and returns its length.'"
+        }
+      ],
+      "hints": [
+        "Use an f-string.",
+        "Do not forget the full stop at the end."
+      ],
+      "solution": "def describe(name, takes, returns):\n    return f\"{name} takes {takes} and returns {returns}.\""
+    },
+    {
+      "prompt": "This function has no docstring. Add one as the first line inside the function. It must be a sentence that includes the word `rectangle`. Do not change how the function works.",
+      "starterCode": "def area(width, height):\n    return width * height",
+      "tests": [
+        {
+          "call": "bool(area.__doc__)",
+          "returns": "True"
+        },
+        {
+          "call": "'rectangle' in (area.__doc__ or '').lower()",
+          "returns": "True"
+        },
+        {
+          "call": "area(2, 3)",
+          "returns": "6"
+        }
+      ],
+      "hints": [
+        "A docstring is a string in triple quotes right under the `def` line.",
+        "For example: `\"\"\"Return the area of a rectangle.\"\"\"`"
+      ],
+      "solution": "def area(width, height):\n    \"\"\"Return the area of a rectangle.\"\"\"\n    return width * height"
+    },
+    {
+      "prompt": "Write `summary_line(doc)`. It gets a docstring (text) and returns its first line that has text, without spaces at the ends. For empty text, or for `None`, return an empty string.",
+      "starterCode": "def summary_line(doc):\n    # your code here\n    pass",
+      "tests": [
+        {
+          "call": "summary_line('\\n    Add two numbers.\\n\\n    More text.\\n')",
+          "returns": "'Add two numbers.'"
+        },
+        {
+          "call": "summary_line('One line.')",
+          "returns": "'One line.'"
+        },
+        {
+          "call": "summary_line('')",
+          "returns": "''"
+        },
+        {
+          "call": "summary_line(None)",
+          "returns": "''"
+        }
+      ],
+      "hints": [
+        "Return `\"\"` at once when `doc` is empty or `None`: `if not doc:`.",
+        "Loop over `doc.split(\"\\n\")` and return the first line that is not empty after `strip()`."
+      ],
+      "solution": "def summary_line(doc):\n    if not doc:\n        return \"\"\n    for line in doc.split(\"\\n\"):\n        if line.strip():\n            return line.strip()\n    return \"\""
+    }
+  ],
+  "quiz": [
+    {
+      "question": "What is the one-sentence formula for a function?",
+      "options": [
+        "It is a secret",
+        "[name] takes [input] and returns [output].",
+        "Write 20 lines of comments",
+        "Use only numbers"
+      ],
+      "answer": 1,
+      "explanation": "Name, input, output. If you can fill these three in simply, the function is clear."
+    },
+    {
+      "question": "What should a comment explain?",
+      "options": [
+        "What the code obviously does",
+        "Why the code does something",
+        "Nothing, never write comments",
+        "Your age"
+      ],
+      "answer": 1,
+      "explanation": "The code shows what happens. A good comment gives the reason behind it."
+    },
+    {
+      "question": "Where does a docstring go?",
+      "options": [
+        "At the end of the file",
+        "As the first thing inside the function",
+        "In another file",
+        "In the file name"
+      ],
+      "answer": 1,
+      "explanation": "A docstring is a triple-quoted string right under the `def` line."
+    }
+  ]
+}

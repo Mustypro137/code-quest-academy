@@ -1,0 +1,146 @@
+{
+  "title": "Read docs and write short messages",
+  "explanation": [
+    {
+      "type": "text",
+      "text": "Two skills help you every day at work: reading **documentation** and writing **short, clear messages**, such as commit messages and status updates."
+    },
+    {
+      "type": "text",
+      "text": "**Reading documentation.** Official docs follow a pattern. For a function you usually see its **signature** (the name and the parameters), a short description, and sometimes examples. For example, this is how Python describes `str.split`:"
+    },
+    {
+      "type": "code",
+      "code": "str.split(sep=None, maxsplit=-1)\n\nReturn a list of the words in the string, using sep as the delimiter string."
+    },
+    {
+      "type": "list",
+      "items": [
+        "`sep` and `maxsplit` are parameters. The `=` shows the **default value**, which is used when you do not give one.",
+        "The sentence below says what the function returns: a list.",
+        "Read the examples first, then the details. Try the example yourself in the code box."
+      ]
+    },
+    {
+      "type": "text",
+      "text": "**Commit messages.** A commit message tells the story of your project. These are common habits:"
+    },
+    {
+      "type": "list",
+      "items": [
+        "A short first line, around 50 characters or fewer.",
+        "Start with a capital letter and a verb that gives an order: \"Add\", \"Fix\", \"Remove\", \"Update\".",
+        "No full stop at the end."
+      ]
+    },
+    {
+      "type": "text",
+      "text": "**Status updates.** In a team, a short update has three parts: what is **done**, what is **next**, and what is **blocked** (only if something stops you)."
+    },
+    {
+      "type": "template",
+      "title": "Status update",
+      "text": "Keep it to three lines. Use true details. Leave out \"Blocked\" when nothing blocks you.",
+      "code": "Done: [what you finished]\nNext: [what you will do next]\nBlocked: [what stops you, and what you need]"
+    }
+  ],
+  "examples": [
+    {
+      "title": "Defaults in action",
+      "code": "text = \"a,b,c,d\"\nprint(text.split(\",\"))\nprint(text.split(\",\", 1))      # maxsplit=1: only one cut\nprint(\"one two  three\".split())   # sep=None: split on any spaces"
+    },
+    {
+      "title": "Weak and better commit messages",
+      "run": false,
+      "wrap": true,
+      "code": "Weak: \"fixed stuff.\"\nWeak: \"update\"\nBetter: \"Fix crash when the input file is empty\"\nBetter: \"Add report with totals per customer\""
+    }
+  ],
+  "exercises": [
+    {
+      "prompt": "Write `check_commit(msg)`. It returns a list of problems with a commit message, in this order:\n\n- `Empty message` (and nothing else) when the message is empty or only spaces\n- `Too long` when it has more than 50 characters\n- `Ends with a period` when it ends with `.`\n- `Starts with a small letter` when the first character is a small letter\n\nA good message gives an empty list.",
+      "starterCode": "def check_commit(msg):\n    # your code here\n    pass",
+      "tests": [
+        {
+          "call": "check_commit('Add report')",
+          "returns": "[]"
+        },
+        {
+          "call": "check_commit('fix bug.')",
+          "returns": "['Ends with a period', 'Starts with a small letter']"
+        },
+        {
+          "call": "check_commit('A' * 51)",
+          "returns": "['Too long']"
+        },
+        {
+          "call": "check_commit('   ')",
+          "returns": "['Empty message']"
+        },
+        {
+          "call": "check_commit('b' * 51 + '.')",
+          "returns": "['Too long', 'Ends with a period', 'Starts with a small letter']"
+        }
+      ],
+      "hints": [
+        "Make an empty list `problems` and add to it with `append`.",
+        "`msg[0].islower()` checks the first letter. Check for an empty message first and return early."
+      ],
+      "solution": "def check_commit(msg):\n    if not msg.strip():\n        return [\"Empty message\"]\n    problems = []\n    if len(msg) > 50:\n        problems.append(\"Too long\")\n    if msg.endswith(\".\"):\n        problems.append(\"Ends with a period\")\n    if msg[0].islower():\n        problems.append(\"Starts with a small letter\")\n    return problems"
+    },
+    {
+      "prompt": "Write `status_update(done, next_step, blocked=None)`. It returns the update as text:\n\n```\nDone: ...\nNext: ...\nBlocked: ...\n```\n\nThe `Blocked` line is only there when `blocked` is given.",
+      "starterCode": "def status_update(done, next_step, blocked=None):\n    # your code here\n    pass",
+      "tests": [
+        {
+          "call": "status_update('Wrote tests', 'Add README')",
+          "returns": "'Done: Wrote tests\\nNext: Add README'"
+        },
+        {
+          "call": "status_update('Wrote tests', 'Add README', 'Need a sample file')",
+          "returns": "'Done: Wrote tests\\nNext: Add README\\nBlocked: Need a sample file'"
+        }
+      ],
+      "hints": [
+        "Start with a list of two lines.",
+        "If `blocked` is given, add the third line. Join with `\"\\n\"`."
+      ],
+      "solution": "def status_update(done, next_step, blocked=None):\n    lines = [f\"Done: {done}\", f\"Next: {next_step}\"]\n    if blocked:\n        lines.append(f\"Blocked: {blocked}\")\n    return \"\\n\".join(lines)"
+    }
+  ],
+  "quiz": [
+    {
+      "question": "In `str.split(sep=None, maxsplit=-1)`, what does `sep=None` show?",
+      "options": [
+        "`sep` is required",
+        "`sep` has a default value of None",
+        "The function is broken",
+        "`sep` must be a number"
+      ],
+      "answer": 1,
+      "explanation": "The `=` in a signature shows the default value that is used when you give none."
+    },
+    {
+      "question": "Which is the best commit message?",
+      "options": [
+        "\"stuff\"",
+        "\"fixed it.\"",
+        "\"Fix crash when the input file is empty\"",
+        "\"UPDATE!!!\""
+      ],
+      "answer": 2,
+      "explanation": "It starts with a capital verb, says what changed, is short, and has no full stop."
+    },
+    {
+      "question": "What are the three parts of a short status update?",
+      "options": [
+        "Hello, goodbye, thanks",
+        "Done, next, blocked",
+        "Start, middle, end",
+        "Python, Git, GitHub"
+      ],
+      "answer": 1,
+      "explanation": "Say what is done, what comes next, and what blocks you (only if something does)."
+    }
+  ]
+}
