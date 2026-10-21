@@ -1,0 +1,242 @@
+{
+  "title": "Your first program: print()",
+  "objective": "Show text and numbers with `print()`, and control the separator and the line ending.",
+  "kind": "browser",
+  "prerequisites": [
+    "m01-fundamentals/01-how-programs-run"
+  ],
+  "explanation": [
+    {
+      "type": "text",
+      "text": "The `print()` function shows something on the screen. Put your message inside the brackets, between quotes."
+    },
+    {
+      "type": "code",
+      "code": "print(\"Hello, world!\")"
+    },
+    {
+      "type": "tip",
+      "text": "Text inside quotes is called a **string**. You can use single quotes or double quotes, but do not mix them in one string."
+    },
+    {
+      "type": "text",
+      "text": "Numbers do not need quotes: `print(42)`. You can print several things at once. `print` puts a space between them:"
+    },
+    {
+      "type": "code",
+      "code": "print(\"I am\", 12, \"years old\")   # I am 12 years old"
+    },
+    {
+      "type": "text",
+      "text": "Two extra settings change the look. `sep` is what goes **between** the things. `end` is what goes **after** the last one (normally a new line)."
+    },
+    {
+      "type": "code",
+      "code": "print(\"a\", \"b\", \"c\", sep=\"-\")        # a-b-c\nprint(\"Loading\", end=\"...\")\nprint(\"done\")                          # Loading...done"
+    },
+    {
+      "type": "text",
+      "text": "Inside a string, `\\n` means a new line, and `\\t` means a tab. To put a quote inside a string, use the other kind of quote around it: `print(\"It's fine\")`."
+    }
+  ],
+  "walkthrough": [
+    {
+      "title": "Separator and line ending",
+      "code": "print(\"a\", \"b\", \"c\", sep=\"-\")\nprint(\"Loading\", end=\"...\")\nprint(\"done\")",
+      "lines": [
+        {
+          "line": "print(\"a\", \"b\", \"c\", sep=\"-\")",
+          "explain": "Three things are printed. `sep=\"-\"` puts a dash between them instead of a space, so you see `a-b-c`."
+        },
+        {
+          "line": "print(\"Loading\", end=\"...\")",
+          "explain": "`end=\"...\"` replaces the new line at the end. The next `print` continues on the same line."
+        },
+        {
+          "line": "print(\"done\")",
+          "explain": "Continues the same line, so the screen shows `Loading...done`."
+        }
+      ]
+    }
+  ],
+  "examples": [
+    {
+      "title": "Print two lines",
+      "code": "print(\"Hello\")\nprint(\"I am learning Python\")"
+    },
+    {
+      "title": "Print a number",
+      "code": "print(42)\nprint(\"The answer is\", 42)"
+    },
+    {
+      "title": "Separator and ending",
+      "code": "print(\"a\", \"b\", \"c\", sep=\"-\")\nprint(\"Loading\", end=\"...\")\nprint(\"done\")\nprint(\"one\\ntwo\")"
+    }
+  ],
+  "exercises": [
+    {
+      "level": "easy",
+      "prompt": "Print the message `Hello, Python!` on the screen.",
+      "starterCode": "# Write your code below\n",
+      "tests": [
+        {
+          "output": "Hello, Python!"
+        }
+      ],
+      "hints": [
+        "Put the message inside quotes, inside `print()`.",
+        "It is `print(\"Hello, Python!\")`."
+      ],
+      "solution": "print(\"Hello, Python!\")"
+    },
+    {
+      "level": "medium",
+      "prompt": "Print two lines.\n\nThe first line is `My name is Sam`. The second line is `I am learning Python`.",
+      "starterCode": "# Write your code below\n",
+      "tests": [
+        {
+          "output": "My name is Sam\nI am learning Python"
+        }
+      ],
+      "hints": [
+        "Use two `print()` lines.",
+        "Each `print()` makes its own line."
+      ],
+      "solution": "print(\"My name is Sam\")\nprint(\"I am learning Python\")"
+    },
+    {
+      "level": "hard",
+      "prompt": "Print the numbers 1 to 5 on **one** line, separated by a comma and a space, like this:\n\n```\n1, 2, 3, 4, 5\n```\n\nUse **one** `print()` call and the `sep` setting.",
+      "starterCode": "# Write your code below\n",
+      "tests": [
+        {
+          "output": "1, 2, 3, 4, 5"
+        }
+      ],
+      "hints": [
+        "Give `print` the five numbers, separated by commas.",
+        "Add `sep=\", \"` at the end."
+      ],
+      "solution": "print(1, 2, 3, 4, 5, sep=\", \")"
+    }
+  ],
+  "debug": [
+    {
+      "title": "Quotes that do not match",
+      "symptom": "SyntaxError: unterminated string literal (detected at line 1)",
+      "prompt": "Fix the code so that it prints `It's fine`.",
+      "brokenCode": "print(\"It's fine')\n",
+      "tests": [
+        {
+          "output": "It's fine"
+        }
+      ],
+      "hints": [
+        "The string starts with `\"` but ends with `'`. The two quotes must be the same kind.",
+        "Use `\"` at both ends. The `'` inside is then just a letter."
+      ],
+      "solution": "print(\"It's fine\")"
+    },
+    {
+      "title": "Text without quotes",
+      "symptom": "NameError: name 'Hello' is not defined",
+      "prompt": "Fix the code so that it prints `Hello`.",
+      "brokenCode": "print(Hello)\n",
+      "tests": [
+        {
+          "output": "Hello"
+        }
+      ],
+      "hints": [
+        "Without quotes, Python thinks `Hello` is a name it should already know.",
+        "Put the text in quotes."
+      ],
+      "solution": "print(\"Hello\")"
+    }
+  ],
+  "mistakes": [
+    {
+      "mistake": "Leaving out the quotes around text.",
+      "why": "Python looks for a name with that spelling and does not find one (`NameError`).",
+      "fix": "Put text in quotes. Numbers do not need quotes."
+    },
+    {
+      "mistake": "Mixing `\"` and `'` to start and end one string.",
+      "why": "Python cannot tell where the string ends.",
+      "fix": "Start and end with the same kind of quote."
+    },
+    {
+      "mistake": "Forgetting the brackets: `print \"Hello\"`.",
+      "why": "That was the style of an old Python version. Python 3 needs brackets.",
+      "fix": "Write `print(\"Hello\")`."
+    },
+    {
+      "mistake": "Expecting `print` to add numbers inside quotes.",
+      "why": "`print(\"2 + 3\")` prints the text `2 + 3`, not 5.",
+      "fix": "Remove the quotes to calculate: `print(2 + 3)`."
+    }
+  ],
+  "quiz": [
+    {
+      "question": "Which line shows Hello on the screen?",
+      "options": [
+        "`print(\"Hello\")`",
+        "`show(\"Hello\")`",
+        "`echo Hello`",
+        "`say(\"Hello\")`"
+      ],
+      "answer": 0,
+      "explanation": "In Python you use the `print()` function."
+    },
+    {
+      "question": "What is text inside quotes called?",
+      "options": [
+        "A string",
+        "A number",
+        "A function",
+        "A comment"
+      ],
+      "answer": 0,
+      "explanation": "Text in quotes is called a string."
+    },
+    {
+      "question": "What does `print(\"a\", \"b\", sep=\"-\")` show?",
+      "options": [
+        "a-b",
+        "a b",
+        "ab",
+        "a, b"
+      ],
+      "answer": 0,
+      "explanation": "`sep` sets what goes between the things. Here it is a dash."
+    }
+  ],
+  "challenge": {
+    "title": "Loading...",
+    "prompt": "Use three `print()` calls to show exactly this on **one** line: `Loading... done`\n\nHint: the `end` setting decides what comes after a `print`.",
+    "stretch": "Make the dots appear one by one (three prints), still on one line.",
+    "starterCode": "# Write your code below\n",
+    "tests": [
+      {
+        "output": "Loading... done"
+      }
+    ],
+    "hints": [
+      "The first two `print` calls need `end=\"\"` so that they do not start a new line.",
+      "Think about where the spaces go."
+    ],
+    "solution": "print(\"Loading\", end=\"\")\nprint(\"...\", end=\" \")\nprint(\"done\")"
+  },
+  "review": {
+    "from": "m01-fundamentals/01-how-programs-run",
+    "question": "In what order does Python run the lines of a program?",
+    "options": [
+      "From top to bottom, one at a time",
+      "From bottom to top",
+      "In alphabetical order",
+      "All at the same time"
+    ],
+    "answer": 0,
+    "explanation": "Python follows the lines in the order you wrote them."
+  }
+}

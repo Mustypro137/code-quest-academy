@@ -8,15 +8,23 @@ const CACHE = 'cqa-v1';
 const SHELL = [
   './', 'index.html', 'manifest.webmanifest',
   'css/base.css', 'css/components.css', 'css/screens.css',
-  'js/app.js', 'js/content.js', 'js/store.js', 'js/path.js', 'js/achievements.js', 'js/appearance.js',
+  'js/app.js', 'js/content.js', 'js/store.js', 'js/moves.js', 'js/path.js', 'js/achievements.js', 'js/appearance.js',
   'js/python/runner.js', 'js/python/worker.js',
   'js/ui/backup.js', 'js/ui/codebox.js', 'js/ui/exercise.js', 'js/ui/home.js',
   'js/ui/html.js', 'js/ui/lesson.js', 'js/ui/quiz.js', 'js/ui/typing.js',
   'js/ui/dashboard.js', 'js/ui/roadmap.js', 'js/ui/progress.js', 'js/ui/settings.js', 'js/ui/rewards.js',
   'js/ui/practice.js', 'js/ui/revise.js', 'js/ui/challenge.js', 'js/ui/workshop.js', 'js/ui/writing.js',
-  'content/glossary.json', 'content/workshop.json', 'content/writing.json',
+  'content/glossary.json', 'content/workshop.json', 'content/writing.json', 'content/curriculum.json',
   'icons/icon-192.png', 'icons/icon-512.png',
 ];
+
+const PYTHON_PACKAGES = [
+  'sqlite3-1.0.0-cp313-cp313-pyemscripten_2025_0_wasm32.whl', 'pytest-8.3.5-py3-none-any.whl',
+  'atomicwrites-1.4.1-py2.py3-none-any.whl', 'attrs-25.2.0-py3-none-any.whl', 'exceptiongroup-1.2.2-py3-none-any.whl',
+  'iniconfig-2.1.0-py3-none-any.whl', 'more_itertools-10.6.0-py3-none-any.whl', 'pluggy-1.5.0-py3-none-any.whl',
+  'py-1.11.0-py2.py3-none-any.whl', 'pyparsing-3.2.1-py3-none-any.whl', 'setuptools-76.0.0-py3-none-any.whl',
+  'six-1.17.0-py2.py3-none-any.whl',
+].map((file) => 'vendor/pyodide/' + file);
 
 const PYODIDE = [
   'vendor/pyodide/pyodide.js', 'vendor/pyodide/pyodide.asm.js', 'vendor/pyodide/pyodide.asm.wasm',
@@ -27,10 +35,17 @@ self.addEventListener('install', (event) => {
   event.waitUntil((async () => {
     const cache = await caches.open(CACHE);
     const index = await (await fetch('content/index.json', { cache: 'no-cache' })).json();
-    const lessons = index.modules.flatMap((m) => m.lessons.map((l) => `content/${m.id}/${l.id}.json`));
-    await cache.addAll([...SHELL, 'content/index.json', ...lessons]);
+    const curriculum = await (await fetch('content/curriculum.json', { cache: 'no-cache' })).json();
+    // A module with a checkpoint has content/<module>/checkpoint.json as its last page.
+    const path = curriculum.stages.flatMap((s) => s.modules).flatMap((m) => [
+      ...m.lessons.map((l) => `content/${m.id}/${l.id}.json`),
+      ...(m.lessons.length && m.checkpoint ? [`content/${m.id}/checkpoint.json`] : []),
+    ]);
+    const others = index.modules.flatMap((m) => m.lessons.map((l) => `content/${m.id}/${l.id}.json`));
+    await cache.addAll([...SHELL, 'content/index.json', ...path, ...others]);
     // Python is large. If this part fails, the site still works online and caches it on first use.
     await cache.addAll(PYODIDE).catch(() => {});
+    await cache.addAll(PYTHON_PACKAGES).catch(() => {});
     await self.skipWaiting();
   })());
 });

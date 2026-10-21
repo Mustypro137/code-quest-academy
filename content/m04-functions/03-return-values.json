@@ -1,0 +1,284 @@
+{
+  "title": "Return values and results",
+  "objective": "Return one or several values, tell printing apart from returning, and return early or `None` on purpose.",
+  "kind": "browser",
+  "prerequisites": [
+    "m04-functions/01-defining-functions"
+  ],
+  "explanation": [
+    {
+      "type": "text",
+      "text": "A function sends its result back with `return`. The function stops at that line. Everything after it in the function is skipped."
+    },
+    {
+      "type": "text",
+      "text": "To return **several values**, separate them with commas. Python makes a tuple, and the caller can unpack it."
+    },
+    {
+      "type": "code",
+      "code": "def stats(numbers):\n    return min(numbers), max(numbers)\n\nlow, high = stats([4, 8, 6])"
+    },
+    {
+      "type": "text",
+      "text": "**Printing** shows a value to a person. **Returning** gives a value to other code. Most functions should return, and a small part of the program at the end should print."
+    },
+    {
+      "type": "text",
+      "text": "Sometimes there is no good answer. Return `None` on purpose, and say so in your docstring or name. The caller can then check `if result is None:`."
+    },
+    {
+      "type": "tip",
+      "text": "A `return` inside a loop ends the whole function the first time it runs. Put it **after** the loop if you want the loop to finish."
+    }
+  ],
+  "walkthrough": [
+    {
+      "title": "Early return and several values",
+      "code": "def stats(numbers):\n    if not numbers:\n        return None\n    return min(numbers), max(numbers), sum(numbers) / len(numbers)\n\nlow, high, mean = stats([4, 8, 6])",
+      "lines": [
+        {
+          "line": "if not numbers:",
+          "explain": "An empty list counts as false, so this catches the case with nothing to work on."
+        },
+        {
+          "line": "return None",
+          "explain": "Ends the function early. The caller gets `None`, which means \"no result\"."
+        },
+        {
+          "line": "return min(numbers), max(numbers), sum(numbers) / len(numbers)",
+          "explain": "Returns three values as one tuple: the smallest, the largest and the average."
+        },
+        {
+          "line": "low, high, mean = stats([4, 8, 6])",
+          "explain": "Unpacks the tuple into three names. Here `low` is 4, `high` is 8 and `mean` is 6.0."
+        }
+      ]
+    }
+  ],
+  "examples": [
+    {
+      "title": "Return several values",
+      "code": "def min_max(numbers):\n    return min(numbers), max(numbers)\n\nlow, high = min_max([4, 9, 1])\nprint(low, high)\nprint(min_max([4, 9, 1]))"
+    },
+    {
+      "title": "Return early",
+      "code": "def describe(n):\n    if n < 0:\n        return \"negative\"\n    if n == 0:\n        return \"zero\"\n    return \"positive\"\n\nfor n in [-5, 0, 7]:\n    print(n, describe(n))"
+    },
+    {
+      "title": "Return None on purpose",
+      "code": "def first_even(numbers):\n    for n in numbers:\n        if n % 2 == 0:\n            return n\n    return None\n\nprint(first_even([3, 5, 6, 8]))\nprint(first_even([1, 3]))"
+    }
+  ],
+  "exercises": [
+    {
+      "level": "easy",
+      "prompt": "Write `is_even(n)`. It returns `True` when `n` is even and `False` when it is odd.",
+      "starterCode": "def is_even(n):\n    # your code here\n    pass",
+      "tests": [
+        {
+          "call": "is_even(4)",
+          "returns": "True"
+        },
+        {
+          "call": "is_even(7)",
+          "returns": "False"
+        },
+        {
+          "call": "is_even(0)",
+          "returns": "True"
+        }
+      ],
+      "hints": [
+        "A number is even when `n % 2` is `0`.",
+        "You can return the comparison directly: `return n % 2 == 0`."
+      ],
+      "solution": "def is_even(n):\n    return n % 2 == 0"
+    },
+    {
+      "level": "medium",
+      "prompt": "Write `first_negative(numbers)`. It returns the first number below zero. If there is none, it returns `None`.",
+      "starterCode": "def first_negative(numbers):\n    # your code here\n    pass",
+      "tests": [
+        {
+          "call": "first_negative([3, -2, 5, -9])",
+          "returns": "-2"
+        },
+        {
+          "call": "first_negative([1, 2])",
+          "returns": "None"
+        },
+        {
+          "call": "first_negative([])",
+          "returns": "None"
+        }
+      ],
+      "hints": [
+        "Loop over the numbers and `return` as soon as you find one below zero.",
+        "After the loop, `return None`."
+      ],
+      "solution": "def first_negative(numbers):\n    for n in numbers:\n        if n < 0:\n            return n\n    return None"
+    },
+    {
+      "level": "hard",
+      "prompt": "Write `split_name(full)`. It returns a tuple `(first, last)` from a full name. Ignore extra spaces. A name with one word has an empty last name. An empty text gives `(\"\", \"\")`.\n\nFor example `split_name(\"Ada Byron King\")` gives `(\"Ada\", \"King\")`.",
+      "starterCode": "def split_name(full):\n    # your code here\n    pass",
+      "tests": [
+        {
+          "call": "split_name('  Ada  Byron King ')",
+          "returns": "('Ada', 'King')"
+        },
+        {
+          "call": "split_name('Ada')",
+          "returns": "('Ada', '')"
+        },
+        {
+          "call": "split_name('')",
+          "returns": "('', '')"
+        }
+      ],
+      "hints": [
+        "`full.split()` splits on any spaces and drops the extra ones.",
+        "Handle an empty list first. Then the first word is `parts[0]` and the last is `parts[-1]` (only if there is more than one word)."
+      ],
+      "solution": "def split_name(full):\n    parts = full.split()\n    if not parts:\n        return \"\", \"\"\n    if len(parts) == 1:\n        return parts[0], \"\"\n    return parts[0], parts[-1]"
+    }
+  ],
+  "debug": [
+    {
+      "title": "Returning too early",
+      "symptom": "total([1, 2, 3]) gives 1, but it should give 6",
+      "prompt": "Fix `total` so that it adds up **all** the numbers.",
+      "brokenCode": "def total(numbers):\n    result = 0\n    for n in numbers:\n        result += n\n        return result",
+      "tests": [
+        {
+          "call": "total([1, 2, 3])",
+          "returns": "6"
+        },
+        {
+          "call": "total([])",
+          "returns": "0"
+        }
+      ],
+      "hints": [
+        "Look at where the `return` line sits. It is inside the loop.",
+        "Move `return result` out of the loop, back to the left (4 spaces)."
+      ],
+      "solution": "def total(numbers):\n    result = 0\n    for n in numbers:\n        result += n\n    return result"
+    },
+    {
+      "title": "The result is lost",
+      "symptom": "add(2, 3) gives None",
+      "prompt": "Fix `add` so that `add(2, 3)` is `5`.",
+      "brokenCode": "def add(a, b):\n    a + b",
+      "tests": [
+        {
+          "call": "add(2, 3)",
+          "returns": "5"
+        },
+        {
+          "call": "add(-1, 1)",
+          "returns": "0"
+        }
+      ],
+      "hints": [
+        "The line `a + b` works out the sum and then throws it away.",
+        "Put `return` in front of it."
+      ],
+      "solution": "def add(a, b):\n    return a + b"
+    }
+  ],
+  "mistakes": [
+    {
+      "mistake": "Putting `return` inside a loop when you meant to return after it.",
+      "why": "The function ends at the first pass of the loop.",
+      "fix": "Return after the loop, or return early on purpose when you found what you wanted."
+    },
+    {
+      "mistake": "Calculating a value and forgetting to `return` it.",
+      "why": "The value is thrown away and the caller gets `None`.",
+      "fix": "Add `return` before the expression."
+    },
+    {
+      "mistake": "Using `print` inside a function that other code needs results from.",
+      "why": "The text appears on the screen, but the caller gets `None`.",
+      "fix": "Return the value. Print in the main part of the program."
+    },
+    {
+      "mistake": "Not checking for `None` before using a result.",
+      "why": "A call such as `None + 1` raises `TypeError`.",
+      "fix": "Test `if result is None:` first, or return a default."
+    }
+  ],
+  "quiz": [
+    {
+      "question": "What does `return 1, 2` give back?",
+      "options": [
+        "A tuple `(1, 2)`",
+        "Only 1",
+        "A list",
+        "An error"
+      ],
+      "answer": 0,
+      "explanation": "Values separated by commas become a tuple."
+    },
+    {
+      "question": "What happens to the lines after a `return` that runs?",
+      "options": [
+        "They are skipped, because the function ends",
+        "They run first",
+        "They run after the caller",
+        "They raise an error"
+      ],
+      "answer": 0,
+      "explanation": "`return` ends the function at once."
+    },
+    {
+      "question": "How do you test that a function gave back \"no result\"?",
+      "options": [
+        "`if result is None:`",
+        "`if result == 0:`",
+        "`if not result == None`",
+        "`if result == \"\"`"
+      ],
+      "answer": 0,
+      "explanation": "`is None` is the clear way to check for `None`."
+    }
+  ],
+  "challenge": {
+    "title": "A safe division",
+    "prompt": "Write `safe_divide(a, b)`. It returns a tuple `(ok, result)`. When `b` is not zero, return `(True, a / b)`. When `b` is zero, return `(False, \"cannot divide by zero\")`.",
+    "stretch": "Return `(False, \"not numbers\")` when `a` or `b` is not a number (use `isinstance`).",
+    "starterCode": "def safe_divide(a, b):\n    # your code here\n    pass",
+    "tests": [
+      {
+        "call": "safe_divide(6, 3)",
+        "returns": "(True, 2.0)"
+      },
+      {
+        "call": "safe_divide(1, 0)",
+        "returns": "(False, 'cannot divide by zero')"
+      },
+      {
+        "call": "safe_divide(0, 5)",
+        "returns": "(True, 0.0)"
+      }
+    ],
+    "hints": [
+      "Check `b == 0` first and return early.",
+      "Otherwise `return True, a / b`."
+    ],
+    "solution": "def safe_divide(a, b):\n    if b == 0:\n        return False, \"cannot divide by zero\"\n    return True, a / b"
+  },
+  "review": {
+    "from": "m01-fundamentals/04-numbers",
+    "question": "What is `7 // 2` in Python?",
+    "options": [
+      "3",
+      "3.5",
+      "4",
+      "2"
+    ],
+    "answer": 0,
+    "explanation": "`//` is floor division: it divides and drops the part after the decimal point."
+  }
+}

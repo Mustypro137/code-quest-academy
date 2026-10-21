@@ -19,37 +19,37 @@
         {
           "title": "Make a messy fake customers.csv",
           "text": "The project lesson makes the file for you. Never use real customer data.",
-          "href": "#/lesson/automation/07-project"
+          "href": "#/lesson/m18-capstones/03-customer-cleaner"
         },
         {
           "title": "Clean the emails",
           "text": "Exercise 1: clean_email.",
-          "href": "#/lesson/automation/07-project"
+          "href": "#/lesson/m18-capstones/03-customer-cleaner"
         },
         {
           "title": "Turn amounts into numbers",
           "text": "Exercise 2: parse_amount.",
-          "href": "#/lesson/automation/07-project"
+          "href": "#/lesson/m18-capstones/03-customer-cleaner"
         },
         {
           "title": "Clean each row",
           "text": "Exercise 3: clean_row.",
-          "href": "#/lesson/automation/07-project"
+          "href": "#/lesson/m18-capstones/03-customer-cleaner"
         },
         {
           "title": "Remove duplicate customers",
           "text": "Exercise 4: remove_duplicates.",
-          "href": "#/lesson/automation/07-project"
+          "href": "#/lesson/m18-capstones/03-customer-cleaner"
         },
         {
           "title": "Find the late customers",
           "text": "Exercise 5: late_customers.",
-          "href": "#/lesson/automation/07-project"
+          "href": "#/lesson/m18-capstones/03-customer-cleaner"
         },
         {
           "title": "Make the report",
           "text": "Exercise 6: make_report.",
-          "href": "#/lesson/automation/07-project"
+          "href": "#/lesson/m18-capstones/03-customer-cleaner"
         },
         {
           "title": "Add tests with assert",

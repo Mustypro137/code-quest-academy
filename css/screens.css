@@ -253,3 +253,24 @@ dialog h2 { margin-top: 0; }
 .card + #arena { margin-top: 1rem; }
 details { margin-top: 0.25rem; }
 summary { cursor: pointer; }
+
+/* Roadmap stages (Python path) */
+.stage { margin: 2rem 0 0.25rem; font-size: 1.15rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; }
+.road-soon { margin: 0; padding: 0.75rem 1.25rem 1.25rem; }
+
+/* Curriculum lessons: goal, prerequisites, line-by-line notes, common mistakes, review */
+.lesson-meta { margin: 0 0 1.25rem; padding: 0.75rem 1rem; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; }
+.lesson-meta p { margin: 0.35rem 0; }
+.badge { display: inline-block; padding: 0.1rem 0.7rem; font-size: 0.875rem; font-weight: 700; color: var(--text); background: var(--surface-2); border: 1px solid var(--border); border-radius: 999px; }
+.chip { display: inline-block; margin: 0.15rem 0.25rem 0.15rem 0; padding: 0.1rem 0.7rem; font-size: 0.95rem; color: var(--text); background: var(--surface-2); border: 1px solid var(--border); border-radius: 999px; text-decoration: none; }
+a.chip { color: var(--accent); }
+a.chip:hover { border-color: var(--accent); }
+.walk { margin-bottom: 1rem; }
+.line-notes { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.5rem; }
+.line-notes li { display: grid; grid-template-columns: minmax(0, 14rem) minmax(0, 1fr); gap: 0.25rem 1rem; padding: 0.5rem 0; border-bottom: 1px solid var(--border); }
+.line-notes code { overflow-wrap: anywhere; white-space: pre-wrap; align-self: start; }
+@media (max-width: 700px) { .line-notes li { grid-template-columns: minmax(0, 1fr); } }
+.mistakes { list-style: none; margin: 0.5rem 0; padding: 0; display: grid; gap: 0.75rem; }
+.lesson .mistakes li { display: grid; gap: 0.2rem; margin: 0; padding: 0.75rem 1rem; background: var(--surface); border: 1px solid var(--border); border-left: 4px solid var(--warning); border-radius: 0 10px 10px 0; }
+.review { margin-top: 1.5rem; max-width: 42rem; }
+.exercises > h2:not(:first-child) { margin-top: 2rem; }

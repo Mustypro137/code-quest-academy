@@ -132,6 +132,16 @@ function inputLines(stdin) {
   return lines;
 }
 
+// Packages that are saved in vendor/pyodide/ and loaded only when a program imports them.
+const VENDORED_PACKAGES = ['sqlite3', 'pytest'];
+
+async function loadNeeded(py, code, tests) {
+  const text = [code, ...(tests ?? []).map((t) => t.setup ?? '')].join('\n');
+  const needed = VENDORED_PACKAGES.filter((name) => new RegExp('^\\s*(import|from)\\s+' + name + '\\b', 'm').test(text));
+  // The loading messages must not end up in the learner's output.
+  if (needed.length) await py.loadPackage(needed, { messageCallback: () => {}, errorCallback: () => {} });
+}
+
 self.onmessage = async ({ data: { id, code, tests, stdin } }) => {
   const py = await ready;
   if (!py) return;
@@ -142,6 +152,7 @@ self.onmessage = async ({ data: { id, code, tests, stdin } }) => {
   const workDir = py.runPython('_cqa_enter()');
   try {
     py.runPython(`_cqa_install_input(${JSON.stringify(inputLines(stdin))})`);
+    await loadNeeded(py, code, tests);
     await py.runPythonAsync(code, { globals });
     py.runPython('import sys; sys.stdout.flush(); sys.stderr.flush()');
     const printed = text.trimEnd();

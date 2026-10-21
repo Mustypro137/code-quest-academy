@@ -3,7 +3,7 @@
   "objective": "Say which names a function can see and change, use parameters and return values instead of globals, and fix the two most common scope errors.",
   "kind": "browser",
   "prerequisites": [
-    "python-basics/int-01-functions"
+    "m04-functions/01-defining-functions"
   ],
   "explanation": [
     {
@@ -286,7 +286,7 @@
     "solution": "def make_account(balance):\n    def deposit(amount):\n        nonlocal balance\n        balance += amount\n\n    def get_balance():\n        return balance\n\n    return deposit, get_balance"
   },
   "review": {
-    "from": "python-basics/int-01-functions",
+    "from": "m04-functions/01-defining-functions",
     "question": "With `def power(base, exponent=2)`, what is `power(3)`?",
     "options": [
       "9",

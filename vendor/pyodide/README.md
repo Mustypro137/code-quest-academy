@@ -7,6 +7,12 @@ Python for the browser, saved here so the site works offline.
 - Files: `pyodide.js`, `pyodide.asm.js`, `pyodide.asm.wasm`, `python_stdlib.zip`, `pyodide-lock.json`
 - Checked against the SHA-256 hashes published by jsDelivr when downloaded.
 
-Extra Python packages (such as numpy) are not included. Add them only when a lesson needs them.
+Extra Python packages saved here (sha256 checked against pyodide-lock.json, from https://cdn.jsdelivr.net/pyodide/v0.29.5/full/),
+loaded only when a program imports them (see js/python/worker.js):
+- `sqlite3`
+- `pytest` and what it needs: atomicwrites, attrs, exceptiongroup, iniconfig, more_itertools, pluggy, py, pyparsing,
+  setuptools, six
+
+Other packages (such as numpy) are not included. Add them only when a lesson needs them.
 
 License: Pyodide is released under the Mozilla Public License 2.0 (https://github.com/pyodide/pyodide).

@@ -21,11 +21,14 @@
 //   lastExport "YYYY-MM-DD"
 //
 // After every change to progress the page gets a "cqa:progress" event with { xpBefore, xpAfter }.
+import { MOVES } from './moves.js';
+
 const KEY = 'cqa.progress';
 const APP = 'codequest-academy';
 export const LESSON_XP = 10;
 export const QUIZ_XP = 2; // per point of improvement over your best score
 export const EXERCISE_XP = 15;
+export const REVIEW_INDEX = 100; // a lesson's review question is saved as question number 100
 export const MIN_TYPING_ACCURACY = 95; // a typing try is only saved as a best at this accuracy or more
 export const ARENA_XP_EACH = 5; // bonus XP for each challenge solved, once a day
 export const ARENA_XP_CLEAR = 10; // extra bonus for solving every challenge
@@ -58,6 +61,18 @@ function pick(obj, keyOk, valueOk) {
   return out;
 }
 
+// Progress saved before the Python path was made uses the old lesson ids. Rename those keys, so nothing is lost.
+// Keys look like "module/lesson" or "module/lesson/number".
+function moved(obj) {
+  const out = {};
+  for (const [key, value] of Object.entries(obj)) {
+    const [module, lesson, ...rest] = key.split('/');
+    const to = MOVES[module + '/' + lesson];
+    out[to ? [to, ...rest].join('/') : key] = value;
+  }
+  return out;
+}
+
 // Builds a well-formed object from anything. Bad fields fall back to defaults.
 function clean(raw) {
   const r = raw && typeof raw === 'object' ? raw : {};
@@ -83,13 +98,13 @@ function clean(raw) {
   return {
     theme: ['light', 'dark', 'system'].includes(r.theme) ? r.theme : undefined,
     settings: { reduceMotion: s.reduceMotion === true, unlockAll: s.unlockAll === true },
-    completed: pick(r.completed, (k) => LESSON_KEY.test(k), isDate),
-    quiz,
-    exercises: pick(r.exercises, (k) => EXERCISE_KEY.test(k), isDate),
-    typing: pick(r.typing, (k) => EXERCISE_KEY.test(k), (v) => typeof v === 'number' && v > 0 && v <= 500),
+    completed: moved(pick(r.completed, (k) => LESSON_KEY.test(k), isDate)),
+    quiz: moved(quiz),
+    exercises: moved(pick(r.exercises, (k) => EXERCISE_KEY.test(k), isDate)),
+    typing: moved(pick(r.typing, (k) => EXERCISE_KEY.test(k), (v) => typeof v === 'number' && v > 0 && v <= 500)),
     activity: pick(r.activity, (k) => DATE.test(k), (v) => Number.isSafeInteger(v) && v > 0 && v < 100000),
     achievements: pick(r.achievements, (k) => ID.test(k), isDate),
-    missed: pick(r.missed, (k) => EXERCISE_KEY.test(k), isDate),
+    missed: moved(pick(r.missed, (k) => EXERCISE_KEY.test(k), isDate)),
     checks: pick(r.checks, (k) => LESSON_KEY.test(k), isDate),
     drafts: pick(r.drafts, (k) => ID.test(k), (v) => typeof v === 'string' && v.length <= 20000),
     flashcards,

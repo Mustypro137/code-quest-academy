@@ -1,0 +1,242 @@
+{
+  "title": "Text and f-strings",
+  "objective": "Build text from pieces with `+` and f-strings, and format numbers inside text.",
+  "kind": "browser",
+  "prerequisites": [
+    "m01-fundamentals/04-numbers"
+  ],
+  "explanation": [
+    {
+      "type": "text",
+      "text": "You can join two strings with `+`, and repeat one with `*`. `len()` gives the number of characters."
+    },
+    {
+      "type": "code",
+      "code": "first = \"Ada\"\nlast = \"Lovelace\"\nprint(first + \" \" + last)    # Ada Lovelace\nprint(\"ha\" * 3)              # hahaha\nprint(len(first))            # 3"
+    },
+    {
+      "type": "text",
+      "text": "An **f-string** is easier. Put an `f` before the quote, and put names or calculations inside curly brackets. Python fills them in."
+    },
+    {
+      "type": "code",
+      "code": "name = \"Ada\"\nage = 36\nprint(f\"{name} is {age} years old\")\nprint(f\"Next year: {age + 1}\")"
+    },
+    {
+      "type": "text",
+      "text": "After a colon inside the brackets you can **format** the value. `:.2f` shows 2 decimals. `:<8` pads to 8 characters, left-aligned. `:>6` right-aligns. `:,` adds thousands commas."
+    },
+    {
+      "type": "code",
+      "code": "price = 2.5\nprint(f\"{price:.2f}\")        # 2.50\nprint(f\"{1234567:,}\")        # 1,234,567\nprint(f\"{'Tea':<8}{price:>6.2f}\")"
+    },
+    {
+      "type": "tip",
+      "text": "A `+` between a string and a number gives a `TypeError`. An f-string does the conversion for you."
+    }
+  ],
+  "walkthrough": [
+    {
+      "title": "f-strings with formatting",
+      "code": "name = \"Tea\"\nprice = 2.5\nprint(f\"{name:<8}{price:>6.2f}\")",
+      "lines": [
+        {
+          "line": "name = \"Tea\"",
+          "explain": "A string stored in `name`."
+        },
+        {
+          "line": "price = 2.5",
+          "explain": "A float stored in `price`."
+        },
+        {
+          "line": "print(f\"{name:<8}{price:>6.2f}\")",
+          "explain": "The `f` turns on filling in. `{name:<8}` makes the name 8 characters wide, aligned left. `{price:>6.2f}` makes the price 6 wide, aligned right, with 2 decimals. The two parts sit side by side, so columns line up."
+        }
+      ]
+    }
+  ],
+  "examples": [
+    {
+      "title": "Join and repeat",
+      "code": "first = \"Ada\"\nlast = \"Lovelace\"\nprint(first + \" \" + last)\nprint(\"ha\" * 3)\nprint(len(first + last))"
+    },
+    {
+      "title": "An f-string",
+      "code": "name = \"Ada\"\nage = 36\nprint(f\"{name} is {age} years old\")\nprint(f\"Next year: {age + 1}\")"
+    },
+    {
+      "title": "Format numbers",
+      "code": "price = 2.5\nprint(f\"{price:.2f}\")\nprint(f\"{1234567:,}\")\nprint(f\"[{'Tea':<8}]\")\nprint(f\"[{'Tea':>8}]\")"
+    }
+  ],
+  "exercises": [
+    {
+      "level": "easy",
+      "prompt": "The variable `name` holds `Sam`. Use an f-string to print `Hello, Sam!`.",
+      "starterCode": "name = \"Sam\"\n# print the greeting with an f-string",
+      "tests": [
+        {
+          "output": "Hello, Sam!"
+        }
+      ],
+      "hints": [
+        "Put an `f` before the quote.",
+        "`print(f\"Hello, {name}!\")`."
+      ],
+      "solution": "name = \"Sam\"\nprint(f\"Hello, {name}!\")"
+    },
+    {
+      "level": "medium",
+      "prompt": "You buy 3 pens at 4.5 each. Make `total` (quantity times price) and print this line with an f-string: `3 x 4.5 = 13.5`.",
+      "starterCode": "qty = 3\nprice = 4.5\n# make total, then print the line",
+      "tests": [
+        {
+          "call": "total",
+          "returns": "13.5"
+        },
+        {
+          "output": "3 x 4.5 = 13.5"
+        }
+      ],
+      "hints": [
+        "`total = qty * price`.",
+        "Put the three values in one f-string: `f\"{qty} x {price} = {total}\"`."
+      ],
+      "solution": "qty = 3\nprice = 4.5\ntotal = qty * price\nprint(f\"{qty} x {price} = {total}\")"
+    },
+    {
+      "level": "hard",
+      "prompt": "Print one line of a price list. The name is left-aligned in 8 characters, and the price is right-aligned in 6 characters with 2 decimals. For `Tea` and `2.5` the line is:\n\n```\nTea       2.50\n```",
+      "starterCode": "name = \"Tea\"\nprice = 2.5\n# print the line",
+      "tests": [
+        {
+          "output": "Tea       2.50"
+        }
+      ],
+      "hints": [
+        "Use `:<8` after the name and `:>6.2f` after the price.",
+        "`print(f\"{name:<8}{price:>6.2f}\")`."
+      ],
+      "solution": "name = \"Tea\"\nprice = 2.5\nprint(f\"{name:<8}{price:>6.2f}\")"
+    }
+  ],
+  "debug": [
+    {
+      "title": "The f is missing",
+      "symptom": "The output shows {name} instead of Sam",
+      "prompt": "Fix the code so that it prints `Hello, Sam`.",
+      "brokenCode": "name = \"Sam\"\nprint(\"Hello, {name}\")\n",
+      "tests": [
+        {
+          "output": "Hello, Sam"
+        }
+      ],
+      "hints": [
+        "Curly brackets only get filled in when the string starts with `f`.",
+        "Write `f\"Hello, {name}\"`."
+      ],
+      "solution": "name = \"Sam\"\nprint(f\"Hello, {name}\")"
+    },
+    {
+      "title": "Text plus a number",
+      "symptom": "TypeError: can only concatenate str (not \"int\") to str",
+      "prompt": "Fix the code so that it prints `Age: 12`.",
+      "brokenCode": "age = 12\nprint(\"Age: \" + age)\n",
+      "tests": [
+        {
+          "output": "Age: 12"
+        }
+      ],
+      "hints": [
+        "`+` cannot join a string and a number.",
+        "Use an f-string: `f\"Age: {age}\"`."
+      ],
+      "solution": "age = 12\nprint(f\"Age: {age}\")"
+    }
+  ],
+  "mistakes": [
+    {
+      "mistake": "Forgetting the `f` in front of the quote.",
+      "why": "The curly brackets are printed as they are.",
+      "fix": "Start the string with `f`."
+    },
+    {
+      "mistake": "Using a round bracket instead of curly brackets inside an f-string.",
+      "why": "Only `{ }` fill in a value.",
+      "fix": "Write `{name}`."
+    },
+    {
+      "mistake": "Using `+` to join a string and a number.",
+      "why": "Python raises `TypeError`.",
+      "fix": "Use an f-string, or `str(number)`."
+    },
+    {
+      "mistake": "Counting spaces by hand in a table.",
+      "why": "It is easy to be one space off.",
+      "fix": "Use alignment: `{name:<8}` and `{price:>6.2f}`."
+    }
+  ],
+  "quiz": [
+    {
+      "question": "What does `f\"Hi {name}\"` do when `name` is `\"Sam\"`?",
+      "options": [
+        "It makes `Hi Sam`",
+        "It makes `Hi {name}`",
+        "It raises an error",
+        "It makes `Hi name`"
+      ],
+      "answer": 0,
+      "explanation": "The `f` fills in the value inside the curly brackets."
+    },
+    {
+      "question": "What does `f\"{2.5:.2f}\"` give?",
+      "options": [
+        "2.50",
+        "2.5",
+        "2",
+        "0.25"
+      ],
+      "answer": 0,
+      "explanation": "`.2f` means 2 decimals."
+    },
+    {
+      "question": "What does `\"ha\" * 3` give?",
+      "options": [
+        "hahaha",
+        "ha3",
+        "ha ha ha",
+        "An error"
+      ],
+      "answer": 0,
+      "explanation": "A string times a number repeats the string."
+    }
+  ],
+  "challenge": {
+    "title": "A receipt",
+    "prompt": "Print a two-line receipt for `item = \"Tea\"`, `qty = 3` and `price = 2.5`:\n\n```\nTea     x3\nTotal:   7.50\n```\n\nThe first line has the item left-aligned in 8 characters, then `x` and the quantity. The second line has `Total: ` and then the total right-aligned in 6 characters with 2 decimals.",
+    "stretch": "Add a third line with 10% tip.",
+    "starterCode": "item = \"Tea\"\nqty = 3\nprice = 2.5\n# print the receipt",
+    "tests": [
+      {
+        "output": "Tea     x3\nTotal:   7.50"
+      }
+    ],
+    "hints": [
+      "The total is `qty * price`.",
+      "`print(f\"{item:<8}x{qty}\")` and `print(f\"Total: {total:>6.2f}\")`."
+    ],
+    "solution": "item = \"Tea\"\nqty = 3\nprice = 2.5\ntotal = qty * price\nprint(f\"{item:<8}x{qty}\")\nprint(f\"Total: {total:>6.2f}\")"
+  },
+  "review": {
+    "from": "m01-fundamentals/04-numbers",
+    "question": "What does `10 % 3` give?",
+    "options": [
+      "1",
+      "3",
+      "3.33",
+      "0"
+    ],
+    "answer": 0,
+    "explanation": "10 divided by 3 is 3 with 1 left over. `%` gives the leftover."
+  }
+}

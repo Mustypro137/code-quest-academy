@@ -1,4 +1,5 @@
 import { setTheme } from './store.js';
+import { MOVES } from './moves.js';
 import { loadModules, loadLesson, loadData } from './content.js';
 import { applyAppearance, effectiveTheme } from './appearance.js';
 import { renderModule, renderMessage } from './ui/home.js';
@@ -63,7 +64,8 @@ const routes = [
     const module = (await loadModules()).find((m) => m.id === moduleId);
     if (!module?.lessons.some((l) => l.id === lessonId)) return notFound;
     const lesson = await loadLesson(moduleId, lessonId);
-    return () => renderLesson(main, module, lessonId, lesson);
+    const modules = await loadModules();
+    return () => renderLesson(main, module, lessonId, lesson, modules);
   } },
 ];
 
@@ -76,9 +78,25 @@ function markNav(active) {
   });
 }
 
+// Old links: a lesson that moved opens in its new place, and the old module pages open the roadmap.
+function currentPath() {
+  const path = location.hash.slice(1);
+  const lesson = path.match(/^\/lesson\/([\w-]+)\/([\w-]+)$/);
+  if (lesson && MOVES[lesson[1] + '/' + lesson[2]]) {
+    const target = '/lesson/' + MOVES[lesson[1] + '/' + lesson[2]];
+    history.replaceState(null, '', '#' + target);
+    return target;
+  }
+  if (/^\/module\/(python-basics|automation)$/.test(path)) {
+    history.replaceState(null, '', '#/roadmap');
+    return '/roadmap';
+  }
+  return path;
+}
+
 async function route() {
   const mine = ++latest;
-  const path = location.hash.slice(1);
+  const path = currentPath();
   main.setAttribute('aria-busy', 'true');
   if (!main.firstChild) main.innerHTML = '<p class="loading">Loading…</p>';
   let draw = notFound;

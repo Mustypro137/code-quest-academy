@@ -41,11 +41,29 @@ function moduleSection(module, open) {
       <summary>
         <span class="icon" aria-hidden="true">${esc(module.icon)}</span>
         <span class="road-title">${esc(module.title)}</span>
-        <span class="road-count">${done} / ${total}</span>
+        <span class="road-count">${total ? `${done} / ${total}` : 'Coming soon'}</span>
         ${bar(total ? (done / total) * 100 : 0, `${module.title} progress`)}
       </summary>
-      <ol class="path">${rows}</ol>
+      ${total ? `<ol class="path">${rows}</ol>` : `<p class="muted road-soon">${esc(module.blurb)} The lessons are coming soon.</p>`}
     </details>`;
+}
+
+// The Python path is shown in numbered stages. The other modules come after it.
+function sections(modules, next) {
+  const stages = [...new Set(modules.filter((m) => m.track).map((m) => m.stage))];
+  let html = '';
+  let last = null;
+  for (const m of modules) {
+    const group = m.track ? m.stage : 'more';
+    if (group !== last) {
+      last = group;
+      html += m.track
+        ? `<h2 class="stage">Stage ${stages.indexOf(m.stage) + 1}: ${esc(m.stageTitle)}</h2>`
+        : '<h2 class="stage">More modules</h2>';
+    }
+    html += moduleSection(m, next ? m.id === next.module.id : false);
+  }
+  return html;
 }
 
 export function renderRoadmap(root, modules) {
@@ -54,7 +72,7 @@ export function renderRoadmap(root, modules) {
     <h1>Learning roadmap</h1>
     <p class="muted">Follow each path from top to bottom. <strong>✓</strong> done, <strong>▶</strong> up next, <strong>🔒</strong> locked until the lesson before it is done.
       Locks are only a suggestion: you can always start a locked lesson anyway.</p>
-    ${modules.map((m) => moduleSection(m, next ? m.id === next.module.id : false)).join('')}`;
+    ${sections(modules, next)}`;
   root.querySelectorAll('button.node-link').forEach((button) => {
     button.addEventListener('click', () => {
       const note = root.querySelector(`#${button.getAttribute('aria-controls')}`);

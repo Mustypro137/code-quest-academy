@@ -40,6 +40,16 @@ for (const file of process.argv.slice(2)) {
   let lesson;
   try { lesson = JSON.parse(fs.readFileSync(file, 'utf8')); } catch (e) { fail(file, 'not valid JSON: ' + e.message); continue; }
   for (const key of ['title', 'objective']) if (typeof lesson[key] !== 'string' || !lesson[key]) fail(file, `missing ${key}`);
+  if (lesson.kind === 'checkpoint') {
+    // A checkpoint: a quiz with a pass mark (each question says which lesson it is from) and a combined challenge.
+    if (!(lesson.passPercent > 0 && lesson.passPercent <= 100)) fail(file, 'checkpoint needs passPercent');
+    if (!Array.isArray(lesson.quiz) || lesson.quiz.length < 6) fail(file, 'checkpoint needs at least 6 quiz questions');
+    (lesson.quiz ?? []).forEach((qn, i) => { checkQuestion(file, `quiz ${i + 1}`, qn); if (!qn.from) fail(file, `quiz ${i + 1}: needs "from" (the lesson it comes from)`); });
+    if (!Array.isArray(lesson.exercises) || !lesson.exercises.length) fail(file, 'checkpoint needs a combined challenge in exercises');
+    (lesson.exercises ?? []).forEach((e, i) => checkTask(file, `challenge ${i + 1}`, e, 'starterCode'));
+    console.log(`checked ${path.basename(file)}: checkpoint with ${(lesson.quiz ?? []).length} questions and ${(lesson.exercises ?? []).length} challenge`);
+    continue;
+  }
   if (!['browser', 'pc'].includes(lesson.kind)) fail(file, 'kind must be "browser" or "pc"');
   if (!Array.isArray(lesson.prerequisites)) fail(file, 'prerequisites must be a list (it can be empty)');
   if (!Array.isArray(lesson.explanation) || !lesson.explanation.length) fail(file, 'missing explanation');
@@ -63,7 +73,9 @@ for (const file of process.argv.slice(2)) {
   (lesson.quiz ?? []).forEach((qn, i) => checkQuestion(file, `quiz ${i + 1}`, qn));
   if (!lesson.challenge) fail(file, 'needs a mini-challenge');
   else { if (!lesson.challenge.title) fail(file, 'challenge needs a title'); checkTask(file, 'challenge', lesson.challenge, 'starterCode'); }
-  if (!lesson.review?.from) fail(file, 'review needs "from" (an earlier lesson)');
+  // The very first lesson of the path has no earlier lesson to review.
+  if (!lesson.review) { if (path.basename(file) !== '01-how-programs-run.json') fail(file, 'needs a review question from an earlier lesson'); }
+  else if (!lesson.review.from) fail(file, 'review needs "from" (an earlier lesson)');
   else checkQuestion(file, 'review', lesson.review);
   console.log(`checked ${path.basename(file)}: ${ex.length} exercises, ${(lesson.debug ?? []).length} debug tasks, challenge, ${(lesson.quiz ?? []).length} quiz questions, review`);
 }

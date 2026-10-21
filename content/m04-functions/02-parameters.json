@@ -1,0 +1,303 @@
+{
+  "title": "Parameters: positional, keyword and default",
+  "objective": "Pass values to a function by position and by name, give parameters default values, and accept any number of values with `*args` and `**kwargs`.",
+  "kind": "browser",
+  "prerequisites": [
+    "m04-functions/01-defining-functions"
+  ],
+  "explanation": [
+    {
+      "type": "text",
+      "text": "You can give arguments to a function in two ways. **Positional** arguments are matched by their place. **Keyword** arguments are matched by name, so the order does not matter."
+    },
+    {
+      "type": "code",
+      "code": "def order(item, quantity=1):\n    return f\"{quantity} x {item}\"\n\nprint(order(\"tea\", 2))             # positional\nprint(order(quantity=3, item=\"cake\"))   # keyword"
+    },
+    {
+      "type": "text",
+      "text": "A **default value** (`quantity=1`) is used when the caller gives nothing. Parameters with defaults must come **after** the ones without."
+    },
+    {
+      "type": "text",
+      "text": "Two special names collect extra values. `*args` gathers extra positional arguments into a **tuple**. `**kwargs` gathers extra keyword arguments into a **dictionary**."
+    },
+    {
+      "type": "code",
+      "code": "def total(*numbers):\n    return sum(numbers)\n\nprint(total(1, 2, 3))   # 6"
+    },
+    {
+      "type": "tip",
+      "text": "Never use a list or a dictionary as a default value, like `items=[]`. The same list is shared by every call. Use `None` and make the list inside the function."
+    },
+    {
+      "type": "text",
+      "text": "A `*` or `**` **when calling** unpacks a list or dictionary into arguments: `total(*[1, 2, 3])`."
+    }
+  ],
+  "walkthrough": [
+    {
+      "title": "Keyword-only and default parameters",
+      "code": "def order(item, quantity=1, *, gift=False):\n    note = \" (gift)\" if gift else \"\"\n    return f\"{quantity} x {item}{note}\"",
+      "lines": [
+        {
+          "line": "def order(item, quantity=1, *, gift=False):",
+          "explain": "`item` is required. `quantity` has a default. The lone `*` means everything after it must be given by name."
+        },
+        {
+          "line": "note = \" (gift)\" if gift else \"\"",
+          "explain": "A one-line choice: the text `\" (gift)\"` when `gift` is true, otherwise an empty text."
+        },
+        {
+          "line": "return f\"{quantity} x {item}{note}\"",
+          "explain": "An f-string puts the three values into one text. The caller gets that text."
+        }
+      ]
+    },
+    {
+      "title": "Collecting extra arguments",
+      "code": "def show(*args, **kwargs):\n    return args, kwargs\n\nresult = show(1, 2, colour=\"red\")",
+      "lines": [
+        {
+          "line": "def show(*args, **kwargs):",
+          "explain": "Any number of positional values go into `args`. Any named values go into `kwargs`."
+        },
+        {
+          "line": "return args, kwargs",
+          "explain": "Returns a tuple and a dictionary together as one tuple: `((1, 2), {\"colour\": \"red\"})`."
+        },
+        {
+          "line": "result = show(1, 2, colour=\"red\")",
+          "explain": "`1` and `2` are positional, so they land in `args`. `colour=\"red\"` is a keyword, so it lands in `kwargs`."
+        }
+      ]
+    }
+  ],
+  "examples": [
+    {
+      "title": "Positional and keyword",
+      "code": "def order(item, quantity=1):\n    return f\"{quantity} x {item}\"\n\nprint(order(\"tea\", 2))\nprint(order(quantity=3, item=\"cake\"))\nprint(order(\"juice\"))"
+    },
+    {
+      "title": "Any number of values",
+      "code": "def total(*numbers):\n    return sum(numbers)\n\nprint(total())\nprint(total(1, 2, 3))\nvalues = [10, 20, 30]\nprint(total(*values))"
+    },
+    {
+      "title": "Collect keyword arguments",
+      "code": "def describe(**details):\n    return sorted(details.items())\n\nprint(describe(name=\"Ada\", age=36))"
+    }
+  ],
+  "exercises": [
+    {
+      "level": "easy",
+      "prompt": "Write `volume(length, width=1, height=1)`. It returns length times width times height.",
+      "starterCode": "def volume(length, width=1, height=1):\n    # your code here\n    pass",
+      "tests": [
+        {
+          "call": "volume(2)",
+          "returns": "2"
+        },
+        {
+          "call": "volume(2, 3)",
+          "returns": "6"
+        },
+        {
+          "call": "volume(2, 3, 4)",
+          "returns": "24"
+        },
+        {
+          "call": "volume(2, height=5)",
+          "returns": "10"
+        }
+      ],
+      "hints": [
+        "Multiply the three parameters.",
+        "The defaults make a missing size count as 1."
+      ],
+      "solution": "def volume(length, width=1, height=1):\n    return length * width * height"
+    },
+    {
+      "level": "medium",
+      "prompt": "Write `average(*numbers)`. It returns the average of all the numbers it gets. With no numbers it returns `0`.",
+      "starterCode": "def average(*numbers):\n    # your code here\n    pass",
+      "tests": [
+        {
+          "call": "average(2, 4, 6)",
+          "returns": "4.0"
+        },
+        {
+          "call": "average()",
+          "returns": "0"
+        },
+        {
+          "call": "average(5)",
+          "returns": "5.0"
+        }
+      ],
+      "hints": [
+        "`numbers` is a tuple. `len(numbers)` and `sum(numbers)` work on it.",
+        "Check for no numbers first: `if not numbers:`."
+      ],
+      "solution": "def average(*numbers):\n    if not numbers:\n        return 0\n    return sum(numbers) / len(numbers)"
+    },
+    {
+      "level": "hard",
+      "prompt": "Write `make_tag(name, **attrs)`. It returns an HTML-like tag. The attributes go in alphabetical order of their names.\n\nFor example `make_tag(\"a\", href=\"x\", id=\"y\")` gives `<a href=\"x\" id=\"y\">`, and `make_tag(\"br\")` gives `<br>`.",
+      "starterCode": "def make_tag(name, **attrs):\n    # your code here\n    pass",
+      "tests": [
+        {
+          "call": "make_tag('a', href='x', id='y')",
+          "returns": "'<a href=\"x\" id=\"y\">'"
+        },
+        {
+          "call": "make_tag('br')",
+          "returns": "'<br>'"
+        },
+        {
+          "call": "make_tag('p', id='z', class_='big')",
+          "returns": "'<p class_=\"big\" id=\"z\">'"
+        }
+      ],
+      "hints": [
+        "`attrs` is a dictionary. `sorted(attrs.items())` gives the pairs in order.",
+        "Build each part as `f' {key}=\"{value}\"'`, join them, and put the result after the name."
+      ],
+      "solution": "def make_tag(name, **attrs):\n    parts = \"\".join(f' {key}=\"{value}\"' for key, value in sorted(attrs.items()))\n    return f\"<{name}{parts}>\""
+    }
+  ],
+  "debug": [
+    {
+      "title": "The list that remembers",
+      "symptom": "add_item('b') returns ['a', 'b'] but you expected ['b']",
+      "prompt": "Fix `add_item` so that a call without a list starts with a **new** empty list every time.",
+      "brokenCode": "def add_item(item, items=[]):\n    items.append(item)\n    return items",
+      "tests": [
+        {
+          "call": "add_item('b')",
+          "returns": "['b']",
+          "setup": "x = add_item('a')"
+        },
+        {
+          "call": "add_item('c', ['z'])",
+          "returns": "['z', 'c']"
+        }
+      ],
+      "hints": [
+        "A default value is made **once**, when the function is defined. Every call then shares that one list.",
+        "Use `items=None`, and inside the function write `if items is None: items = []`."
+      ],
+      "solution": "def add_item(item, items=None):\n    if items is None:\n        items = []\n    items.append(item)\n    return items"
+    },
+    {
+      "title": "A missing argument",
+      "symptom": "TypeError: greet() missing 1 required positional argument: 'name'",
+      "prompt": "Fix the call so that `message` is `Hi, Sam!`.",
+      "brokenCode": "def greet(name, greeting=\"Hello\"):\n    return f\"{greeting}, {name}!\"\n\nmessage = greet(greeting=\"Hi\")",
+      "tests": [
+        {
+          "call": "message",
+          "returns": "'Hi, Sam!'"
+        }
+      ],
+      "hints": [
+        "`name` has no default, so the call must give it.",
+        "Add `\"Sam\"` as the first argument: `greet(\"Sam\", greeting=\"Hi\")`."
+      ],
+      "solution": "def greet(name, greeting=\"Hello\"):\n    return f\"{greeting}, {name}!\"\n\nmessage = greet(\"Sam\", greeting=\"Hi\")"
+    }
+  ],
+  "mistakes": [
+    {
+      "mistake": "Using a list or dictionary as a default value.",
+      "why": "It is created once and shared by every call that uses the default.",
+      "fix": "Default to `None`, and create the list inside the function."
+    },
+    {
+      "mistake": "Putting a positional argument after a keyword argument.",
+      "why": "Python raises `SyntaxError: positional argument follows keyword argument`.",
+      "fix": "Give positional arguments first, then keywords."
+    },
+    {
+      "mistake": "Putting a parameter with a default before one without.",
+      "why": "Python raises `SyntaxError: non-default argument follows default argument`.",
+      "fix": "Required parameters first, defaults last."
+    },
+    {
+      "mistake": "Forgetting that `*args` is a tuple and `**kwargs` is a dictionary.",
+      "why": "You cannot change a tuple, and a dictionary needs `.items()` to be looped over.",
+      "fix": "Convert with `list(args)` or loop with `kwargs.items()`."
+    }
+  ],
+  "quiz": [
+    {
+      "question": "What is `args` in `def f(*args)`?",
+      "options": [
+        "A tuple of the extra positional values",
+        "A list of keyword values",
+        "A dictionary",
+        "Always empty"
+      ],
+      "answer": 0,
+      "explanation": "`*args` gathers extra positional arguments into a tuple."
+    },
+    {
+      "question": "What does `**kwargs` collect?",
+      "options": [
+        "Extra keyword arguments, as a dictionary",
+        "Extra positional arguments",
+        "A list",
+        "Nothing"
+      ],
+      "answer": 0,
+      "explanation": "`**kwargs` gathers extra named arguments into a dictionary."
+    },
+    {
+      "question": "Why is `def f(items=[])` risky?",
+      "options": [
+        "The same list is shared by every call that uses the default",
+        "Lists cannot be defaults",
+        "It is a syntax error",
+        "It is slow"
+      ],
+      "answer": 0,
+      "explanation": "The default is made once. Changes to it stay for the next call."
+    }
+  ],
+  "challenge": {
+    "title": "A URL builder",
+    "prompt": "Write `make_url(base, *parts, **query)`. It joins the base and the parts with `/`. If there are keyword arguments, it adds `?` and the settings as `key=value` joined with `&`, in alphabetical order of the keys.\n\nFor example `make_url(\"https://x.com\", \"search\", q=\"py\", page=2)` gives `https://x.com/search?page=2&q=py`.",
+    "stretch": "Make the function skip query values that are `None`.",
+    "starterCode": "def make_url(base, *parts, **query):\n    # your code here\n    pass",
+    "tests": [
+      {
+        "call": "make_url('https://x.com', 'a', 'b')",
+        "returns": "'https://x.com/a/b'"
+      },
+      {
+        "call": "make_url('https://x.com', 'search', q='py', page=2)",
+        "returns": "'https://x.com/search?page=2&q=py'"
+      },
+      {
+        "call": "make_url('https://x.com')",
+        "returns": "'https://x.com'"
+      }
+    ],
+    "hints": [
+      "`\"/\".join([base, *parts])` joins the base and the parts.",
+      "Only add the `?` part when `query` is not empty."
+    ],
+    "solution": "def make_url(base, *parts, **query):\n    url = \"/\".join([base.rstrip(\"/\"), *parts])\n    if query:\n        url += \"?\" + \"&\".join(f\"{key}={value}\" for key, value in sorted(query.items()))\n    return url"
+  },
+  "review": {
+    "from": "m04-functions/01-defining-functions",
+    "question": "A function has no `return` statement. What does calling it give back?",
+    "options": [
+      "None",
+      "0",
+      "An empty text",
+      "An error"
+    ],
+    "answer": 0,
+    "explanation": "A function without `return` gives back `None`."
+  }
+}

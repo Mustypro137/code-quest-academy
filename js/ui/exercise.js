@@ -15,13 +15,14 @@ export function renderPrompt(prompt) {
 // after TRIES_BEFORE_SOLUTION failed checks (or once the exercise is solved).
 // ex: { prompt, starterCode, tests, hints, solution, input? }  (input: lines for input() calls)
 export function mountExercise(el, moduleId, lessonId, number, ex) {
+  const heading = ex.heading ?? `Exercise ${number + 1}${ex.level ? ' · ' + ex.level.charAt(0).toUpperCase() + ex.level.slice(1) : ''}`;
   let failed = 0;
   let solved = isExerciseDone(moduleId, lessonId, number);
   let hintsShown = 0;
   const hints = ex.hints ?? [];
 
   el.innerHTML = `
-    <h3>Exercise ${number + 1}${solved ? ' <span class="done-mark">✓ Solved</span>' : ''}</h3>
+    <h3>${esc(heading)}${solved ? ' <span class="done-mark">✓ Solved</span>' : ''}</h3>
     ${renderPrompt(ex.prompt)}
     <div class="codebox"></div>
     <p class="exercise-status" role="status"></p>
@@ -70,7 +71,7 @@ export function mountExercise(el, moduleId, lessonId, number, ex) {
         const gained = completeExercise(moduleId, lessonId, number);
         solved = true;
         status.textContent = gained ? `✓ Solved! +${EXERCISE_XP} XP` : '✓ Solved again. Nice!';
-        el.querySelector('h3').innerHTML = `Exercise ${number + 1} <span class="done-mark">✓ Solved</span>`;
+        el.querySelector('h3').innerHTML = `${esc(heading)} <span class="done-mark">✓ Solved</span>`;
       } else {
         failed++;
         status.textContent = '';

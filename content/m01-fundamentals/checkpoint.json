@@ -1,0 +1,129 @@
+{
+  "title": "Fundamentals checkpoint",
+  "objective": "Show what you learned in this module, and what you still remember from the ones before it.",
+  "kind": "checkpoint",
+  "passPercent": 70,
+  "explanation": [
+    {
+      "type": "text",
+      "text": "This checkpoint covers: how a program runs, print, variables, numbers, f-strings and input. Answer the quiz (70% passes), then solve the combined challenge. Questions come from this module and from earlier ones, so old ideas stay fresh."
+    }
+  ],
+  "quiz": [
+    {
+      "from": "m01-fundamentals/01-how-programs-run",
+      "question": "In what order does Python run the lines of a program?",
+      "options": [
+        "From top to bottom, one at a time",
+        "From bottom to top",
+        "In alphabetical order",
+        "All at once"
+      ],
+      "answer": 0,
+      "explanation": "Python follows the lines in order."
+    },
+    {
+      "from": "m01-fundamentals/02-print",
+      "question": "What does `print(\"a\", \"b\", sep=\"-\")` show?",
+      "options": [
+        "a-b",
+        "a b",
+        "ab",
+        "a, b"
+      ],
+      "answer": 0,
+      "explanation": "`sep` sets what goes between the things."
+    },
+    {
+      "from": "m01-fundamentals/03-variables",
+      "question": "After `x = 3` and then `x = x + 1`, what is `x`?",
+      "options": [
+        "4",
+        "3",
+        "31",
+        "An error"
+      ],
+      "answer": 0,
+      "explanation": "Python works out the right side first, then stores it back."
+    },
+    {
+      "from": "m01-fundamentals/03-variables",
+      "question": "Which is a good variable name?",
+      "options": [
+        "`first_name`",
+        "`first name`",
+        "`1st_name`",
+        "`first-name`"
+      ],
+      "answer": 0,
+      "explanation": "Lowercase letters and underscores only, and not starting with a number."
+    },
+    {
+      "from": "m01-fundamentals/04-numbers",
+      "question": "What is `17 % 5`?",
+      "options": [
+        "2",
+        "3",
+        "3.4",
+        "12"
+      ],
+      "answer": 0,
+      "explanation": "17 divided by 5 is 3 with 2 left over."
+    },
+    {
+      "from": "m01-fundamentals/04-numbers",
+      "question": "Which gives the whole-number part of `17 / 5`?",
+      "options": [
+        "`17 // 5`",
+        "`17 % 5`",
+        "`17 ** 5`",
+        "`17 - 5`"
+      ],
+      "answer": 0,
+      "explanation": "`//` divides and drops the decimal part."
+    },
+    {
+      "from": "m01-fundamentals/05-text-fstrings",
+      "question": "What does `f\"{2.5:.2f}\"` give?",
+      "options": [
+        "2.50",
+        "2.5",
+        "2",
+        "0.25"
+      ],
+      "answer": 0,
+      "explanation": "`.2f` means 2 decimals."
+    },
+    {
+      "from": "m01-fundamentals/06-input-output",
+      "question": "What type does `input()` give back?",
+      "options": [
+        "Text",
+        "A number",
+        "A list",
+        "True or False"
+      ],
+      "answer": 0,
+      "explanation": "Always text. Convert it with `int()` or `float()`."
+    }
+  ],
+  "exercises": [
+    {
+      "title": "A receipt calculator",
+      "prompt": "Read three lines with `input()`: the item name, the price (a decimal number) and the quantity (a whole number). Print one line like this: `3 x tea = 7.50`. The total has 2 decimals. The Input box has the lines `tea`, `2.5` and `3`.",
+      "input": "tea\n2.5\n3",
+      "starterCode": "# Read the item, the price and the quantity\n",
+      "tests": [
+        {
+          "contains": "3 x tea = 7.50"
+        }
+      ],
+      "hints": [
+        "Use `input()` three times. Use `float()` for the price and `int()` for the quantity.",
+        "`print(f\"{qty} x {item} = {price * qty:.2f}\")`."
+      ],
+      "solution": "item = input()\nprice = float(input())\nqty = int(input())\nprint(f\"{qty} x {item} = {price * qty:.2f}\")",
+      "level": "hard"
+    }
+  ]
+}

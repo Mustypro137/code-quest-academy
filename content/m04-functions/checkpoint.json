@@ -1,0 +1,141 @@
+{
+  "title": "Functions checkpoint",
+  "objective": "Show what you learned in this module, and what you still remember from the ones before it.",
+  "kind": "checkpoint",
+  "passPercent": 70,
+  "explanation": [
+    {
+      "type": "text",
+      "text": "This checkpoint covers: defining functions, parameters, return values, scope, and small functions, plus variables, conditions and lists from earlier. Answer the quiz (70% passes), then solve the combined challenge. Questions come from this module and from earlier ones, so old ideas stay fresh."
+    }
+  ],
+  "quiz": [
+    {
+      "from": "m04-functions/01-defining-functions",
+      "question": "Which keyword starts a function definition?",
+      "options": [
+        "def",
+        "function",
+        "fun",
+        "define"
+      ],
+      "answer": 0,
+      "explanation": "Python uses `def`."
+    },
+    {
+      "from": "m04-functions/02-parameters",
+      "question": "Which parameter collects extra keyword arguments?",
+      "options": [
+        "`**kwargs`",
+        "`*args`",
+        "`kwargs`",
+        "`args**`"
+      ],
+      "answer": 0,
+      "explanation": "`**kwargs` makes a dictionary of the extra named values."
+    },
+    {
+      "from": "m04-functions/03-return-values",
+      "question": "What does a function give back when it has no `return` line?",
+      "options": [
+        "None",
+        "0",
+        "An empty text",
+        "Nothing happens"
+      ],
+      "answer": 0,
+      "explanation": "It gives back `None`."
+    },
+    {
+      "from": "m04-functions/04-scope",
+      "question": "Which keyword lets an inner function change a name of the function around it?",
+      "options": [
+        "`nonlocal`",
+        "`global`",
+        "`outer`",
+        "`shared`"
+      ],
+      "answer": 0,
+      "explanation": "`nonlocal` points the name at the enclosing function."
+    },
+    {
+      "from": "m04-functions/05-small-functions",
+      "question": "Where does a docstring go?",
+      "options": [
+        "As the first thing inside the function",
+        "After the last line",
+        "In a separate file",
+        "In the function name"
+      ],
+      "answer": 0,
+      "explanation": "A docstring is a triple-quoted text under the `def` line."
+    },
+    {
+      "from": "m01-fundamentals/03-variables",
+      "question": "After `x = 5` and then `x = x + 1`, what is `x`?",
+      "options": [
+        "6",
+        "5",
+        "51",
+        "An error"
+      ],
+      "answer": 0,
+      "explanation": "The right side is worked out first (5 + 1), then stored in `x`."
+    },
+    {
+      "from": "m02-decisions-loops/02-conditions",
+      "question": "What does `if x > 3 and x < 10:` check?",
+      "options": [
+        "That `x` is between 3 and 10, not counting 3 and 10",
+        "That `x` is 3 or 10",
+        "That `x` is more than 10",
+        "Nothing"
+      ],
+      "answer": 0,
+      "explanation": "`and` needs both parts to be true."
+    },
+    {
+      "from": "m03-collections/02-lists",
+      "question": "What is `[1, 2, 3][1]`?",
+      "options": [
+        "2",
+        "1",
+        "3",
+        "An error"
+      ],
+      "answer": 0,
+      "explanation": "Counting starts at 0, so index 1 is the second item."
+    }
+  ],
+  "exercises": [
+    {
+      "title": "Number statistics",
+      "prompt": "Write `stats(*numbers, digits=1)`. It returns a tuple `(count, total, average)`. The average is rounded to `digits` decimals. With no numbers, it returns `(0, 0, 0)`.\n\nFor example `stats(1, 2, 4)` is `(3, 7, 2.3)`, and `stats(1, 2, 4, digits=2)` is `(3, 7, 2.33)`.",
+      "starterCode": "def stats(*numbers, digits=1):\n    # your code here\n    pass",
+      "tests": [
+        {
+          "call": "stats(1, 2, 4)",
+          "returns": "(3, 7, 2.3)"
+        },
+        {
+          "call": "stats(1, 2, 4, digits=2)",
+          "returns": "(3, 7, 2.33)"
+        },
+        {
+          "call": "stats()",
+          "returns": "(0, 0, 0)"
+        },
+        {
+          "call": "stats(5)",
+          "returns": "(1, 5, 5.0)"
+        }
+      ],
+      "hints": [
+        "`numbers` is a tuple. Check `if not numbers:` first.",
+        "The average is `round(sum(numbers) / len(numbers), digits)`."
+      ],
+      "solution": "def stats(*numbers, digits=1):\n    if not numbers:\n        return 0, 0, 0\n    total = sum(numbers)\n    return len(numbers), total, round(total / len(numbers), digits)",
+      "level": "hard"
+    }
+  ]
+}

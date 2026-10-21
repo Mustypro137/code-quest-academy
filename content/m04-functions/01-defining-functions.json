@@ -1,0 +1,269 @@
+{
+  "title": "Functions: reuse your code",
+  "objective": "Write a function with `def`, call it with arguments, and use `return` to give a result back.",
+  "kind": "browser",
+  "prerequisites": [
+    "m01-fundamentals/03-variables",
+    "m02-decisions-loops/02-conditions"
+  ],
+  "explanation": [
+    {
+      "type": "text",
+      "text": "A function is a named block of code. You write it once and use it many times. Use `def` to make one."
+    },
+    {
+      "type": "code",
+      "code": "def greet(name):\n    return \"Hello, \" + name\n\nmessage = greet(\"Sam\")\nprint(message)"
+    },
+    {
+      "type": "text",
+      "text": "`name` is a **parameter**: a name that receives a value. The value you give when you call the function is the **argument**. `return` sends a result back to the caller. The indented lines are the **body** of the function."
+    },
+    {
+      "type": "tip",
+      "text": "If a function has no `return`, it gives back `None`. A function that only prints is fine, but a function that returns a value is easier to reuse and to test."
+    }
+  ],
+  "walkthrough": [
+    {
+      "title": "A function with a parameter and a result",
+      "code": "def greet(name):\n    return \"Hello, \" + name\n\nmessage = greet(\"Sam\")\nprint(message)",
+      "lines": [
+        {
+          "line": "def greet(name):",
+          "explain": "`def` starts the function. `greet` is its name. `name` is the parameter. The colon opens the body."
+        },
+        {
+          "line": "return \"Hello, \" + name",
+          "explain": "Builds the text and sends it back to the caller. The function ends here. The line is indented, so it belongs to the function."
+        },
+        {
+          "line": "message = greet(\"Sam\")",
+          "explain": "Calls the function. `\"Sam\"` is the argument. The returned text is stored in `message`."
+        },
+        {
+          "line": "print(message)",
+          "explain": "Shows `Hello, Sam`. Calling `greet` alone would show nothing, because the function returns and does not print."
+        }
+      ]
+    }
+  ],
+  "examples": [
+    {
+      "title": "Default value",
+      "code": "def power(base, exponent=2):\n    return base ** exponent\n\nprint(power(5))     # 25\nprint(power(2, 3))  # 8"
+    },
+    {
+      "title": "Use the same function many times",
+      "code": "def shout(text):\n    return text.upper() + \"!\"\n\nfor word in [\"hello\", \"python\", \"code\"]:\n    print(shout(word))"
+    }
+  ],
+  "exercises": [
+    {
+      "level": "easy",
+      "prompt": "Write a function `double(n)` that returns `n` times 2.",
+      "starterCode": "def double(n):\n    # your code here\n    pass",
+      "tests": [
+        {
+          "call": "double(4)",
+          "returns": "8"
+        },
+        {
+          "call": "double(0)",
+          "returns": "0"
+        },
+        {
+          "call": "double(-3)",
+          "returns": "-6"
+        }
+      ],
+      "hints": [
+        "Use `return` to send the answer back.",
+        "The answer is `n * 2`."
+      ],
+      "solution": "def double(n):\n    return n * 2"
+    },
+    {
+      "level": "medium",
+      "prompt": "Write a function `greet(name, greeting=\"Hello\")` that returns the greeting, a comma, a space, and the name.\n\nFor example `greet(\"Sam\")` gives `Hello, Sam`.",
+      "starterCode": "def greet(name, greeting=\"Hello\"):\n    # your code here\n    pass",
+      "tests": [
+        {
+          "call": "greet('Sam')",
+          "returns": "'Hello, Sam'"
+        },
+        {
+          "call": "greet('Sam', 'Hi')",
+          "returns": "'Hi, Sam'"
+        }
+      ],
+      "hints": [
+        "Join text with `+`.",
+        "Do not forget the comma and the space: `\", \"`."
+      ],
+      "solution": "def greet(name, greeting=\"Hello\"):\n    return greeting + \", \" + name"
+    },
+    {
+      "level": "hard",
+      "prompt": "Write `grade(score)`. It returns `\"A\"` for 90 or more, `\"B\"` for 80 or more, `\"C\"` for 70 or more, and `\"F\"` for anything lower.",
+      "starterCode": "def grade(score):\n    # your code here\n    pass",
+      "tests": [
+        {
+          "call": "grade(95)",
+          "returns": "'A'"
+        },
+        {
+          "call": "grade(90)",
+          "returns": "'A'"
+        },
+        {
+          "call": "grade(80)",
+          "returns": "'B'"
+        },
+        {
+          "call": "grade(79)",
+          "returns": "'C'"
+        },
+        {
+          "call": "grade(69)",
+          "returns": "'F'"
+        }
+      ],
+      "hints": [
+        "Use `if`, `elif` and `else`.",
+        "A function can have several `return` lines. The first one that runs ends the function."
+      ],
+      "solution": "def grade(score):\n    if score >= 90:\n        return \"A\"\n    if score >= 80:\n        return \"B\"\n    if score >= 70:\n        return \"C\"\n    return \"F\""
+    }
+  ],
+  "debug": [
+    {
+      "title": "Printing is not returning",
+      "symptom": "TypeError: unsupported operand type(s) for +: 'NoneType' and 'int'",
+      "prompt": "Fix `double` so that `result` becomes `9`. Do not change the last line.",
+      "brokenCode": "def double(n):\n    print(n * 2)\n\nresult = double(4) + 1",
+      "tests": [
+        {
+          "call": "result",
+          "returns": "9"
+        }
+      ],
+      "hints": [
+        "`print` only shows a value on the screen. It does not give the value back to the caller.",
+        "A function with no `return` gives back `None`. Use `return` instead of `print`."
+      ],
+      "solution": "def double(n):\n    return n * 2\n\nresult = double(4) + 1"
+    },
+    {
+      "title": "The body is not indented",
+      "symptom": "IndentationError: expected an indented block after function definition on line 1",
+      "prompt": "Fix the code so that `greet(\"Sam\")` returns `Hello, Sam`.",
+      "brokenCode": "def greet(name):\nreturn \"Hello, \" + name",
+      "tests": [
+        {
+          "call": "greet('Sam')",
+          "returns": "'Hello, Sam'"
+        }
+      ],
+      "hints": [
+        "Python uses the spaces at the start of a line to know what belongs to the function.",
+        "Indent the `return` line by 4 spaces."
+      ],
+      "solution": "def greet(name):\n    return \"Hello, \" + name"
+    }
+  ],
+  "mistakes": [
+    {
+      "mistake": "Forgetting `return` and printing instead.",
+      "why": "The caller gets `None`, so you cannot use the result in more code.",
+      "fix": "Use `return` for results. Print only at the very end, to show them."
+    },
+    {
+      "mistake": "Writing `greet` instead of `greet(\"Sam\")`.",
+      "why": "Without brackets the function is not called. You only have the function itself.",
+      "fix": "Add brackets and the arguments: `greet(\"Sam\")`."
+    },
+    {
+      "mistake": "Defining a function but never calling it.",
+      "why": "The code inside only runs when the function is called.",
+      "fix": "Call it, and use or print the result."
+    },
+    {
+      "mistake": "Using a parameter name outside the function.",
+      "why": "`name` exists only while `greet` runs. Outside, Python says `NameError`.",
+      "fix": "Keep the result in a variable that you make outside."
+    }
+  ],
+  "quiz": [
+    {
+      "question": "Which keyword makes a function?",
+      "options": [
+        "function",
+        "def",
+        "make",
+        "func"
+      ],
+      "answer": 1,
+      "explanation": "Python uses `def` to define a function."
+    },
+    {
+      "question": "What does `return` do?",
+      "options": [
+        "Prints the value on the screen",
+        "Stops the program",
+        "Sends a value back to the caller",
+        "Deletes the function"
+      ],
+      "answer": 2,
+      "explanation": "`return` hands a result back to the code that called the function."
+    },
+    {
+      "question": "With `def power(base, exponent=2)`, what is `power(5)`?",
+      "options": [
+        "25",
+        "10",
+        "7",
+        "An error"
+      ],
+      "answer": 0,
+      "explanation": "`exponent` defaults to 2, so the answer is `5 ** 2`, which is 25."
+    }
+  ],
+  "challenge": {
+    "title": "A tip calculator",
+    "prompt": "Write `tip(amount, percent=10)`. It returns the tip for a bill, rounded to 2 decimals. For example `tip(50)` is `5.0`, and `tip(19.99, 15)` is `3.0`.",
+    "stretch": "Raise `ValueError(\"amount cannot be negative\")` when the amount is below zero.",
+    "starterCode": "def tip(amount, percent=10):\n    # your code here\n    pass",
+    "tests": [
+      {
+        "call": "tip(50)",
+        "returns": "5.0"
+      },
+      {
+        "call": "tip(19.99, 15)",
+        "returns": "3.0"
+      },
+      {
+        "call": "tip(0)",
+        "returns": "0.0"
+      }
+    ],
+    "hints": [
+      "The tip is `amount * percent / 100`.",
+      "Use `round(value, 2)`."
+    ],
+    "solution": "def tip(amount, percent=10):\n    return round(amount * percent / 100, 2)"
+  },
+  "review": {
+    "from": "m01-fundamentals/03-variables",
+    "question": "What does `age = 12` do?",
+    "options": [
+      "Makes a variable called `age` with the value 12",
+      "Checks whether `age` is 12",
+      "Prints 12",
+      "Deletes `age`"
+    ],
+    "answer": 0,
+    "explanation": "A single `=` stores a value in a name. Two equals signs (`==`) would compare."
+  }
+}

@@ -7,9 +7,26 @@ async function getJson(url) {
   return res.json();
 }
 
+// The Python path (content/curriculum.json) is a list of stages with modules. Each module ends with a checkpoint
+// when it has one. The other modules come from content/index.json. Path modules carry track, stage and stageTitle.
+function pathModules(curriculum) {
+  return curriculum.stages.flatMap((stage) => stage.modules.map((m) => ({
+    id: m.id,
+    icon: m.icon,
+    title: m.title,
+    blurb: m.summary,
+    track: 'python',
+    stage: stage.id,
+    stageTitle: stage.title,
+    lessons: m.lessons.length && m.checkpoint
+      ? [...m.lessons, { id: 'checkpoint', title: m.title + ' checkpoint', checkpoint: true }]
+      : m.lessons,
+  })));
+}
+
 export function loadModules() {
-  indexPromise ??= getJson('content/index.json')
-    .then((data) => data.modules)
+  indexPromise ??= Promise.all([getJson('content/curriculum.json'), getJson('content/index.json')])
+    .then(([curriculum, index]) => [...pathModules(curriculum), ...index.modules])
     .catch((err) => {
       indexPromise = undefined; // allow a retry
       throw err;

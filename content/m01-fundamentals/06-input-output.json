@@ -1,0 +1,266 @@
+{
+  "title": "Ask the user: input()",
+  "objective": "Read what a person types with `input()`, turn it into a number when needed, and print a clear answer.",
+  "kind": "browser",
+  "prerequisites": [
+    "m01-fundamentals/05-text-fstrings"
+  ],
+  "explanation": [
+    {
+      "type": "text",
+      "text": "So far your programs ran by themselves. With `input()` a program can **ask a question** and wait for the answer. The answer comes back as **text**."
+    },
+    {
+      "type": "code",
+      "code": "name = input(\"What is your name? \")\nprint(\"Hello, \" + name + \"!\")"
+    },
+    {
+      "type": "text",
+      "text": "**In this browser** there is no keyboard prompt. Instead, when your code has `input()`, an **Input** box appears under the code. Type the answers there, **one line for each** `input()`. When you press Run, the first `input()` gets the first line, the second gets the second line, and so on. The program shows the question and the answer like a terminal would."
+    },
+    {
+      "type": "text",
+      "text": "**On your own PC** the program stops and waits, and you type the answer yourself."
+    },
+    {
+      "type": "text",
+      "text": "`input()` always gives text. Even if you type `5`, you get the text `\"5\"`. To use it as a number, convert it with `int()` or `float()`."
+    },
+    {
+      "type": "code",
+      "code": "age = int(input(\"How old are you? \"))\nprint(\"Next year you will be\", age + 1)"
+    },
+    {
+      "type": "tip",
+      "text": "If you see `EOFError: input() needs another line`, the Input box has fewer lines than the program asks for. Add one line for each `input()`."
+    },
+    {
+      "type": "tip",
+      "text": "If you get a `ValueError` after `int(input())`, the line was not a whole number. Check the Input box for a typing mistake. (You will learn to handle that in the errors module.)"
+    },
+    {
+      "type": "pc",
+      "title": "ask and greet",
+      "text": "Save this as hello.py and run it with \"python hello.py\". The program waits for you to type.",
+      "code": "name = input(\"What is your name? \")\nage = int(input(\"How old are you? \"))\nprint(\"Hello,\", name, \"- next year you will be\", age + 1)"
+    }
+  ],
+  "walkthrough": [
+    {
+      "title": "Ask, convert, answer",
+      "code": "age = int(input(\"How old are you? \"))\nprint(\"Next year you will be\", age + 1)",
+      "lines": [
+        {
+          "line": "age = int(input(\"How old are you? \"))",
+          "explain": "`input(...)` shows the question and gets the answer as text. `int(...)` turns that text into a whole number. The number is stored in `age`."
+        },
+        {
+          "line": "print(\"Next year you will be\", age + 1)",
+          "explain": "Now `age` is a number, so `age + 1` works. Without `int`, this line would raise a `TypeError`."
+        }
+      ]
+    }
+  ],
+  "examples": [
+    {
+      "title": "Ask a name",
+      "input": "Ada",
+      "code": "name = input(\"Your name? \")\nprint(\"Nice to meet you,\", name)"
+    },
+    {
+      "title": "Add two numbers",
+      "input": "4\n5",
+      "code": "a = int(input(\"First number: \"))\nb = int(input(\"Second number: \"))\nprint(\"Sum:\", a + b)"
+    },
+    {
+      "title": "Ask and calculate",
+      "input": "3\n4",
+      "code": "width = float(input(\"Width: \"))\nheight = float(input(\"Height: \"))\nprint(f\"Area: {width * height}\")"
+    }
+  ],
+  "exercises": [
+    {
+      "level": "easy",
+      "prompt": "Read a name with `input()` and save it in a variable called `name`. Then print `Hello, ` and the name and `!`, for example `Hello, Sam!`.\n\nThe Input box has the line `Sam` for you.",
+      "starterCode": "# Read the name with input(), then print the greeting\n",
+      "tests": [
+        {
+          "call": "name",
+          "returns": "'Sam'"
+        },
+        {
+          "contains": "Hello, Sam!"
+        }
+      ],
+      "hints": [
+        "`name = input()` reads one line.",
+        "Join the pieces: `\"Hello, \" + name + \"!\"`."
+      ],
+      "solution": "name = input()\nprint(\"Hello, \" + name + \"!\")",
+      "input": "Sam"
+    },
+    {
+      "level": "medium",
+      "prompt": "Read two whole numbers with `input()` and save them in `a` and `b`. Then print their sum.\n\nThe Input box has the lines `4` and `5`.",
+      "starterCode": "# Read the numbers with input() and int()\na = 0\nb = 0\n",
+      "tests": [
+        {
+          "call": "a + b",
+          "returns": "9"
+        },
+        {
+          "contains": "9"
+        }
+      ],
+      "hints": [
+        "`input()` gives text. Use `int(input())`.",
+        "Call `input()` twice, once for each number."
+      ],
+      "solution": "a = int(input())\nb = int(input())\nprint(a + b)",
+      "input": "4\n5"
+    },
+    {
+      "level": "hard",
+      "prompt": "Read a name and then an age. Print one line like this: `Sam will be 13 next year`.\n\nThe Input box has the lines `Sam` and `12`.",
+      "starterCode": "# Read the name, then the age (a whole number)\n",
+      "tests": [
+        {
+          "contains": "Sam will be 13 next year"
+        }
+      ],
+      "hints": [
+        "Read the name first, because it is the first line.",
+        "Convert the age with `int()`, then use an f-string: `f\"{name} will be {age + 1} next year\"`."
+      ],
+      "solution": "name = input()\nage = int(input())\nprint(f\"{name} will be {age + 1} next year\")",
+      "input": "Sam\n12"
+    }
+  ],
+  "debug": [
+    {
+      "title": "Text is not a number",
+      "symptom": "TypeError: can only concatenate str (not \"int\") to str",
+      "prompt": "Fix the code so that it prints `13` when the Input box has `12`.",
+      "brokenCode": "age = input()\nprint(age + 1)\n",
+      "tests": [
+        {
+          "contains": "13"
+        }
+      ],
+      "hints": [
+        "`input()` always gives text, even for digits.",
+        "Wrap it: `int(input())`."
+      ],
+      "solution": "age = int(input())\nprint(age + 1)",
+      "input": "12"
+    },
+    {
+      "title": "The questions are in the wrong order",
+      "symptom": "ValueError: invalid literal for int() with base 10: 'Sam'",
+      "prompt": "The Input box has `Sam` and then `12`. Fix the code so that `name` is `Sam` and `age` is `12`.",
+      "brokenCode": "age = int(input(\"Age: \"))\nname = input(\"Name: \")\n",
+      "tests": [
+        {
+          "call": "name",
+          "returns": "'Sam'"
+        },
+        {
+          "call": "age",
+          "returns": "12"
+        }
+      ],
+      "hints": [
+        "The first `input()` gets the first line (`Sam`), the second gets the second line (`12`).",
+        "Swap the two lines."
+      ],
+      "solution": "name = input(\"Name: \")\nage = int(input(\"Age: \"))",
+      "input": "Sam\n12"
+    }
+  ],
+  "mistakes": [
+    {
+      "mistake": "Forgetting that `input()` gives text.",
+      "why": "Adding to the text raises `TypeError`, or two texts get joined instead of added (`\"4\" + \"5\"` is `\"45\"`).",
+      "fix": "Convert with `int()` or `float()` when you need a number."
+    },
+    {
+      "mistake": "Putting fewer lines in the Input box than the program asks for.",
+      "why": "The program raises `EOFError` when it asks for a line that is not there.",
+      "fix": "One line for each `input()` call."
+    },
+    {
+      "mistake": "Answering the questions in a different order from the code.",
+      "why": "The first `input()` takes the first line, whatever it is.",
+      "fix": "Match the order of the lines to the order of the questions."
+    },
+    {
+      "mistake": "Using `int()` on something that is not a whole number, such as `\"3.5\"`.",
+      "why": "Python raises `ValueError`.",
+      "fix": "Use `float()` for decimals."
+    }
+  ],
+  "quiz": [
+    {
+      "question": "What type of value does `input()` give back?",
+      "options": [
+        "Text (a string)",
+        "A number",
+        "A list",
+        "True or False"
+      ],
+      "answer": 0,
+      "explanation": "`input()` always gives text. Use `int()` or `float()` to make a number."
+    },
+    {
+      "question": "How do you read a whole number from the user?",
+      "options": [
+        "`number = int(input())`",
+        "`number = input()`",
+        "`number = str(input())`",
+        "`number = print(input())`"
+      ],
+      "answer": 0,
+      "explanation": "`int()` turns the text from `input()` into a whole number."
+    },
+    {
+      "question": "In this browser, where do the answers for `input()` go?",
+      "options": [
+        "In the Input box under the code, one line for each `input()`",
+        "In the output",
+        "In the quiz",
+        "Nowhere, it is not supported"
+      ],
+      "answer": 0,
+      "explanation": "The Input box gives the program its lines, one for each `input()` call."
+    }
+  ],
+  "challenge": {
+    "title": "A rectangle calculator",
+    "prompt": "Read the width and then the height of a rectangle (whole numbers). Print `Area: ` and the area. The Input box has the lines `4` and `5`, so the program should print `Area: 20`.",
+    "stretch": "Also print the perimeter on a second line.",
+    "starterCode": "# Read the width, then the height\n",
+    "tests": [
+      {
+        "contains": "Area: 20"
+      }
+    ],
+    "hints": [
+      "Two `input()` calls, each inside `int()`.",
+      "`print(\"Area:\", width * height)`."
+    ],
+    "solution": "width = int(input())\nheight = int(input())\nprint(\"Area:\", width * height)",
+    "input": "4\n5"
+  },
+  "review": {
+    "from": "m01-fundamentals/05-text-fstrings",
+    "question": "What does `f\"Hi {name}\"` do when `name` is `\"Sam\"`?",
+    "options": [
+      "It makes `Hi Sam`",
+      "It makes `Hi {name}`",
+      "It raises an error",
+      "It makes `Hi name`"
+    ],
+    "answer": 0,
+    "explanation": "The `f` fills in the value inside the curly brackets."
+  }
+}

@@ -12,8 +12,7 @@ I built it to learn by small steps: read a short lesson, run an example, solve a
 
 | Module | Lessons | Topics |
 |---|---|---|
-| Python Basics | 22 | Beginner to advanced: variables, loops, `input()`, functions, dictionaries, errors, tuples and sets, sorting, modules, regular expressions, classes, generators, decorators, recursion, dataclasses, the `with` statement |
-| Python Automation | 12 | Files, CSV, JSON, dates, cleaning data, reports, a customer list cleaner project, merging CSVs, duplicate files, email, web data, Excel |
+| **Python path** | 18 modules in 6 stages | Fundamentals, decisions and loops, collections, functions, modules and environments, errors and testing, files, paths, comprehensions to decorators, object-oriented programming, types and clean code, Git, HTTP and APIs, SQLite, pytest, concurrency, packaging and security, and capstone projects. Built module by module: fundamentals and functions are complete, the others fill in over time, and every module ends with a checkpoint. |
 | AI with Python | 6 | Prompts, messages, a fake model for testing, JSON replies, calling a real model, a message sorter project |
 | Projects & Portfolio | 6 | Choosing a project, structure, tests, error handling, Git and GitHub, building a portfolio |
 | LinkedIn & Communication | 4 | Profile, simple writing, posting about a project, writing a README |
@@ -73,7 +72,8 @@ js/
   ui/               dashboard, roadmap, progress, settings, rewards, practice rooms (challenge, revise, workshop,
                     writing), lesson, quiz, exercise, codebox, typing, backup
 content/
-  index.json        list of modules and lessons
+  curriculum.json   the Python path: stages, modules, lessons
+  index.json        the other modules and their lessons
   <module>/<lesson>.json
   glossary.json, workshop.json, writing.json   flashcards, project checklists, writing room drafts
 vendor/pyodide/     Python for the browser (version in its README)
@@ -85,7 +85,8 @@ A lesson is one JSON file, and no JavaScript changes are needed. See [docs/addin
 
 ## Known limits
 - `input()` does not wait for the keyboard in the browser. Type its answers in the Input box under the code, one line for each `input()`. `sys.stdin` is empty.
-- Only the Python standard library is available. Packages such as numpy are not included yet.
+- Python in the page has the standard library plus `sqlite3` and `pytest` (saved in the repository and loaded when a
+  program imports them). Other packages, such as numpy, are not included yet.
 - Email, web and Excel lessons show code to copy to your own PC. They cannot run in the browser.
 - Progress lives in one browser. Use Backup to move it to another.
 - The real-model lesson (AI with Python, lesson 5) needs an account and an API key, and it was not run during

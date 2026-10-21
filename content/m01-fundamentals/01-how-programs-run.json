@@ -1,0 +1,222 @@
+{
+  "title": "How a program runs",
+  "objective": "Explain what a program is, run one, and read a simple error message.",
+  "kind": "browser",
+  "prerequisites": [],
+  "explanation": [
+    {
+      "type": "text",
+      "text": "A **program** is a list of instructions for the computer. You write the instructions in a language such as Python. Python reads them **from top to bottom, one line at a time**, and does what each line says."
+    },
+    {
+      "type": "text",
+      "text": "Writing the program is not enough. You must **run** it. In this page you press the **Run** button. On your own computer you type `python my_file.py` in a terminal. Both do the same thing: Python reads your file and follows it."
+    },
+    {
+      "type": "code",
+      "code": "print(\"Step 1\")\nprint(\"Step 2\")\nprint(\"Step 3\")"
+    },
+    {
+      "type": "text",
+      "text": "Computers do exactly what you write, not what you mean. If a line has a mistake, Python stops and shows an **error message**. This is normal. Every programmer sees errors every day, and the message tells you what to fix."
+    },
+    {
+      "type": "list",
+      "items": [
+        "The **last line** of the message names the kind of error and says what is wrong.",
+        "The lines above say **where**: the line number of your code.",
+        "Read the message, look at that line, and fix one thing at a time."
+      ]
+    },
+    {
+      "type": "tip",
+      "text": "An error does not mean you broke anything. Nothing is damaged. Fix the line and press Run again."
+    }
+  ],
+  "walkthrough": [
+    {
+      "title": "Three lines, run in order",
+      "code": "print(\"Step 1\")\nprint(\"Step 2\")\nprint(\"Step 3\")",
+      "lines": [
+        {
+          "line": "print(\"Step 1\")",
+          "explain": "The first instruction. `print` shows the text on the screen. Python does this one first."
+        },
+        {
+          "line": "print(\"Step 2\")",
+          "explain": "Python goes down to the next line only when the line above is finished."
+        },
+        {
+          "line": "print(\"Step 3\")",
+          "explain": "The last line. When it is done, the program ends."
+        }
+      ]
+    }
+  ],
+  "examples": [
+    {
+      "title": "Lines run in order",
+      "code": "print(\"First\")\nprint(\"Second\")\nprint(\"Third\")"
+    },
+    {
+      "title": "What an error looks like (read only)",
+      "run": false,
+      "wrap": true,
+      "code": "print(\"Hello)\nSyntaxError: unterminated string literal (detected at line 1)\n\nThe last line says what is wrong: a quote was opened but never closed."
+    }
+  ],
+  "exercises": [
+    {
+      "level": "easy",
+      "prompt": "Print three lines: `one`, then `two`, then `three`.",
+      "starterCode": "# Write your code below\n",
+      "tests": [
+        {
+          "output": "one\ntwo\nthree"
+        }
+      ],
+      "hints": [
+        "Use one `print()` for each line.",
+        "Text goes inside quotes: `print(\"one\")`."
+      ],
+      "solution": "print(\"one\")\nprint(\"two\")\nprint(\"three\")"
+    },
+    {
+      "level": "medium",
+      "prompt": "This program makes tea, but the steps are in the wrong order. Change the order of the lines so that it prints:\n\n```\nBoil water\nPut tea in the cup\nAdd the water\nWait\nDrink\n```",
+      "starterCode": "print(\"Add the water\")\nprint(\"Drink\")\nprint(\"Boil water\")\nprint(\"Wait\")\nprint(\"Put tea in the cup\")",
+      "tests": [
+        {
+          "output": "Boil water\nPut tea in the cup\nAdd the water\nWait\nDrink"
+        }
+      ],
+      "hints": [
+        "Python runs the lines from top to bottom, so the order of the lines is the order of the output.",
+        "Move the lines, or retype them in the right order."
+      ],
+      "solution": "print(\"Boil water\")\nprint(\"Put tea in the cup\")\nprint(\"Add the water\")\nprint(\"Wait\")\nprint(\"Drink\")"
+    },
+    {
+      "level": "hard",
+      "prompt": "Print this small box. Type it exactly, with the same spaces:\n\n```\n+-----+\n| Hi! |\n+-----+\n```",
+      "starterCode": "# Write your code below\n",
+      "tests": [
+        {
+          "output": "+-----+\n| Hi! |\n+-----+"
+        }
+      ],
+      "hints": [
+        "Three `print()` lines.",
+        "Everything between the quotes is printed as it is, including spaces."
+      ],
+      "solution": "print(\"+-----+\")\nprint(\"| Hi! |\")\nprint(\"+-----+\")"
+    }
+  ],
+  "debug": [
+    {
+      "title": "A quote that never closes",
+      "symptom": "SyntaxError: unterminated string literal (detected at line 1)",
+      "prompt": "Fix the code so that it prints `Hello`.",
+      "brokenCode": "print(\"Hello)\n",
+      "tests": [
+        {
+          "output": "Hello"
+        }
+      ],
+      "hints": [
+        "Text needs a quote at the start **and** at the end.",
+        "Add the missing `\"` before the bracket."
+      ],
+      "solution": "print(\"Hello\")"
+    },
+    {
+      "title": "A misspelled name",
+      "symptom": "NameError: name 'Print' is not defined. Did you mean: 'print'?",
+      "prompt": "Fix the code so that it prints `Hi`.",
+      "brokenCode": "Print(\"Hi\")\n",
+      "tests": [
+        {
+          "output": "Hi"
+        }
+      ],
+      "hints": [
+        "Python cares about capital letters. `Print` and `print` are different names.",
+        "Use all small letters."
+      ],
+      "solution": "print(\"Hi\")"
+    }
+  ],
+  "mistakes": [
+    {
+      "mistake": "Writing `Print` or `PRINT` instead of `print`.",
+      "why": "Python treats capital and small letters as different, so it does not know the name.",
+      "fix": "Write `print` in small letters."
+    },
+    {
+      "mistake": "Forgetting a closing quote or bracket.",
+      "why": "Python reads on, cannot find the end, and reports a `SyntaxError`.",
+      "fix": "Count your quotes and brackets. Each one that opens must close."
+    },
+    {
+      "mistake": "Expecting Python to understand what you mean.",
+      "why": "The computer only follows the exact instructions.",
+      "fix": "Write each step clearly, in the order you want it to happen."
+    },
+    {
+      "mistake": "Changing many things at once after an error.",
+      "why": "You cannot tell which change fixed it, or broke something else.",
+      "fix": "Fix one thing, run again, and read the new message."
+    }
+  ],
+  "quiz": [
+    {
+      "question": "In what order does Python run the lines of a program?",
+      "options": [
+        "From top to bottom, one at a time",
+        "From bottom to top",
+        "In alphabetical order",
+        "All at the same time"
+      ],
+      "answer": 0,
+      "explanation": "Python follows the lines in the order you wrote them."
+    },
+    {
+      "question": "Where is the most useful line of an error message?",
+      "options": [
+        "The last line",
+        "The first line",
+        "There is no useful line",
+        "The blank line"
+      ],
+      "answer": 0,
+      "explanation": "The last line names the error and says what is wrong."
+    },
+    {
+      "question": "What should you do when Python shows an error?",
+      "options": [
+        "Read the message and fix that line",
+        "Turn off the computer",
+        "Delete the whole program",
+        "Ignore it"
+      ],
+      "answer": 0,
+      "explanation": "Errors are normal. The message tells you where to look."
+    }
+  ],
+  "challenge": {
+    "title": "A tiny timetable",
+    "prompt": "Print a timetable with these three lines, in this order:\n\n```\nMonday: Python\nTuesday: Practice\nWednesday: Rest\n```",
+    "stretch": "Add a fourth line for Thursday and Friday.",
+    "starterCode": "# Write your code below\n",
+    "tests": [
+      {
+        "output": "Monday: Python\nTuesday: Practice\nWednesday: Rest"
+      }
+    ],
+    "hints": [
+      "Three `print()` lines.",
+      "The colon and the space after it are part of the text."
+    ],
+    "solution": "print(\"Monday: Python\")\nprint(\"Tuesday: Practice\")\nprint(\"Wednesday: Rest\")"
+  }
+}

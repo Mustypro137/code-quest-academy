@@ -3,7 +3,8 @@ import { getQuizBest, recordQuiz, recordAnswer } from '../store.js';
 
 // Multiple-choice quiz, one question at a time.
 // questions: [{ question, options: [...], answer: <index>, explanation }]
-export function renderQuiz(box, moduleId, lessonId, questions) {
+// pass: { percent, onPass } for a checkpoint. onPass runs when the score reaches the pass mark.
+export function renderQuiz(box, moduleId, lessonId, questions, pass) {
   let index = 0;
   let score = 0;
 
@@ -61,9 +62,15 @@ export function renderQuiz(box, moduleId, lessonId, questions) {
   function finish() {
     const gained = recordQuiz(moduleId, lessonId, score, questions.length);
     const perfect = score === questions.length;
+    const passed = pass && (score * 100) / questions.length >= pass.percent;
+    if (passed) pass.onPass();
+    const passLine = !pass ? '' : passed
+      ? '<p><strong>✓ Checkpoint passed!</strong></p>'
+      : `<p>You need ${pass.percent}% to pass. Look at the lessons again and try once more.</p>`;
     box.querySelector('.quiz-body').innerHTML = `
       <p class="quiz-score">${perfect ? '🎉' : '👍'} You scored ${score} / ${questions.length}</p>
       ${gained ? `<p>+${gained} XP</p>` : ''}
+      ${passLine}
       <button class="btn" type="button" id="quiz-again">Try again</button>`;
     box.querySelector('.quiz-best')?.remove();
     box.querySelector('h2').insertAdjacentHTML('afterend', bestLine());

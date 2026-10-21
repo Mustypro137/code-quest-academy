@@ -58,13 +58,26 @@ function upNext(next) {
     </section>`;
 }
 
+// The Python path has many modules, so it is one card. The roadmap shows its parts.
+function groupModules(modules) {
+  const path = modules.filter((m) => m.track);
+  if (!path.length) return modules;
+  const lessons = path.flatMap((m) => m.lessons.map((l) => ({ id: m.id + '/' + l.id })));
+  const card = {
+    id: 'python-path', icon: '🐍', title: 'Python path', href: '#/roadmap',
+    blurb: `${path.length} modules from your first program to capstone projects.`,
+    lessons, done: path.reduce((n, m) => n + doneCount(m.id), 0),
+  };
+  return [card, ...modules.filter((m) => !m.track)];
+}
+
 function moduleCards(modules) {
-  return modules.map((m) => {
+  return groupModules(modules).map((m) => {
     const total = m.lessons.length;
-    const done = doneCount(m.id);
+    const done = m.done ?? doneCount(m.id);
     return `
     <li>
-      <a class="module-card" href="#/module/${esc(m.id)}">
+      <a class="module-card" href="${esc(m.href ?? `#/module/${m.id}`)}">
         <span class="icon" aria-hidden="true">${esc(m.icon)}</span>
         <h3>${esc(m.title)}</h3>
         <p>${esc(m.blurb)}</p>

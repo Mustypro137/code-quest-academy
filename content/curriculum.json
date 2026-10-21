@@ -1,0 +1,345 @@
+{
+  "stages": [
+    {
+      "id": "foundations",
+      "title": "Foundations",
+      "modules": [
+        {
+          "id": "m01-fundamentals",
+          "icon": "🌱",
+          "title": "Programming fundamentals",
+          "summary": "Variables, types, operators, input and output.",
+          "lessons": [
+            {
+              "id": "01-how-programs-run",
+              "title": "How a program runs"
+            },
+            {
+              "id": "02-print",
+              "title": "Your first program: print()"
+            },
+            {
+              "id": "03-variables",
+              "title": "Variables: give a value a name"
+            },
+            {
+              "id": "04-numbers",
+              "title": "Numbers and maths"
+            },
+            {
+              "id": "05-text-fstrings",
+              "title": "Text and f-strings"
+            },
+            {
+              "id": "06-input-output",
+              "title": "Ask the user: input()"
+            }
+          ],
+          "checkpoint": true
+        },
+        {
+          "id": "m02-decisions-loops",
+          "icon": "🔀",
+          "title": "Conditions, loops and logic",
+          "summary": "Make choices, repeat steps, and think in small steps.",
+          "lessons": [
+            {
+              "id": "02-conditions",
+              "title": "Conditions: making choices"
+            },
+            {
+              "id": "03-loops",
+              "title": "Loops: repeat things"
+            }
+          ]
+        },
+        {
+          "id": "m03-collections",
+          "icon": "🧺",
+          "title": "Strings and collections",
+          "summary": "Strings, lists, tuples, sets and dictionaries.",
+          "lessons": [
+            {
+              "id": "01-strings",
+              "title": "Strings: working with text"
+            },
+            {
+              "id": "02-lists",
+              "title": "Lists: many values in one"
+            },
+            {
+              "id": "03-tuples-sets",
+              "title": "Tuples and sets"
+            },
+            {
+              "id": "04-dictionaries",
+              "title": "Dictionaries: store data with names"
+            },
+            {
+              "id": "05-sorting",
+              "title": "Sorting and lambda"
+            },
+            {
+              "id": "07-regex",
+              "title": "Find patterns with re"
+            }
+          ]
+        },
+        {
+          "id": "m04-functions",
+          "icon": "🧩",
+          "title": "Functions",
+          "summary": "Parameters, return values and scope.",
+          "lessons": [
+            {
+              "id": "01-defining-functions",
+              "title": "Functions: reuse your code"
+            },
+            {
+              "id": "02-parameters",
+              "title": "Parameters: positional, keyword and default"
+            },
+            {
+              "id": "03-return-values",
+              "title": "Return values and results"
+            },
+            {
+              "id": "04-scope",
+              "title": "Scope: where a name lives"
+            },
+            {
+              "id": "05-small-functions",
+              "title": "Small functions, clear names, docstrings"
+            }
+          ],
+          "checkpoint": true
+        }
+      ]
+    },
+    {
+      "id": "tools",
+      "title": "Working tools",
+      "modules": [
+        {
+          "id": "m05-modules-environments",
+          "icon": "📦",
+          "title": "Modules and environments",
+          "summary": "Imports, packages, virtual environments and pip.",
+          "lessons": [
+            {
+              "id": "01-import",
+              "title": "Modules and import"
+            },
+            {
+              "id": "03-dates",
+              "title": "Dates and times"
+            },
+            {
+              "id": "05-virtual-environments",
+              "title": "Virtual environments"
+            }
+          ]
+        },
+        {
+          "id": "m06-errors-testing",
+          "icon": "🐞",
+          "title": "Errors, debugging and testing",
+          "summary": "Read tracebacks, handle exceptions, and test your code.",
+          "lessons": [
+            {
+              "id": "02-try-except",
+              "title": "Handling errors with try/except"
+            }
+          ]
+        },
+        {
+          "id": "m07-files",
+          "icon": "📄",
+          "title": "Reading and writing files",
+          "summary": "Text, JSON, CSV and other file formats.",
+          "lessons": [
+            {
+              "id": "01-text-files",
+              "title": "Files and folders"
+            },
+            {
+              "id": "02-json",
+              "title": "Working with JSON"
+            },
+            {
+              "id": "03-csv",
+              "title": "Working with CSV files"
+            },
+            {
+              "id": "05-excel",
+              "title": "Excel files with Python"
+            }
+          ]
+        },
+        {
+          "id": "m08-paths-folders",
+          "icon": "🗂️",
+          "title": "Paths and folders",
+          "summary": "pathlib, os and shutil, used safely.",
+          "lessons": [
+            {
+              "id": "04-merge-csv",
+              "title": "Merge many CSV files into one"
+            },
+            {
+              "id": "05-duplicates",
+              "title": "Find duplicate files"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "pythonic",
+      "title": "Pythonic code",
+      "modules": [
+        {
+          "id": "m09-pythonic",
+          "icon": "🐍",
+          "title": "Pythonic tools",
+          "summary": "Comprehensions, iterators, generators, decorators.",
+          "lessons": [
+            {
+              "id": "01-comprehensions",
+              "title": "List comprehensions"
+            },
+            {
+              "id": "03-generators",
+              "title": "Generators and lazy values"
+            },
+            {
+              "id": "04-decorators",
+              "title": "Decorators"
+            },
+            {
+              "id": "05-context-managers",
+              "title": "The with statement"
+            }
+          ]
+        },
+        {
+          "id": "m10-oop",
+          "icon": "🏗️",
+          "title": "Object-oriented programming",
+          "summary": "Classes, inheritance and data classes.",
+          "lessons": [
+            {
+              "id": "01-classes",
+              "title": "Classes and objects"
+            },
+            {
+              "id": "04-dataclasses",
+              "title": "Dataclasses"
+            }
+          ]
+        },
+        {
+          "id": "m11-types-clean-code",
+          "icon": "✨",
+          "title": "Types and clean code",
+          "summary": "Type hints, readable code and maintainability.",
+          "lessons": []
+        }
+      ]
+    },
+    {
+      "id": "professional",
+      "title": "Professional skills",
+      "modules": [
+        {
+          "id": "m12-git-cli",
+          "icon": "🌿",
+          "title": "Git, command line and structure",
+          "summary": "Work like a developer: Git, the terminal, project layout.",
+          "lessons": []
+        },
+        {
+          "id": "m13-http-apis",
+          "icon": "🌐",
+          "title": "HTTP and APIs",
+          "summary": "Requests, JSON APIs, secrets and errors.",
+          "lessons": [
+            {
+              "id": "03-web-data",
+              "title": "Get data from the web"
+            },
+            {
+              "id": "07-email",
+              "title": "Write and send email with Python"
+            }
+          ]
+        },
+        {
+          "id": "m14-sqlite",
+          "icon": "🗄️",
+          "title": "SQLite and SQL",
+          "summary": "Store and query data with SQL.",
+          "lessons": []
+        },
+        {
+          "id": "m15-pytest",
+          "icon": "✅",
+          "title": "pytest and engineering",
+          "summary": "Write good tests and build quality habits.",
+          "lessons": []
+        }
+      ]
+    },
+    {
+      "id": "advanced",
+      "title": "Advanced topics",
+      "modules": [
+        {
+          "id": "m16-concurrency-performance",
+          "icon": "⚡",
+          "title": "Concurrency and performance",
+          "summary": "Measure first, then speed up: asyncio, threads, algorithms.",
+          "lessons": [
+            {
+              "id": "05-recursion-memo",
+              "title": "Recursion"
+            }
+          ]
+        },
+        {
+          "id": "m17-packaging-security",
+          "icon": "🔐",
+          "title": "Packaging, deployment and security",
+          "summary": "Share your code and keep it safe.",
+          "lessons": []
+        }
+      ]
+    },
+    {
+      "id": "capstones",
+      "title": "Capstones",
+      "modules": [
+        {
+          "id": "m18-capstones",
+          "icon": "🏆",
+          "title": "Capstone projects",
+          "summary": "Put everything together in real projects.",
+          "lessons": [
+            {
+              "id": "01-cleaning",
+              "title": "Cleaning messy text"
+            },
+            {
+              "id": "02-reports",
+              "title": "Building reports"
+            },
+            {
+              "id": "03-customer-cleaner",
+              "title": "Mini project: customer list cleaner"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

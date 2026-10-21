@@ -1,5 +1,5 @@
 import { esc, inline } from './html.js';
-import { getMissed, getDueCards, reviewCard, reviewQuestion, recordAnswer } from '../store.js';
+import { getMissed, getDueCards, reviewCard, reviewQuestion, recordAnswer, REVIEW_INDEX } from '../store.js';
 import { loadLesson } from '../content.js';
 import { backLink } from './practice.js';
 
@@ -44,7 +44,7 @@ export function renderRevise(root, cards) {
     for (const key of missed) {
       const [m, l, i] = key.split('/');
       const lesson = await loadLesson(m, l).catch(() => null);
-      const q = lesson?.quiz?.[Number(i)];
+      const q = Number(i) === REVIEW_INDEX ? lesson?.review : lesson?.quiz?.[Number(i)];
       if (q) items.push({ key, q, title: lesson.title });
       else recordAnswer(m, l, Number(i), true); // the lesson changed: drop the stale question
     }

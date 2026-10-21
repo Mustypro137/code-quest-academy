@@ -1,0 +1,266 @@
+{
+  "title": "Small functions, clear names, docstrings",
+  "objective": "Split a job into small functions that each do one thing, give them clear names, and write a docstring that says what a function does.",
+  "kind": "browser",
+  "prerequisites": [
+    "m04-functions/03-return-values"
+  ],
+  "explanation": [
+    {
+      "type": "text",
+      "text": "A good function does **one job** and has a name that says what it does. Small functions are easy to read, easy to test, and easy to reuse."
+    },
+    {
+      "type": "list",
+      "items": [
+        "Name a function with a **verb**: `clean_name`, `total_price`, `is_valid`.",
+        "Return a value instead of printing it, so other code can use it.",
+        "If you need the word \"and\" to describe a function, it probably does two jobs. Split it."
+      ]
+    },
+    {
+      "type": "text",
+      "text": "A **docstring** is text in triple quotes as the first line inside a function. It says what the function does. Python keeps it, and tools show it as help."
+    },
+    {
+      "type": "code",
+      "code": "def clean_name(name):\n    \"\"\"Return the name without extra spaces, in title case.\"\"\"\n    return \" \".join(name.split()).title()"
+    },
+    {
+      "type": "tip",
+      "text": "Comments explain **why**. Docstrings explain **what**. If the code needs a comment to say what it does, a better name often removes the need."
+    }
+  ],
+  "walkthrough": [
+    {
+      "title": "Two small functions that work together",
+      "code": "def clean_name(name):\n    \"\"\"Return the name without extra spaces, in title case.\"\"\"\n    return \" \".join(name.split()).title()\n\ndef greeting(name):\n    \"\"\"Return a greeting for a person.\"\"\"\n    return f\"Hello, {clean_name(name)}!\"",
+      "lines": [
+        {
+          "line": "def clean_name(name):",
+          "explain": "A verb and what it works on. The name tells you what to expect."
+        },
+        {
+          "line": "\"\"\"Return the name without extra spaces, in title case.\"\"\"",
+          "explain": "The docstring. It starts with a verb and says what comes back."
+        },
+        {
+          "line": "return \" \".join(name.split()).title()",
+          "explain": "`split()` drops the extra spaces, `\" \".join(...)` puts the words back with one space, `.title()` fixes the capital letters."
+        },
+        {
+          "line": "return f\"Hello, {clean_name(name)}!\"",
+          "explain": "`greeting` does not repeat the cleaning code. It calls the small function."
+        }
+      ]
+    }
+  ],
+  "examples": [
+    {
+      "title": "A docstring is kept by Python",
+      "code": "def shout(text):\n    \"\"\"Return the text in capital letters with an exclamation mark.\"\"\"\n    return text.upper() + \"!\"\n\nprint(shout.__doc__)\nprint(shout(\"hello\"))"
+    },
+    {
+      "title": "Before: one big function",
+      "code": "def report(prices):\n    total = 0\n    for p in prices:\n        total += p\n    print(\"Total: $\" + format(total, \".2f\"))\n\nreport([1.5, 2.25])"
+    },
+    {
+      "title": "After: small functions",
+      "code": "def total(prices):\n    \"\"\"Return the sum of the prices.\"\"\"\n    return sum(prices)\n\ndef format_money(amount):\n    \"\"\"Return the amount as text with a dollar sign and 2 decimals.\"\"\"\n    return \"$\" + format(amount, \".2f\")\n\ndef report(prices):\n    \"\"\"Return a one-line report of the total.\"\"\"\n    return \"Total: \" + format_money(total(prices))\n\nprint(report([1.5, 2.25]))"
+    }
+  ],
+  "exercises": [
+    {
+      "level": "easy",
+      "prompt": "Write `clean_name(name)`. It returns the name with single spaces between the words and a capital letter at the start of each word.",
+      "starterCode": "def clean_name(name):\n    # your code here\n    pass",
+      "tests": [
+        {
+          "call": "clean_name('  ada   byron ')",
+          "returns": "'Ada Byron'"
+        },
+        {
+          "call": "clean_name('SAM')",
+          "returns": "'Sam'"
+        },
+        {
+          "call": "clean_name('')",
+          "returns": "''"
+        }
+      ],
+      "hints": [
+        "`name.split()` drops extra spaces.",
+        "`\" \".join(words).title()` puts them back."
+      ],
+      "solution": "def clean_name(name):\n    return \" \".join(name.split()).title()"
+    },
+    {
+      "level": "medium",
+      "prompt": "The small function `clean_name` is written for you. Write `greeting(name)`. It returns `Hello, ` and the cleaned name and `!`. Use `clean_name`: do not repeat its code.",
+      "starterCode": "def clean_name(name):\n    \"\"\"Return the name without extra spaces, in title case.\"\"\"\n    return \" \".join(name.split()).title()\n\ndef greeting(name):\n    # your code here\n    pass",
+      "tests": [
+        {
+          "call": "greeting('  ada   byron ')",
+          "returns": "'Hello, Ada Byron!'"
+        },
+        {
+          "call": "greeting('SAM')",
+          "returns": "'Hello, Sam!'"
+        }
+      ],
+      "hints": [
+        "Call `clean_name(name)` inside an f-string."
+      ],
+      "solution": "def clean_name(name):\n    \"\"\"Return the name without extra spaces, in title case.\"\"\"\n    return \" \".join(name.split()).title()\n\ndef greeting(name):\n    return f\"Hello, {clean_name(name)}!\""
+    },
+    {
+      "level": "hard",
+      "prompt": "Split one job into three small functions:\n\n- `total(prices)` returns the sum of the list.\n- `format_money(amount)` returns the amount as text like `$3.75` (a dollar sign and 2 decimals).\n- `report(prices)` returns `Total: ` and the formatted total, such as `Total: $3.75`. It must use the other two.",
+      "starterCode": "def total(prices):\n    # your code here\n    pass\n\ndef format_money(amount):\n    # your code here\n    pass\n\ndef report(prices):\n    # your code here\n    pass",
+      "tests": [
+        {
+          "call": "total([1.5, 2.25])",
+          "returns": "3.75"
+        },
+        {
+          "call": "format_money(3.75)",
+          "returns": "'$3.75'"
+        },
+        {
+          "call": "format_money(2)",
+          "returns": "'$2.00'"
+        },
+        {
+          "call": "report([1.5, 2.25])",
+          "returns": "'Total: $3.75'"
+        },
+        {
+          "call": "report([])",
+          "returns": "'Total: $0.00'"
+        }
+      ],
+      "hints": [
+        "`sum(prices)` adds the list. `format(amount, \".2f\")` gives 2 decimals, and you can put `\"$\"` in front of it.",
+        "`report` can be `\"Total: \" + format_money(total(prices))`."
+      ],
+      "solution": "def total(prices):\n    return sum(prices)\n\ndef format_money(amount):\n    return \"$\" + format(amount, \".2f\")\n\ndef report(prices):\n    return \"Total: \" + format_money(total(prices))"
+    }
+  ],
+  "debug": [
+    {
+      "title": "A function that only prints",
+      "symptom": "square_all([1, 2, 3]) returns None, so the squares cannot be used",
+      "prompt": "Fix `square_all` so that it **returns** a list of the squares, in the same order.",
+      "brokenCode": "def square_all(numbers):\n    for n in numbers:\n        print(n * n)",
+      "tests": [
+        {
+          "call": "square_all([1, 2, 3])",
+          "returns": "[1, 4, 9]"
+        },
+        {
+          "call": "square_all([])",
+          "returns": "[]"
+        }
+      ],
+      "hints": [
+        "Printing shows values but gives nothing back.",
+        "Build a list and return it: `[n * n for n in numbers]`."
+      ],
+      "solution": "def square_all(numbers):\n    return [n * n for n in numbers]"
+    }
+  ],
+  "mistakes": [
+    {
+      "mistake": "One function that reads, calculates and prints.",
+      "why": "You cannot test or reuse any part of it alone.",
+      "fix": "Split it: one function per job, and print only in the last step."
+    },
+    {
+      "mistake": "Vague names like `do_it`, `data2` or `stuff`.",
+      "why": "A reader has to open the code to learn what it does.",
+      "fix": "Name it for its result: `total_price`, `clean_name`."
+    },
+    {
+      "mistake": "A docstring that repeats the name (\"Clean name.\").",
+      "why": "It tells the reader nothing new.",
+      "fix": "Say what goes in and what comes out: \"Return the name without extra spaces.\""
+    },
+    {
+      "mistake": "Copying the same code into two functions.",
+      "why": "A fix in one place is forgotten in the other.",
+      "fix": "Move the shared code into a small function and call it from both."
+    }
+  ],
+  "quiz": [
+    {
+      "question": "What is a good name for a function that adds up prices?",
+      "options": [
+        "`total_price`",
+        "`stuff`",
+        "`x`",
+        "`do_it`"
+      ],
+      "answer": 0,
+      "explanation": "A good name says what the function gives back."
+    },
+    {
+      "question": "Where does a docstring go?",
+      "options": [
+        "As the first thing inside the function",
+        "After the last line",
+        "In another file",
+        "In the function name"
+      ],
+      "answer": 0,
+      "explanation": "A docstring is a triple-quoted text right under the `def` line."
+    },
+    {
+      "question": "A function needs \"and\" to describe it. What does that suggest?",
+      "options": [
+        "It probably does two jobs and should be split",
+        "It is perfect",
+        "It needs more parameters",
+        "It must print"
+      ],
+      "answer": 0,
+      "explanation": "One function, one job. Two jobs means two functions."
+    }
+  ],
+  "challenge": {
+    "title": "Initials",
+    "prompt": "Write `initials(name)`. It returns the capital initial of each word, each followed by a dot. For example `initials(\"ada king lovelace\")` is `A.K.L.`. An empty name gives an empty text.",
+    "stretch": "Keep the dots out and join the initials with spaces instead.",
+    "starterCode": "def initials(name):\n    # your code here\n    pass",
+    "tests": [
+      {
+        "call": "initials('ada king lovelace')",
+        "returns": "'A.K.L.'"
+      },
+      {
+        "call": "initials('  sam  ')",
+        "returns": "'S.'"
+      },
+      {
+        "call": "initials('')",
+        "returns": "''"
+      }
+    ],
+    "hints": [
+      "`name.split()` gives the words, with no extra spaces.",
+      "`\"\".join(word[0].upper() + \".\" for word in words)`."
+    ],
+    "solution": "def initials(name):\n    return \"\".join(word[0].upper() + \".\" for word in name.split())"
+  },
+  "review": {
+    "from": "m04-functions/02-parameters",
+    "question": "Which call is valid for `def f(a, b=2)`?",
+    "options": [
+      "`f(1)`",
+      "`f()`",
+      "`f(b=3)`",
+      "`f(1, 2, 3)`"
+    ],
+    "answer": 0,
+    "explanation": "`a` is required and `b` has a default, so `f(1)` works. The others miss `a` or give too many values."
+  }
+}

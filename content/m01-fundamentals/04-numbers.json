@@ -1,0 +1,275 @@
+{
+  "title": "Numbers and maths",
+  "objective": "Do maths with whole and decimal numbers, use `//`, `%` and `**`, and round results.",
+  "kind": "browser",
+  "prerequisites": [
+    "m01-fundamentals/03-variables"
+  ],
+  "explanation": [
+    {
+      "type": "text",
+      "text": "Python has whole numbers (like `7`, called **int**) and decimal numbers (like `3.5`, called **float**). You can do maths with them."
+    },
+    {
+      "type": "code",
+      "code": "print(7 + 2)   # 9\nprint(7 - 2)   # 5\nprint(7 * 2)   # 14\nprint(7 / 2)   # 3.5"
+    },
+    {
+      "type": "text",
+      "text": "Three more tools that you will use a lot:"
+    },
+    {
+      "type": "code",
+      "code": "print(7 // 2)  # 3   whole-number division\nprint(7 % 2)   # 1   the remainder\nprint(2 ** 3)  # 8   power (2 times 2 times 2)"
+    },
+    {
+      "type": "text",
+      "text": "`/` always gives a decimal number. `//` throws away the decimal part. `%` gives what is left over."
+    },
+    {
+      "type": "text",
+      "text": "Python does brackets first, then `**`, then `*` and `/`, then `+` and `-`. Use brackets when you are not sure."
+    },
+    {
+      "type": "tip",
+      "text": "`n % 2 == 0` is a quick way to check if `n` is even. The remainder is 0 only when `n` divides exactly by 2."
+    },
+    {
+      "type": "tip",
+      "text": "`round(3.14159, 2)` gives `3.14`. The second number is how many decimal places to keep. Decimal numbers can also be a little off, like `0.1 + 0.2` giving `0.30000000000000004`, so round before you show them."
+    }
+  ],
+  "walkthrough": [
+    {
+      "title": "Work out a price with tax",
+      "code": "price = 20\ntax = price * 0.1\ntotal = price + tax\nprint(total)",
+      "lines": [
+        {
+          "line": "price = 20",
+          "explain": "A whole number stored in `price`."
+        },
+        {
+          "line": "tax = price * 0.1",
+          "explain": "Ten percent of the price. Multiplying by a decimal (a float) gives a float: 2.0."
+        },
+        {
+          "line": "total = price + tax",
+          "explain": "Adds the two. An int plus a float gives a float: 22.0."
+        },
+        {
+          "line": "print(total)",
+          "explain": "Shows `22.0`. The `.0` appears because the answer is a float."
+        }
+      ]
+    }
+  ],
+  "examples": [
+    {
+      "title": "Work out a price",
+      "code": "price = 20\ntax = price * 0.1\ntotal = price + tax\nprint(total)"
+    },
+    {
+      "title": "Divide and keep the remainder",
+      "code": "print(17 // 5, 17 % 5)\nprint(round(10 / 3, 2))"
+    },
+    {
+      "title": "Brackets change the answer",
+      "code": "print(2 + 3 * 4)\nprint((2 + 3) * 4)\nprint(0.1 + 0.2)\nprint(round(0.1 + 0.2, 2))"
+    }
+  ],
+  "exercises": [
+    {
+      "level": "easy",
+      "prompt": "You have 17 sweets to share between 5 friends.\n\nMake `each` the whole number of sweets each friend gets, and `left` the sweets left over. Print both on one line.",
+      "starterCode": "# Write your code below\n",
+      "tests": [
+        {
+          "call": "each",
+          "returns": "3"
+        },
+        {
+          "call": "left",
+          "returns": "2"
+        },
+        {
+          "output": "3 2"
+        }
+      ],
+      "hints": [
+        "`//` gives the whole-number part.",
+        "`%` gives the remainder."
+      ],
+      "solution": "each = 17 // 5\nleft = 17 % 5\nprint(each, left)"
+    },
+    {
+      "level": "medium",
+      "prompt": "Change 25 degrees Celsius to Fahrenheit. The rule: multiply by 9, divide by 5, then add 32.\n\nMake a variable `f` with the answer and print it.",
+      "starterCode": "# Write your code below\n",
+      "tests": [
+        {
+          "call": "f",
+          "returns": "77.0"
+        },
+        {
+          "output": "77.0"
+        }
+      ],
+      "hints": [
+        "Start with `c = 25`.",
+        "`f = c * 9 / 5 + 32`."
+      ],
+      "solution": "c = 25\nf = c * 9 / 5 + 32\nprint(f)"
+    },
+    {
+      "level": "hard",
+      "prompt": "A bill is 87.50 and 4 friends share it. Add a 10% tip first, then split it fairly. Make `each` the amount each friend pays, rounded to 2 decimals. Print it.",
+      "starterCode": "# Write your code below\n",
+      "tests": [
+        {
+          "call": "each",
+          "returns": "24.06"
+        },
+        {
+          "output": "24.06"
+        }
+      ],
+      "hints": [
+        "The total with tip is `87.5 * 1.1`.",
+        "Divide by 4, then use `round(value, 2)`."
+      ],
+      "solution": "bill = 87.5\ntotal = bill * 1.1\neach = round(total / 4, 2)\nprint(each)"
+    }
+  ],
+  "debug": [
+    {
+      "title": "Text plus a number",
+      "symptom": "TypeError: can only concatenate str (not \"int\") to str",
+      "prompt": "Fix the code so that it prints `Total: 5`.",
+      "brokenCode": "print(\"Total: \" + 5)\n",
+      "tests": [
+        {
+          "output": "Total: 5"
+        }
+      ],
+      "hints": [
+        "`+` cannot join a text and a number.",
+        "Give `print` two things separated by a comma: `print(\"Total:\", 5)`."
+      ],
+      "solution": "print(\"Total:\", 5)"
+    },
+    {
+      "title": "The wrong answer from brackets",
+      "symptom": "average is 7.0 but it should be 5.0",
+      "prompt": "Fix the code so that `average` is the average of 4 and 6.",
+      "brokenCode": "average = 4 + 6 / 2\n",
+      "tests": [
+        {
+          "call": "average",
+          "returns": "5.0"
+        }
+      ],
+      "hints": [
+        "Python does `/` before `+`, so this is `4 + (6 / 2)`.",
+        "Put brackets around the addition: `(4 + 6) / 2`."
+      ],
+      "solution": "average = (4 + 6) / 2"
+    }
+  ],
+  "mistakes": [
+    {
+      "mistake": "Forgetting that `/` always gives a decimal.",
+      "why": "`10 / 2` is `5.0`, not `5`. That can surprise you in later code.",
+      "fix": "Use `//` when you want a whole number."
+    },
+    {
+      "mistake": "Writing `2^3` for \"2 to the power 3\".",
+      "why": "In Python `^` is a different operation, not a power.",
+      "fix": "Use `2 ** 3`."
+    },
+    {
+      "mistake": "Joining text and numbers with `+`.",
+      "why": "Python will not guess how to add text to a number (`TypeError`).",
+      "fix": "Print them separately with a comma, or turn the number into text."
+    },
+    {
+      "mistake": "Trusting long decimals like `0.30000000000000004`.",
+      "why": "Computers store decimals with tiny errors.",
+      "fix": "Use `round(value, 2)` before you show a result."
+    }
+  ],
+  "quiz": [
+    {
+      "question": "What is `7 // 2`?",
+      "options": [
+        "3",
+        "3.5",
+        "4",
+        "2"
+      ],
+      "answer": 0,
+      "explanation": "`//` divides and drops the part after the decimal point."
+    },
+    {
+      "question": "What does `10 % 3` give?",
+      "options": [
+        "1",
+        "3",
+        "3.33",
+        "0"
+      ],
+      "answer": 0,
+      "explanation": "10 divided by 3 is 3 with 1 left over. `%` gives the leftover."
+    },
+    {
+      "question": "What is `2 ** 3`?",
+      "options": [
+        "8",
+        "6",
+        "5",
+        "9"
+      ],
+      "answer": 0,
+      "explanation": "`**` is the power: 2 times 2 times 2."
+    }
+  ],
+  "challenge": {
+    "title": "Seconds to hours",
+    "prompt": "A video is 3725 seconds long. Make `hours`, `minutes` and `secs` so that `hours` hours, `minutes` minutes and `secs` seconds add up to 3725 (use only whole numbers). Print them like this: `1:2:5`.\n\nHint: there are 3600 seconds in an hour and 60 in a minute.",
+    "stretch": "Make the result show two digits: `01:02:05`.",
+    "starterCode": "# Write your code below\n",
+    "tests": [
+      {
+        "call": "hours",
+        "returns": "1"
+      },
+      {
+        "call": "minutes",
+        "returns": "2"
+      },
+      {
+        "call": "secs",
+        "returns": "5"
+      },
+      {
+        "output": "1:2:5"
+      }
+    ],
+    "hints": [
+      "`hours = total // 3600`, then use `%` to get what is left.",
+      "`print(hours, minutes, secs, sep=\":\")`."
+    ],
+    "solution": "total = 3725\nhours = total // 3600\nrest = total % 3600\nminutes = rest // 60\nsecs = rest % 60\nprint(hours, minutes, secs, sep=\":\")"
+  },
+  "review": {
+    "from": "m01-fundamentals/03-variables",
+    "question": "Which is a good variable name?",
+    "options": [
+      "`first_name`",
+      "`first name`",
+      "`1st_name`",
+      "`first-name`"
+    ],
+    "answer": 0,
+    "explanation": "Use lowercase letters and underscores. No spaces, no dashes, and do not start with a number."
+  }
+}

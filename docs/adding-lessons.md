@@ -6,7 +6,9 @@ A lesson is one JSON file. You do not need to change any JavaScript.
 Put it in `content/<module-id>/<lesson-id>.json`. IDs use letters, numbers and `-` only.
 
 ## 2. Add it to the index
-Add one entry to the module in `content/index.json`. Lessons show in the order you list them.
+For the **Python path** (modules `m01-...` to `m18-...`), see [curriculum-schema.md](curriculum-schema.md): lessons are
+listed in `content/curriculum.json` and use the full lesson schema. For the other modules, add one entry to the module
+in `content/index.json`. Lessons show in the order you list them.
 
 ```json
 { "id": "08-files", "title": "Reading files", "level": "intermediate" }

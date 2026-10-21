@@ -1,7 +1,22 @@
 # Python path: structure (proposal)
 
-Status: **proposed, waiting for approval.** Nothing in this plan is built yet except the schema
-([curriculum-schema.md](curriculum-schema.md)) and two sample lessons.
+Status: **approved.** Decisions: a new "Python path" track with the existing lessons moved into it (the AI,
+Projects, LinkedIn and English modules stay as they are), `sqlite3` and `pytest` added to the saved browser Python,
+and the schema in [curriculum-schema.md](curriculum-schema.md).
+
+## Build status
+Done means every lesson uses the full schema, the checkpoint exists, and the browser tests and accessibility
+scans pass. "Moved" lessons are in their new place and still work, but have not been upgraded to the full schema yet.
+
+| Module | Status |
+|---|---|
+| 1 Fundamentals | **Done** (6 lessons and a checkpoint) |
+| 4 Functions | **Done** (5 lessons and a checkpoint) |
+| 2, 3, 5, 6, 7, 8, 9, 10, 13, 16, 18 | Some lessons moved in, to be upgraded and completed in order |
+| 11, 12, 14, 15, 17 | Not started (all new) |
+
+The path is built one module at a time, so the roadmap shows the unfinished modules as "Coming soon" or with the
+lessons that exist so far.
 
 ## What can run in the page
 I tested the browser Python (Pyodide 0.29.5) that the site already uses.
@@ -64,12 +79,8 @@ Totals: about **90 lessons**, **18 checkpoints** (one per module). About 25 of t
 Rough size: modules of 4 to 6 lessons are about the same effort as the 7 lessons added last time, so the full path
 is roughly 15 steps of that size, plus the renderer and the package steps.
 
-## Decisions I need from you
-1. **Structure:** do you approve the 18 modules, their order and the lesson lists above (changes welcome)?
-2. **Where it lives:** (a) a new "Python path" track with its 18 modules, with existing lessons moved into it, and
-   the other modules (AI, LinkedIn, Projects, English) staying as they are, or (b) keep the current modules and add
-   the new lessons to them. I recommend (a).
-3. **Add sqlite3 and pytest** to the saved browser Python (a few more files in the repository)? Without them,
-   modules 14 and 15 would be PC-only.
-4. **Schema:** are the required fields right? In particular, exactly 3 exercises per lesson, one debug task or
-   more, one mini-challenge, and one review question from an earlier lesson.
+## Decisions (answered)
+1. Structure: approved.
+2. Where it lives: (a), a new Python path track. Done: 34 lessons moved, old links and saved progress still work.
+3. `sqlite3` and `pytest` added (2.15 MB, hashes checked). Both run in the page, offline.
+4. Schema: approved.

@@ -3,7 +3,7 @@
   "objective": "Explain why every project gets its own virtual environment, and write the commands to create one, switch it on, and save its packages.",
   "kind": "pc",
   "prerequisites": [
-    "python-basics/int-07-modules"
+    "m05-modules-environments/01-import"
   ],
   "explanation": [
     {

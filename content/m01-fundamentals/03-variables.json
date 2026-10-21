@@ -1,0 +1,263 @@
+{
+  "title": "Variables: give a value a name",
+  "objective": "Store values in named variables, change them later, and choose good names.",
+  "kind": "browser",
+  "prerequisites": [
+    "m01-fundamentals/02-print"
+  ],
+  "explanation": [
+    {
+      "type": "text",
+      "text": "A **variable** is a name that holds a value. Use `=` to make one. The value goes on the right, the name goes on the left."
+    },
+    {
+      "type": "code",
+      "code": "name = \"Sam\"\nage = 12\nprint(name)\nprint(age)"
+    },
+    {
+      "type": "text",
+      "text": "A name can have letters, numbers and `_`. It cannot start with a number and cannot have spaces. Python programmers write names in lowercase with underscores, like `first_name`."
+    },
+    {
+      "type": "text",
+      "text": "You can change a variable later. The new value replaces the old one."
+    },
+    {
+      "type": "code",
+      "code": "score = 0\nscore = score + 10\nprint(score)  # 10"
+    },
+    {
+      "type": "text",
+      "text": "A line that starts with `#` is a **comment**. Python ignores it. Use comments to explain your code."
+    },
+    {
+      "type": "tip",
+      "text": "`=` means \"store this value\". It does not mean \"is equal to\". To compare two values, Python uses `==` (you will see it soon)."
+    }
+  ],
+  "walkthrough": [
+    {
+      "title": "Making and changing a variable",
+      "code": "score = 0\nscore = score + 10\nprint(score)",
+      "lines": [
+        {
+          "line": "score = 0",
+          "explain": "Makes the variable `score` and stores the number 0 in it."
+        },
+        {
+          "line": "score = score + 10",
+          "explain": "Python works out the **right side first** (0 + 10 = 10), then stores the answer back in `score`. The old value is replaced."
+        },
+        {
+          "line": "print(score)",
+          "explain": "Shows the current value of `score`, which is 10."
+        }
+      ]
+    }
+  ],
+  "examples": [
+    {
+      "title": "Change a variable",
+      "code": "city = \"Paris\"\nprint(city)\ncity = \"Rome\"\nprint(city)"
+    },
+    {
+      "title": "Print more than one thing",
+      "code": "name = \"Sam\"\nage = 12\nprint(name, age)\nprint(\"My name is\", name)"
+    },
+    {
+      "title": "Swap two values",
+      "code": "a = 3\nb = 8\na, b = b, a\nprint(a, b)"
+    }
+  ],
+  "exercises": [
+    {
+      "level": "easy",
+      "prompt": "Make a variable called `animal` with the text `cat`. Then print it.",
+      "starterCode": "# Write your code below\n",
+      "tests": [
+        {
+          "call": "animal",
+          "returns": "'cat'"
+        },
+        {
+          "output": "cat"
+        }
+      ],
+      "hints": [
+        "`animal = \"cat\"` makes the variable.",
+        "Then `print(animal)` shows it."
+      ],
+      "solution": "animal = \"cat\"\nprint(animal)"
+    },
+    {
+      "level": "medium",
+      "prompt": "Make a variable `score` with the value `5`. Then add 10 to `score` (change `score` itself). Print `score`.",
+      "starterCode": "# Write your code below\n",
+      "tests": [
+        {
+          "call": "score",
+          "returns": "15"
+        },
+        {
+          "output": "15"
+        }
+      ],
+      "hints": [
+        "Start with `score = 5`.",
+        "`score = score + 10` changes it."
+      ],
+      "solution": "score = 5\nscore = score + 10\nprint(score)"
+    },
+    {
+      "level": "hard",
+      "prompt": "Two cups hold juice and milk. Start with `left = \"juice\"` and `right = \"milk\"`. Swap them, so that `left` is `milk` and `right` is `juice`. Print `left` and `right` on one line.",
+      "starterCode": "left = \"juice\"\nright = \"milk\"\n# swap them here, then print",
+      "tests": [
+        {
+          "call": "left",
+          "returns": "'milk'"
+        },
+        {
+          "call": "right",
+          "returns": "'juice'"
+        },
+        {
+          "output": "milk juice"
+        }
+      ],
+      "hints": [
+        "Python can swap with one line: `a, b = b, a`.",
+        "Or use a third variable to hold one value for a moment."
+      ],
+      "solution": "left = \"juice\"\nright = \"milk\"\nleft, right = right, left\nprint(left, right)"
+    }
+  ],
+  "debug": [
+    {
+      "title": "Used before it is made",
+      "symptom": "NameError: name 'total' is not defined",
+      "prompt": "Fix the code so that it prints `10`.",
+      "brokenCode": "print(total)\ntotal = 10\n",
+      "tests": [
+        {
+          "output": "10"
+        }
+      ],
+      "hints": [
+        "Python runs the lines from top to bottom. The name must exist **before** you use it.",
+        "Move the `print` line below the line that makes `total`."
+      ],
+      "solution": "total = 10\nprint(total)"
+    },
+    {
+      "title": "A name that starts with a number",
+      "symptom": "SyntaxError: invalid decimal literal",
+      "prompt": "Fix the code so that the variable is called `second_place` and holds `Sam`.",
+      "brokenCode": "2nd_place = \"Sam\"\n",
+      "tests": [
+        {
+          "call": "second_place",
+          "returns": "'Sam'"
+        }
+      ],
+      "hints": [
+        "A variable name cannot start with a digit.",
+        "Rename it to `second_place`."
+      ],
+      "solution": "second_place = \"Sam\""
+    }
+  ],
+  "mistakes": [
+    {
+      "mistake": "Using a name before making it.",
+      "why": "Python runs top to bottom, so the name does not exist yet (`NameError`).",
+      "fix": "Make the variable first, then use it."
+    },
+    {
+      "mistake": "Different capital letters: `Score` and `score`.",
+      "why": "They are two different names.",
+      "fix": "Use lowercase names and spell them the same way every time."
+    },
+    {
+      "mistake": "Spaces or dashes in a name: `my name`, `my-name`.",
+      "why": "Python reads them as separate things or as a minus sign.",
+      "fix": "Use an underscore: `my_name`."
+    },
+    {
+      "mistake": "Using `=` when you want to compare.",
+      "why": "`=` stores a value. Comparing is `==`.",
+      "fix": "Read `x = 5` as \"x gets 5\"."
+    }
+  ],
+  "quiz": [
+    {
+      "question": "Which line makes a variable called `age` with the value 12?",
+      "options": [
+        "`age = 12`",
+        "`12 = age`",
+        "`age == 12`",
+        "`make age 12`"
+      ],
+      "answer": 0,
+      "explanation": "The name goes on the left of `=`, and the value goes on the right."
+    },
+    {
+      "question": "Which is a good variable name?",
+      "options": [
+        "`first_name`",
+        "`first name`",
+        "`1st_name`",
+        "`first-name`"
+      ],
+      "answer": 0,
+      "explanation": "Use lowercase letters and underscores. No spaces, no dashes, and do not start with a number."
+    },
+    {
+      "question": "After `x = 3` and then `x = x + 1`, what is `x`?",
+      "options": [
+        "4",
+        "3",
+        "31",
+        "An error"
+      ],
+      "answer": 0,
+      "explanation": "Python works out `x + 1` (which is 4) and stores it back in `x`."
+    }
+  ],
+  "challenge": {
+    "title": "A rectangle",
+    "prompt": "A rectangle is 4 wide and 5 high. Make variables `width`, `height`, `area` (width times height) and `perimeter` (the distance around: 2 times width plus 2 times height). Then print two lines: `Area: 20` and `Perimeter: 18`. Use the variables, not the numbers 20 and 18.",
+    "stretch": "Change `width` and `height` and check that the output follows.",
+    "starterCode": "# Write your code below\n",
+    "tests": [
+      {
+        "call": "area",
+        "returns": "20"
+      },
+      {
+        "call": "perimeter",
+        "returns": "18"
+      },
+      {
+        "output": "Area: 20\nPerimeter: 18"
+      }
+    ],
+    "hints": [
+      "`area = width * height`.",
+      "`print(\"Area:\", area)` puts a space between the two things."
+    ],
+    "solution": "width = 4\nheight = 5\narea = width * height\nperimeter = 2 * width + 2 * height\nprint(\"Area:\", area)\nprint(\"Perimeter:\", perimeter)"
+  },
+  "review": {
+    "from": "m01-fundamentals/02-print",
+    "question": "What does `print(\"a\", \"b\", sep=\"-\")` show?",
+    "options": [
+      "a-b",
+      "a b",
+      "ab",
+      "a, b"
+    ],
+    "answer": 0,
+    "explanation": "`sep` sets what goes between the things."
+  }
+}
