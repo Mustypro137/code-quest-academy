@@ -1,0 +1,300 @@
+{
+  "title": "Scope: where a name lives",
+  "objective": "Say which names a function can see and change, use parameters and return values instead of globals, and fix the two most common scope errors.",
+  "kind": "browser",
+  "prerequisites": [
+    "python-basics/int-01-functions"
+  ],
+  "explanation": [
+    {
+      "type": "text",
+      "text": "A **scope** is the part of a program where a name can be used. When Python looks for a name, it checks four places in order. People call this the **LEGB** rule:"
+    },
+    {
+      "type": "list",
+      "items": [
+        "**L**ocal: inside the current function.",
+        "**E**nclosing: inside an outer function, if there is one.",
+        "**G**lobal: at the top level of the file.",
+        "**B**uilt-in: names Python gives you, such as `len` and `print`."
+      ]
+    },
+    {
+      "type": "text",
+      "text": "A name you make **inside** a function is local. It is gone when the function ends. A function can **read** a global name, but when it **assigns** to a name, Python makes a new local name."
+    },
+    {
+      "type": "tip",
+      "text": "Prefer parameters and `return` over globals. A function that only uses its parameters is easy to test and to reuse."
+    },
+    {
+      "type": "text",
+      "text": "An inner function can use the names of the function around it. To **change** such a name, say `nonlocal`. This is how a function can remember something between calls (a closure)."
+    }
+  ],
+  "walkthrough": [
+    {
+      "title": "A local name hides a global name",
+      "code": "total = 100\n\ndef add_tax(price):\n    total = price * 1.2\n    return total\n\nprint(add_tax(10))\nprint(total)",
+      "lines": [
+        {
+          "line": "total = 100",
+          "explain": "A global name. It is made at the top level, so every part of the file can read it."
+        },
+        {
+          "line": "def add_tax(price):",
+          "explain": "`price` is a parameter. It is a local name that exists only during the call."
+        },
+        {
+          "line": "total = price * 1.2",
+          "explain": "Assigning makes a **new local** `total`. It does not change the global one, even though the names are the same. This is called shadowing."
+        },
+        {
+          "line": "return total",
+          "explain": "Sends the local value back. The local `total` disappears after this line."
+        },
+        {
+          "line": "print(add_tax(10))",
+          "explain": "Prints 12.0."
+        },
+        {
+          "line": "print(total)",
+          "explain": "Still prints 100. The global `total` was never changed."
+        }
+      ]
+    },
+    {
+      "title": "A function that remembers (nonlocal)",
+      "code": "def make_counter():\n    count = 0\n\n    def step():\n        nonlocal count\n        count += 1\n        return count\n\n    return step",
+      "lines": [
+        {
+          "line": "count = 0",
+          "explain": "Local to `make_counter`. It lives as long as `step` can still use it."
+        },
+        {
+          "line": "def step():",
+          "explain": "An inner function. It can see `count` because `count` is in the enclosing scope."
+        },
+        {
+          "line": "nonlocal count",
+          "explain": "Tells Python: `count` is the one from the outer function. Without this line, `count += 1` would fail."
+        },
+        {
+          "line": "count += 1",
+          "explain": "Changes the outer `count`."
+        },
+        {
+          "line": "return step",
+          "explain": "Returns the function itself (no brackets), so the caller can keep calling it."
+        }
+      ]
+    }
+  ],
+  "examples": [
+    {
+      "title": "Local and global",
+      "code": "x = \"global\"\n\ndef show():\n    x = \"local\"\n    print(x)\n\nshow()\nprint(x)"
+    },
+    {
+      "title": "A counter that remembers",
+      "code": "def make_counter():\n    count = 0\n\n    def step():\n        nonlocal count\n        count += 1\n        return count\n\n    return step\n\na = make_counter()\nb = make_counter()\nprint(a(), a(), b())"
+    }
+  ],
+  "exercises": [
+    {
+      "level": "easy",
+      "prompt": "Write `apply_discount(price, percent)`. It returns the new price after taking `percent` percent off. It must **not** change any global name: just use the parameters and `return`.",
+      "starterCode": "def apply_discount(price, percent):\n    # your code here\n    pass",
+      "tests": [
+        {
+          "call": "apply_discount(200, 10)",
+          "returns": "180.0"
+        },
+        {
+          "call": "(apply_discount(price, 50), price)",
+          "returns": "(50.0, 100)",
+          "setup": "price = 100"
+        }
+      ],
+      "hints": [
+        "The new price is `price * (100 - percent) / 100`.",
+        "Use `return`. Do not assign to `price` outside the function."
+      ],
+      "solution": "def apply_discount(price, percent):\n    return price * (100 - percent) / 100"
+    },
+    {
+      "level": "medium",
+      "prompt": "The global name `calls` counts how many times `count_calls()` ran. Finish `count_calls()`: add 1 to the **global** `calls`, then return it.",
+      "starterCode": "calls = 0\n\ndef count_calls():\n    # add 1 to the global name calls, then return it\n    pass",
+      "tests": [
+        {
+          "call": "(count_calls(), count_calls(), calls)",
+          "returns": "(1, 2, 2)"
+        }
+      ],
+      "hints": [
+        "To assign to a global name inside a function, say `global calls` first.",
+        "`calls += 1`, then `return calls`."
+      ],
+      "solution": "calls = 0\n\ndef count_calls():\n    global calls\n    calls += 1\n    return calls"
+    },
+    {
+      "level": "hard",
+      "prompt": "Write `make_counter()`. It returns a function. Each time you call that function it adds 1 to its **own** hidden count and returns the new count. Two counters must not share a count.",
+      "starterCode": "def make_counter():\n    # return a function that counts: 1, 2, 3, ...\n    pass",
+      "tests": [
+        {
+          "call": "(a(), a(), b(), a())",
+          "returns": "(1, 2, 1, 3)",
+          "setup": "a = make_counter()\nb = make_counter()"
+        }
+      ],
+      "hints": [
+        "Make `count = 0` inside `make_counter`, then define an inner function.",
+        "In the inner function, use `nonlocal count` before `count += 1`."
+      ],
+      "solution": "def make_counter():\n    count = 0\n\n    def step():\n        nonlocal count\n        count += 1\n        return count\n\n    return step"
+    }
+  ],
+  "debug": [
+    {
+      "title": "UnboundLocalError",
+      "symptom": "UnboundLocalError: cannot access local variable 'total' where it is not associated with a value",
+      "prompt": "This code crashes when `add` runs. Fix it so `add(10, 5)` returns `15`. Do **not** use `global`: let `add` take the total as a parameter and return the new total.",
+      "brokenCode": "total = 0\n\ndef add(n):\n    total = total + n\n    return total",
+      "tests": [
+        {
+          "call": "add(10, 5)",
+          "returns": "15"
+        },
+        {
+          "call": "add(0, 0)",
+          "returns": "0"
+        }
+      ],
+      "hints": [
+        "Python sees `total = ...` in the function, so it treats `total` as local. A local `total` has no value yet on the right side.",
+        "Give the function two parameters, `total` and `n`."
+      ],
+      "solution": "def add(total, n):\n    return total + n"
+    },
+    {
+      "title": "'list' object is not callable",
+      "symptom": "TypeError: 'list' object is not callable",
+      "prompt": "Fix the code so `sorted_items` is `[1, 2, 3]` and `copy` is `[4, 5]`. Do not change what the lines do, only the names.",
+      "brokenCode": "list = [3, 1, 2]\nsorted_items = sorted(list)\ncopy = list((4, 5))",
+      "tests": [
+        {
+          "call": "sorted_items",
+          "returns": "[1, 2, 3]"
+        },
+        {
+          "call": "copy",
+          "returns": "[4, 5]"
+        }
+      ],
+      "hints": [
+        "The first line replaced the built-in `list` with a list of numbers.",
+        "Rename the variable, for example to `items`."
+      ],
+      "solution": "items = [3, 1, 2]\nsorted_items = sorted(items)\ncopy = list((4, 5))"
+    }
+  ],
+  "mistakes": [
+    {
+      "mistake": "Assigning to a global name inside a function and expecting the global to change.",
+      "why": "Assigning makes a new local name. The global is not touched.",
+      "fix": "Return the value and assign it outside. Use `global` only when you really must."
+    },
+    {
+      "mistake": "Using a name before assigning it in the same function.",
+      "why": "Python decides a name is local if the function assigns it anywhere, so reading it first fails with `UnboundLocalError`.",
+      "fix": "Pass the value in as a parameter."
+    },
+    {
+      "mistake": "Naming a variable `list`, `str`, `sum`, `max` or `input`.",
+      "why": "It hides the built-in, so the real one stops working in that scope.",
+      "fix": "Use clear names such as `items`, `text`, `total` or `biggest`."
+    },
+    {
+      "mistake": "Thinking an `if` or `for` block has its own scope.",
+      "why": "Only functions (and classes and modules) make a scope. A loop variable is still there after the loop.",
+      "fix": "Do not rely on a loop variable after the loop. Give a result its own name."
+    }
+  ],
+  "quiz": [
+    {
+      "question": "A function assigns to a name that also exists globally. What happens?",
+      "options": [
+        "It creates a new local name",
+        "It changes the global name",
+        "It raises an error at once",
+        "It deletes the global name"
+      ],
+      "answer": 0,
+      "explanation": "Assigning inside a function makes a local name. The global stays as it was."
+    },
+    {
+      "question": "What does `nonlocal count` do?",
+      "options": [
+        "Lets an inner function change `count` from the function around it",
+        "Makes `count` a global name",
+        "Makes `count` a constant",
+        "Deletes `count`"
+      ],
+      "answer": 0,
+      "explanation": "`nonlocal` points the name at the one in the enclosing function."
+    },
+    {
+      "question": "In which order does Python look for a name?",
+      "options": [
+        "Local, enclosing, global, built-in",
+        "Global, local, built-in, enclosing",
+        "Built-in, global, local, enclosing",
+        "Only in the global scope"
+      ],
+      "answer": 0,
+      "explanation": "This is the LEGB rule: Local, Enclosing, Global, Built-in."
+    }
+  ],
+  "challenge": {
+    "title": "A tiny bank account",
+    "prompt": "Write `make_account(balance)`. It returns **two** functions: `deposit(amount)` adds to the balance, and `get_balance()` returns it. Each account keeps its own balance, and the balance is not a global.",
+    "stretch": "Make `deposit` raise `ValueError(\"amount must be positive\")` when the amount is zero or negative.",
+    "starterCode": "def make_account(balance):\n    # return deposit, get_balance\n    pass",
+    "tests": [
+      {
+        "call": "g()",
+        "returns": "175",
+        "setup": "d, g = make_account(100)\nd(50)\nd(25)"
+      },
+      {
+        "call": "(g1(), g2())",
+        "returns": "(15, 20)",
+        "setup": "d1, g1 = make_account(10)\nd2, g2 = make_account(20)\nd1(5)"
+      },
+      {
+        "call": "g()",
+        "returns": "7",
+        "setup": "d, g = make_account(7)"
+      }
+    ],
+    "hints": [
+      "You need two inner functions that share the same `balance`.",
+      "Use `nonlocal balance` in `deposit`. `get_balance` only reads it. Return them as a tuple: `return deposit, get_balance`."
+    ],
+    "solution": "def make_account(balance):\n    def deposit(amount):\n        nonlocal balance\n        balance += amount\n\n    def get_balance():\n        return balance\n\n    return deposit, get_balance"
+  },
+  "review": {
+    "from": "python-basics/int-01-functions",
+    "question": "With `def power(base, exponent=2)`, what is `power(3)`?",
+    "options": [
+      "9",
+      "6",
+      "5",
+      "An error"
+    ],
+    "answer": 0,
+    "explanation": "`exponent` defaults to 2, so the answer is `3 ** 2`, which is 9."
+  }
+}

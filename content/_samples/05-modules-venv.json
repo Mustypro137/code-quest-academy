@@ -1,0 +1,253 @@
+{
+  "title": "Virtual environments",
+  "objective": "Explain why every project gets its own virtual environment, and write the commands to create one, switch it on, and save its packages.",
+  "kind": "pc",
+  "prerequisites": [
+    "python-basics/int-07-modules"
+  ],
+  "explanation": [
+    {
+      "type": "text",
+      "text": "This lesson is about your own computer, so the commands have a Copy button and cannot run in the browser. The exercises still check your understanding, with small Python functions that build and read the commands."
+    },
+    {
+      "type": "text",
+      "text": "Different projects need different packages, and sometimes different **versions** of the same package. If you install everything into one place, projects start to break each other. A **virtual environment** (venv) is a private folder of packages for one project."
+    },
+    {
+      "type": "pc",
+      "title": "make and use a virtual environment (Windows)",
+      "text": "Run these in the project folder. The first line makes the folder .venv. Use copies of nothing: a venv only holds packages.",
+      "code": "python -m venv .venv\n.venv\\Scripts\\activate\npython -m pip install requests\npython -m pip freeze > requirements.txt\ndeactivate"
+    },
+    {
+      "type": "pc",
+      "title": "the same on macOS or Linux",
+      "text": "Only the activate line is different.",
+      "code": "python3 -m venv .venv\nsource .venv/bin/activate\npython -m pip install requests\npython -m pip freeze > requirements.txt\ndeactivate"
+    },
+    {
+      "type": "tip",
+      "text": "In Windows PowerShell the activate line is `.\\.venv\\Scripts\\Activate.ps1`. If PowerShell says scripts are disabled, run `Set-ExecutionPolicy -Scope CurrentUser RemoteSigned` once, or use the Command Prompt instead."
+    },
+    {
+      "type": "text",
+      "text": "To rebuild the same environment on another computer, make a new venv, activate it, and run `python -m pip install -r requirements.txt`."
+    }
+  ],
+  "walkthrough": [
+    {
+      "title": "The venv workflow",
+      "code": "python -m venv .venv\n.venv\\Scripts\\activate\npython -m pip install requests\npython -m pip freeze > requirements.txt\ndeactivate",
+      "lines": [
+        {
+          "line": "python -m venv .venv",
+          "explain": "Runs the `venv` module and makes a folder called `.venv` with its own copy of Python and an empty package list."
+        },
+        {
+          "line": ".venv\\Scripts\\activate",
+          "explain": "Switches the environment on for this terminal. Your prompt usually shows `(.venv)`. From now on `python` and `pip` use the venv."
+        },
+        {
+          "line": "python -m pip install requests",
+          "explain": "Installs the package into the venv, not into your whole computer. `python -m pip` makes sure that pip belongs to the same Python."
+        },
+        {
+          "line": "python -m pip freeze > requirements.txt",
+          "explain": "Writes every installed package and its exact version into a text file. `>` sends the output into the file."
+        },
+        {
+          "line": "deactivate",
+          "explain": "Switches the environment off. The terminal goes back to normal."
+        }
+      ]
+    }
+  ],
+  "examples": [],
+  "exercises": [
+    {
+      "level": "easy",
+      "prompt": "Write `create_command(folder)`. It returns the command that makes a virtual environment in that folder, such as `python -m venv .venv`.",
+      "starterCode": "def create_command(folder):\n    # your code here\n    pass",
+      "tests": [
+        {
+          "call": "create_command('.venv')",
+          "returns": "'python -m venv .venv'"
+        },
+        {
+          "call": "create_command('env')",
+          "returns": "'python -m venv env'"
+        }
+      ],
+      "hints": [
+        "It is text: `python -m venv` and then the folder name."
+      ],
+      "solution": "def create_command(folder):\n    return f\"python -m venv {folder}\""
+    },
+    {
+      "level": "medium",
+      "prompt": "Write `activate_command(folder, system)`. For `\"windows\"` return `FOLDER\\Scripts\\activate`. For `\"mac\"` or `\"linux\"` return `source FOLDER/bin/activate`. For any other system return `None`.",
+      "starterCode": "def activate_command(folder, system):\n    # your code here\n    pass",
+      "tests": [
+        {
+          "call": "activate_command('.venv', 'windows')",
+          "returns": "'.venv\\\\Scripts\\\\activate'"
+        },
+        {
+          "call": "activate_command('.venv', 'linux')",
+          "returns": "'source .venv/bin/activate'"
+        },
+        {
+          "call": "activate_command('env', 'mac')",
+          "returns": "'source env/bin/activate'"
+        },
+        {
+          "call": "activate_command('.venv', 'plan9')",
+          "returns": "None"
+        }
+      ],
+      "hints": [
+        "In Python text, a backslash is written twice: `\"\\\\\"`.",
+        "Use `if`, `elif` and a final `return None`."
+      ],
+      "solution": "def activate_command(folder, system):\n    if system == \"windows\":\n        return folder + \"\\\\Scripts\\\\activate\"\n    if system in (\"mac\", \"linux\"):\n        return f\"source {folder}/bin/activate\"\n    return None"
+    },
+    {
+      "level": "hard",
+      "prompt": "Write `parse_requirements(text)`. Each useful line of a `requirements.txt` is a package name followed by an optional version rule, like `requests==2.32.4` or `pytest>=8`. Return a list of `(name, rule)` pairs in order. The rule is everything after the name (an empty string when there is none). Skip empty lines and lines that start with `#`.",
+      "starterCode": "import re\n\ndef parse_requirements(text):\n    # your code here\n    pass",
+      "tests": [
+        {
+          "call": "parse_requirements('requests==2.32.4\\n# tools\\n\\npytest>=8\\nrich\\n')",
+          "returns": "[('requests', '==2.32.4'), ('pytest', '>=8'), ('rich', '')]"
+        },
+        {
+          "call": "parse_requirements('')",
+          "returns": "[]"
+        }
+      ],
+      "hints": [
+        "Go through `text.split(\"\\n\")` and call `.strip()` on each line.",
+        "A name is made of letters, digits, `-`, `_` and `.`. Try `re.match(r\"([A-Za-z0-9_.-]+)(.*)\", line)`."
+      ],
+      "solution": "import re\n\ndef parse_requirements(text):\n    result = []\n    for line in text.split(\"\\n\"):\n        line = line.strip()\n        if not line or line.startswith(\"#\"):\n            continue\n        match = re.match(r\"([A-Za-z0-9_.-]+)(.*)\", line)\n        result.append((match.group(1), match.group(2).strip()))\n    return result"
+    }
+  ],
+  "debug": [
+    {
+      "title": "A requirements file with comments",
+      "symptom": "ValueError: not enough values to unpack (expected 2, got 1)",
+      "prompt": "This function should return a dictionary of the **pinned** packages (lines like `name==version`). It crashes on comments, blank lines and unpinned packages. Fix it: ignore every line that is not `name==version`.",
+      "brokenCode": "def pinned(text):\n    result = {}\n    for line in text.split(\"\\n\"):\n        name, version = line.split(\"==\")\n        result[name] = version\n    return result",
+      "tests": [
+        {
+          "call": "pinned('requests==2.32.4\\n# tools\\n\\nrich\\n')",
+          "returns": "{'requests': '2.32.4'}"
+        },
+        {
+          "call": "pinned('')",
+          "returns": "{}"
+        }
+      ],
+      "hints": [
+        "An empty line or a comment has no `==`, so `split(\"==\")` gives one piece, not two.",
+        "Check `\"==\" in line` and that the line does not start with `#` before you split."
+      ],
+      "solution": "def pinned(text):\n    result = {}\n    for line in text.split(\"\\n\"):\n        line = line.strip()\n        if \"==\" in line and not line.startswith(\"#\"):\n            name, version = line.split(\"==\")\n            result[name.strip()] = version.strip()\n    return result"
+    }
+  ],
+  "mistakes": [
+    {
+      "mistake": "Installing packages without activating the environment first.",
+      "why": "They go into your global Python, not the project.",
+      "fix": "Look for `(.venv)` in your prompt before you run `pip`."
+    },
+    {
+      "mistake": "Committing the `.venv` folder to Git.",
+      "why": "It is big, it is different on every computer, and `requirements.txt` already describes it.",
+      "fix": "Add `.venv/` to `.gitignore`."
+    },
+    {
+      "mistake": "Running a bare `pip` that belongs to a different Python.",
+      "why": "The package lands in a place your script does not look.",
+      "fix": "Use `python -m pip`."
+    },
+    {
+      "mistake": "Forgetting to save `requirements.txt` after installing something.",
+      "why": "Nobody else (and not you next year) can rebuild the same environment.",
+      "fix": "Run `python -m pip freeze > requirements.txt` after you change packages."
+    }
+  ],
+  "quiz": [
+    {
+      "question": "Why does each project get its own virtual environment?",
+      "options": [
+        "So projects cannot break each other with different package versions",
+        "Because Python only allows one project",
+        "To make Python run faster",
+        "To hide the code"
+      ],
+      "answer": 0,
+      "explanation": "Each project can have exactly the packages and versions it needs."
+    },
+    {
+      "question": "What does `deactivate` do?",
+      "options": [
+        "Switches the environment off for this terminal",
+        "Deletes the .venv folder",
+        "Uninstalls all packages",
+        "Closes Python for good"
+      ],
+      "answer": 0,
+      "explanation": "The folder stays. Only your terminal stops using it."
+    },
+    {
+      "question": "Why use `python -m pip` and not just `pip`?",
+      "options": [
+        "It makes sure pip belongs to the same Python you are using",
+        "It is faster",
+        "Plain pip does not exist",
+        "It skips the download"
+      ],
+      "answer": 0,
+      "explanation": "Then the package is installed for the Python that will run your script."
+    }
+  ],
+  "challenge": {
+    "title": "A safe .gitignore",
+    "prompt": "Write `missing_ignores(text)`. `text` is the content of a `.gitignore` file. Return the entries from `[\".venv/\", \"__pycache__/\", \".env\"]` that are **not** in it (a line must match exactly after removing spaces at the ends). Keep that order.",
+    "stretch": "Also accept `.venv` (without the slash) as a match for `.venv/`.",
+    "starterCode": "def missing_ignores(text):\n    # your code here\n    pass",
+    "tests": [
+      {
+        "call": "missing_ignores('.venv/\\n')",
+        "returns": "['__pycache__/', '.env']"
+      },
+      {
+        "call": "missing_ignores('')",
+        "returns": "['.venv/', '__pycache__/', '.env']"
+      },
+      {
+        "call": "missing_ignores('.venv/\\n__pycache__/\\n.env\\n')",
+        "returns": "[]"
+      }
+    ],
+    "hints": [
+      "Make a set of the stripped lines of `text`.",
+      "Loop over the three wanted entries and keep the ones that are not in the set."
+    ],
+    "solution": "def missing_ignores(text):\n    lines = {line.strip() for line in text.split(\"\\n\")}\n    return [entry for entry in [\".venv/\", \"__pycache__/\", \".env\"] if entry not in lines]"
+  },
+  "review": {
+    "from": "projects/05-git-github",
+    "question": "Which of these should you never commit to a public repository?",
+    "options": [
+      "A file with your API key",
+      "README.md",
+      "A small fake sample file",
+      "Your code"
+    ],
+    "answer": 0,
+    "explanation": "Secrets must stay out of the repository, especially a public one."
+  }
+}
