@@ -1,0 +1,189 @@
+{
+  "cards": [
+    {
+      "id": "variable",
+      "term": "variable",
+      "definition": "A name that holds a value."
+    },
+    {
+      "id": "string",
+      "term": "string",
+      "definition": "Text in quotes, such as \"hello\"."
+    },
+    {
+      "id": "integer",
+      "term": "integer",
+      "definition": "A whole number, such as 7 or -3."
+    },
+    {
+      "id": "float",
+      "term": "float",
+      "definition": "A number with a decimal point, such as 2.5."
+    },
+    {
+      "id": "boolean",
+      "term": "boolean",
+      "definition": "A value that is either True or False."
+    },
+    {
+      "id": "list",
+      "term": "list",
+      "definition": "Many values kept in order, written with square brackets."
+    },
+    {
+      "id": "dictionary",
+      "term": "dictionary",
+      "definition": "Values stored under names (keys), written with curly brackets."
+    },
+    {
+      "id": "function",
+      "term": "function",
+      "definition": "A named block of code that you can use again."
+    },
+    {
+      "id": "parameter",
+      "term": "parameter",
+      "definition": "A name in a function definition that receives a value."
+    },
+    {
+      "id": "argument",
+      "term": "argument",
+      "definition": "The real value you give a function when you call it."
+    },
+    {
+      "id": "return-value",
+      "term": "return value",
+      "definition": "The result a function sends back to the code that called it."
+    },
+    {
+      "id": "loop",
+      "term": "loop",
+      "definition": "Code that repeats."
+    },
+    {
+      "id": "condition",
+      "term": "condition",
+      "definition": "A test that is true or false, used by if and while."
+    },
+    {
+      "id": "comment",
+      "term": "comment",
+      "definition": "A note in the code that Python ignores. It explains why."
+    },
+    {
+      "id": "docstring",
+      "term": "docstring",
+      "definition": "Text in triple quotes at the start of a function that says what it does."
+    },
+    {
+      "id": "module",
+      "term": "module",
+      "definition": "A file of Python code that you can import and use."
+    },
+    {
+      "id": "library",
+      "term": "library",
+      "definition": "Code that other people wrote, which you can use in your own program."
+    },
+    {
+      "id": "class",
+      "term": "class",
+      "definition": "A plan for making objects that have data and actions."
+    },
+    {
+      "id": "object",
+      "term": "object",
+      "definition": "A thing made from a class. It has its own data."
+    },
+    {
+      "id": "method",
+      "term": "method",
+      "definition": "A function that belongs to an object or class."
+    },
+    {
+      "id": "exception",
+      "term": "exception",
+      "definition": "An error that stops the program unless you catch it."
+    },
+    {
+      "id": "traceback",
+      "term": "traceback",
+      "definition": "The list of lines that led to an error. Read it from the bottom."
+    },
+    {
+      "id": "bug",
+      "term": "bug",
+      "definition": "A mistake in the code."
+    },
+    {
+      "id": "debug",
+      "term": "debug",
+      "definition": "To find and fix bugs."
+    },
+    {
+      "id": "test",
+      "term": "test",
+      "definition": "A small check that says what the output should be for an input."
+    },
+    {
+      "id": "edge-case",
+      "term": "edge case",
+      "definition": "An unusual input, such as an empty list, that often breaks code."
+    },
+    {
+      "id": "dry-run",
+      "term": "dry run",
+      "definition": "A run that shows what would happen but changes nothing."
+    },
+    {
+      "id": "api",
+      "term": "API",
+      "definition": "A service made for programs to use, often returning JSON."
+    },
+    {
+      "id": "json",
+      "term": "JSON",
+      "definition": "A text format for data, made of dictionaries and lists."
+    },
+    {
+      "id": "csv",
+      "term": "CSV",
+      "definition": "A table saved as plain text, with commas between the columns."
+    },
+    {
+      "id": "hash",
+      "term": "hash",
+      "definition": "A short fingerprint of some content. The same content gives the same hash."
+    },
+    {
+      "id": "environment-variable",
+      "term": "environment variable",
+      "definition": "A setting stored outside your code, good for keeping secrets such as keys."
+    },
+    {
+      "id": "repository",
+      "term": "repository",
+      "definition": "A project folder that Git tracks. Also called a repo."
+    },
+    {
+      "id": "commit",
+      "term": "commit",
+      "definition": "A saved step in the history of a project, with a short message."
+    },
+    {
+      "id": "prompt",
+      "term": "prompt",
+      "definition": "The text you send to an AI model."
+    },
+    {
+      "id": "token",
+      "term": "token",
+      "definition": "A small piece of text that an AI model reads. Often a short word or part of a word."
+    },
+    {
+      "id": "docs",
+      "term": "docs",
+      "definition": "The manual that explains how a tool or library works. Short for documentation."
+    }
+  ]
+}

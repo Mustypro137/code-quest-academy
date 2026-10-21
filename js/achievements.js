@@ -14,6 +14,10 @@ export const ACHIEVEMENTS = [
   { id: 'streak-7', icon: '🚀', title: 'On fire', text: 'Practise 7 days in a row.', ...count('bestStreak', 7) },
   { id: 'level-5', icon: '⭐', title: 'Level 5', text: 'Reach level 5.', test: (s) => levelInfo(s.xp).level >= 5, meter: (s) => [Math.min(levelInfo(s.xp).level, 5), 5] },
   { id: 'typist', icon: '⌨️', title: 'Fast fingers', text: 'Type 30 words a minute with 95% accuracy.', ...count('bestTypingWpm', 30) },
+  { id: 'arena-clear', icon: '🏟️', title: 'Arena champion', text: 'Solve every exercise in a Challenge arena run.', ...count('arenaClears', 1) },
+  { id: 'reviewer', icon: '🔁', title: 'Good memory', text: 'Review 20 flashcards or quiz questions.', ...count('reviews', 20) },
+  { id: 'writer', icon: '✍️', title: 'Writer', text: 'Write a draft of 50 characters or more in the LinkedIn room.', ...count('draftsWritten', 1) },
+  { id: 'builder', icon: '🛠️', title: 'Builder', text: 'Tick 5 steps in the Project workshop.', ...count('projectSteps', 5) },
   { id: 'backup', icon: '💾', title: 'Safe and sound', text: 'Download a backup of your progress.', test: (s) => Boolean(s.lastExport) },
   {
     id: 'module-done', icon: '🏆', title: 'Module master', text: 'Finish every lesson in one module.',

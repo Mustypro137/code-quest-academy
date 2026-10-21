@@ -20,3 +20,13 @@ export function loadModules() {
 export function loadLesson(moduleId, lessonId) {
   return getJson(`content/${moduleId}/${lessonId}.json`);
 }
+
+// Other content files, such as content/glossary.json. Loaded once.
+const dataCache = {};
+export function loadData(name) {
+  dataCache[name] ??= getJson(`content/${name}.json`).catch((err) => {
+    delete dataCache[name]; // allow a retry
+    throw err;
+  });
+  return dataCache[name];
+}

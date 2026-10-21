@@ -1,5 +1,5 @@
 import { setTheme } from './store.js';
-import { loadModules, loadLesson } from './content.js';
+import { loadModules, loadLesson, loadData } from './content.js';
 import { applyAppearance, effectiveTheme } from './appearance.js';
 import { renderModule, renderMessage } from './ui/home.js';
 import { renderDashboard } from './ui/dashboard.js';
@@ -7,6 +7,11 @@ import { renderRoadmap } from './ui/roadmap.js';
 import { renderProgress } from './ui/progress.js';
 import { renderSettings } from './ui/settings.js';
 import { renderLesson } from './ui/lesson.js';
+import { renderPractice } from './ui/practice.js';
+import { renderRevise } from './ui/revise.js';
+import { renderChallenge } from './ui/challenge.js';
+import { renderWorkshop } from './ui/workshop.js';
+import { renderWriting } from './ui/writing.js';
 import { initRewards } from './ui/rewards.js';
 import { focusScrollable } from './ui/html.js';
 
@@ -24,6 +29,26 @@ const routes = [
   { nav: '/roadmap', pattern: /^\/roadmap$/, handler: async () => {
     const modules = await loadModules();
     return () => renderRoadmap(main, modules);
+  } },
+  { nav: '/practice', pattern: /^\/practice$/, handler: async () => {
+    const [{ cards }, workshop] = await Promise.all([loadData('glossary'), loadData('workshop')]);
+    return () => renderPractice(main, { cards, workshop });
+  } },
+  { nav: '/practice', pattern: /^\/practice\/challenge$/, handler: async () => {
+    const modules = await loadModules();
+    return () => renderChallenge(main, modules);
+  } },
+  { nav: '/practice', pattern: /^\/practice\/revise$/, handler: async () => {
+    const { cards } = await loadData('glossary');
+    return () => renderRevise(main, cards);
+  } },
+  { nav: '/practice', pattern: /^\/practice\/projects$/, handler: async () => {
+    const workshop = await loadData('workshop');
+    return () => renderWorkshop(main, workshop);
+  } },
+  { nav: '/practice', pattern: /^\/practice\/linkedin$/, handler: async () => {
+    const { drafts } = await loadData('writing');
+    return () => renderWriting(main, drafts);
   } },
   { nav: '/progress', pattern: /^\/progress$/, handler: async () => {
     const modules = await loadModules();

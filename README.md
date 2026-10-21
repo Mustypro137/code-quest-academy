@@ -24,8 +24,11 @@ I built it to learn by small steps: read a short lesson, run an example, solve a
   solution that unlocks after 2 failed tries. Code that runs longer than 10 seconds is stopped.
 - **Dashboard, roadmap and progress.** A "continue" card, a level ring (level N starts at 50 x N x (N-1) XP), a
   learning path with done, up-next and locked lessons (locks are only a suggestion), an active-days calendar and
-  11 achievements.
+  15 achievements.
 - **Progress.** XP, a daily streak, solved exercises and best quiz scores, saved in your browser.
+- **Practice rooms.** A challenge arena (3 timed exercises, no hints, small daily XP bonus), a revision centre (missed
+  quiz questions and flashcards that come back after 1, 3 and 7 days), a project workshop (step checklists for two
+  projects and a plan of your own) and a LinkedIn practice room (drafts and checklists that stay on your device).
 - **Settings.** Dark, light or system theme, reduce motion, "Unlock everything", backup and restore, offline
   status, and reset with a confirmation.
 - **Backup.** Download your progress from the home page and restore it later or on another device.
@@ -44,6 +47,8 @@ I built it to learn by small steps: read a short lesson, run an example, solve a
 | Complete a lesson (first time) | 10 |
 | Solve an exercise (first time) | 15 |
 | Quiz: each point above your best score | 2 |
+| Challenge arena: each exercise solved, once a day | 5 |
+| Challenge arena: all exercises solved, once a day | +10 |
 
 ## Run it on your computer
 The site needs a small local server, because browsers block Python and `fetch` on `file://` pages.
@@ -65,10 +70,12 @@ js/
   content.js        loads lesson files
   python/           worker.js (runs Python), runner.js (talks to the worker)
   path.js           lesson states (done, current, locked); achievements.js, appearance.js
-  ui/               dashboard, roadmap, progress, settings, rewards, lesson, quiz, exercise, codebox, typing, backup
+  ui/               dashboard, roadmap, progress, settings, rewards, practice rooms (challenge, revise, workshop,
+                    writing), lesson, quiz, exercise, codebox, typing, backup
 content/
   index.json        list of modules and lessons
   <module>/<lesson>.json
+  glossary.json, workshop.json, writing.json   flashcards, project checklists, writing room drafts
 vendor/pyodide/     Python for the browser (version in its README)
 docs/               adding-lessons.md
 ```

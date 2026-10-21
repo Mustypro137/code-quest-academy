@@ -1,0 +1,55 @@
+{
+  "drafts": [
+    {
+      "id": "writing-headline",
+      "title": "Headline",
+      "help": "The line under your name. Say what you do and what you build or help with, not only \"Student\".",
+      "template": "[What you do] | [What you build or help with] | [Skill 1, Skill 2]",
+      "checklist": [
+        "Says what I do, not only \"Student\"",
+        "Names what I build or help with",
+        "Uses plain words and true details"
+      ]
+    },
+    {
+      "id": "writing-about",
+      "title": "About section",
+      "help": "Only the first lines show before \"see more\", so put your best sentence first.",
+      "template": "I am learning [your main skill] by building small [kind of tools] that [what they help with].\n\nMy latest project: [one sentence about a real project and what it does].\n\nI am currently learning [next thing]. I am looking for [what you want next, in plain words].\n\nYou can contact me here on LinkedIn or at [email].",
+      "checklist": [
+        "Starts with who I am and what I do now",
+        "Names a real project as proof",
+        "Says what I want next and how to contact me",
+        "Every claim is true"
+      ]
+    },
+    {
+      "id": "writing-post",
+      "title": "Project post",
+      "help": "Turn one finished project into a short post. Use fake data only.",
+      "template": "[A hook: one strong line about the problem or the result]\n\n[The problem, in one or two short lines.]\n\nSo I built [what you built]. It:\n- [step or feature 1]\n- [step or feature 2]\n- [step or feature 3]\n\nResult: [what changed. Use a number only if it is true.]\n\nWhat I learned: [one real lesson].\n\nCode and notes: [link]\n\n[A question for the reader?]\n\n#Python #Automation",
+      "checklist": [
+        "A strong first line (the hook)",
+        "Says the problem in one or two lines",
+        "Says what I did in 3 or 4 short lines",
+        "The result is true, with a number only if it is real",
+        "Ends with what I learned and a question",
+        "No private or customer data"
+      ]
+    },
+    {
+      "id": "writing-readme",
+      "title": "Project README",
+      "help": "The front page of your repository. Someone should understand it in one minute.",
+      "template": "# [Project name]\n\n[One sentence: what it is.]\n\n## The problem\n[Why it exists: what was slow, messy or hard.]\n\n## What it does\n- [Feature 1]\n- [Feature 2]\n- [Feature 3]\n\n## How to run it\n1. Install Python 3.\n2. [Where to put the input file, and what to name it.]\n3. Open a terminal in the folder and type:\n\n```\npython [your_script].py\n```\n\n## Example output\n```\n[A few lines of real output. Use fake data.]\n```\n\n## What I learned\n[One or two true lessons]\n\n## Next steps\n[What you want to add next]",
+      "checklist": [
+        "One line: what is it?",
+        "Why does it exist?",
+        "A short list of what it does",
+        "Steps to run it that a new person can follow",
+        "Example output with fake data",
+        "What I learned and what is next"
+      ]
+    }
+  ]
+}

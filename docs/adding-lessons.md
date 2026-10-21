@@ -118,6 +118,17 @@ Rules that keep exercises fair:
 If a lesson will not open, look at the browser console (F12). Most problems are a missing comma in the JSON,
 or a lesson `id` that does not match the file name.
 
+## Practice room content
+- `content/glossary.json`: the flashcards. `{ "cards": [{ "id": "loop", "term": "loop", "definition": "Code that repeats." }] }`.
+  Ids use lowercase letters, numbers and `-`.
+- `content/workshop.json`: the project checklists (`projects` with `steps`) and the "own project plan" template.
+  Each step links to a lesson with `href`. A step is saved as `<project id>/<step number>`, so do not reorder steps
+  after people have ticked them.
+- `content/writing.json`: the writing room drafts, each with a `template` and a `checklist`. Draft ids start with `writing-`.
+- The challenge arena needs no content: it picks exercises (with tests) from lessons the learner has finished.
+- The revision centre lists quiz questions the learner got wrong, by lesson and question number.
+  If you change the order of questions in a quiz, old review entries may point at a different question.
+
 ## Roadmap order
 Lessons are shown on the roadmap in the order of `content/index.json`. A lesson is "up next" when the one before it
 is done, and "locked" until then. Locks are only a suggestion: a locked lesson can always be opened.

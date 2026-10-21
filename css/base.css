@@ -44,6 +44,8 @@
 
 * { box-sizing: border-box; }
 
+html { scroll-padding-top: 5rem; }
+
 body {
   margin: 0;
   background: var(--bg);
@@ -169,7 +171,7 @@ main:focus { outline: none; }
     border-right: 0;
     border-top: 1px solid var(--border);
   }
-  .nav ul { grid-template-columns: repeat(4, 1fr); }
+  .nav ul { grid-template-columns: repeat(5, 1fr); }
   .nav a { flex-direction: column; gap: 0.1rem; padding: 0.35rem 0.25rem; font-size: 0.875rem; }
   .nav .label { position: static; width: auto; height: auto; clip: auto; overflow: visible; }
   main { padding: 1rem 0.75rem 6rem; }

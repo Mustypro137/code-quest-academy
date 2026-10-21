@@ -12,6 +12,11 @@
 //   typing     { "<moduleId>/<lessonId>/<number>": best words per minute }  (saved at 95%+ accuracy)
 //   activity   { "YYYY-MM-DD": number of things done that day }  (last 400 days)
 //   achievements { "<id>": "YYYY-MM-DD" }  (date unlocked)
+//   missed     { "<moduleId>/<lessonId>/<question number>": "YYYY-MM-DD" }  (quiz answers to review)
+//   flashcards { "<term id>": { box: 1-3, due: "YYYY-MM-DD" } }  (a card you have seen)
+//   drafts     { "<id>": text }  (writing room and project plan, up to 20000 characters)
+//   checks     { "<group>/<item>": "YYYY-MM-DD" }  (ticked checklist items)
+//   practice   { arenaPlays, arenaClears, arenaBonusDay, reviews }
 //   lastActive "YYYY-MM-DD" (local date)
 //   lastExport "YYYY-MM-DD"
 //
@@ -22,7 +27,11 @@ export const LESSON_XP = 10;
 export const QUIZ_XP = 2; // per point of improvement over your best score
 export const EXERCISE_XP = 15;
 export const MIN_TYPING_ACCURACY = 95; // a typing try is only saved as a best at this accuracy or more
+export const ARENA_XP_EACH = 5; // bonus XP for each challenge solved, once a day
+export const ARENA_XP_CLEAR = 10; // extra bonus for solving every challenge
+export const DRAFT_MIN = 50; // characters a draft needs to count as written
 const ACTIVITY_DAYS = 400;
+const BOX_DAYS = { 1: 1, 2: 3, 3: 7 }; // days until a flashcard comes back, by box
 
 const DATE = /^\d{4}-\d{2}-\d{2}$/;
 const LESSON_KEY = /^[\w-]+\/[\w-]+$/;
@@ -64,6 +73,13 @@ function clean(raw) {
     }
   }
   const s = r.settings && typeof r.settings === 'object' ? r.settings : {};
+  const p = r.practice && typeof r.practice === 'object' ? r.practice : {};
+  const flashcards = {};
+  if (r.flashcards && typeof r.flashcards === 'object') {
+    for (const [k, v] of Object.entries(r.flashcards)) {
+      if (ID.test(k) && v && [1, 2, 3].includes(v.box) && isDate(v.due)) flashcards[k] = { box: v.box, due: v.due };
+    }
+  }
   return {
     theme: ['light', 'dark', 'system'].includes(r.theme) ? r.theme : undefined,
     settings: { reduceMotion: s.reduceMotion === true, unlockAll: s.unlockAll === true },
@@ -73,6 +89,11 @@ function clean(raw) {
     typing: pick(r.typing, (k) => EXERCISE_KEY.test(k), (v) => typeof v === 'number' && v > 0 && v <= 500),
     activity: pick(r.activity, (k) => DATE.test(k), (v) => Number.isSafeInteger(v) && v > 0 && v < 100000),
     achievements: pick(r.achievements, (k) => ID.test(k), isDate),
+    missed: pick(r.missed, (k) => EXERCISE_KEY.test(k), isDate),
+    checks: pick(r.checks, (k) => LESSON_KEY.test(k), isDate),
+    drafts: pick(r.drafts, (k) => ID.test(k), (v) => typeof v === 'string' && v.length <= 20000),
+    flashcards,
+    practice: { arenaPlays: whole(p.arenaPlays), arenaClears: whole(p.arenaClears), reviews: whole(p.reviews), arenaBonusDay: date(p.arenaBonusDay) },
     xp: whole(r.xp),
     streak: whole(r.streak),
     bestStreak: whole(r.bestStreak),
@@ -212,6 +233,121 @@ export function recordQuiz(moduleId, lessonId, score, total) {
   return gained;
 }
 
+// ---------- Revision: missed quiz answers and flashcards ----------
+
+// Remembers a quiz answer. A wrong answer goes on the review list, and a right one takes it off.
+export function recordAnswer(moduleId, lessonId, index, correct) {
+  const data = load();
+  const key = `${moduleId}/${lessonId}/${index}`;
+  if (correct) {
+    if (!(key in data.missed)) return;
+    delete data.missed[key];
+  } else {
+    data.missed[key] = today();
+  }
+  save(data);
+}
+
+export function getMissed() {
+  return Object.keys(load().missed);
+}
+
+function addDays(date, n) {
+  const [y, m, d] = date.split('-').map(Number);
+  const t = new Date(y, m - 1, d + n);
+  const pad = (x) => String(x).padStart(2, '0');
+  return `${t.getFullYear()}-${pad(t.getMonth() + 1)}-${pad(t.getDate())}`;
+}
+
+// Of these card ids, the ones that are new or due today or earlier.
+export function getDueCards(ids) {
+  const { flashcards } = load();
+  const now = today();
+  return ids.filter((id) => !flashcards[id] || flashcards[id].due <= now);
+}
+
+// A card you knew moves up a box and comes back later. One you missed starts again tomorrow.
+export function reviewCard(id, knew) {
+  const data = load();
+  const box = knew ? Math.min(3, (data.flashcards[id]?.box ?? 0) + 1) : 1;
+  data.flashcards[id] = { box, due: addDays(today(), knew ? BOX_DAYS[box] : 1) };
+  data.practice.reviews++;
+  touchStreak(data);
+  commit(data, data.xp);
+}
+
+// Reviewing a missed quiz question: right takes it off the list, wrong keeps it.
+export function reviewQuestion(key, correct) {
+  const data = load();
+  if (correct) delete data.missed[key];
+  data.practice.reviews++;
+  touchStreak(data);
+  commit(data, data.xp);
+}
+
+// ---------- Writing room and project workshop ----------
+
+// Only the LinkedIn room drafts (ids that start with "writing-") count as written.
+const countDrafts = (data) => Object.entries(data.drafts).filter(([id, t]) => id.startsWith('writing-') && t.trim().length >= DRAFT_MIN).length;
+
+export function getDraft(id) {
+  return load().drafts[id] ?? '';
+}
+
+// Saves a draft. Achievements only need to hear about it when the number of finished drafts changes.
+export function setDraft(id, text) {
+  if (!ID.test(id)) return;
+  const data = load();
+  const before = countDrafts(data);
+  const value = String(text).slice(0, 20000);
+  if (value.trim()) data.drafts[id] = value;
+  else delete data.drafts[id];
+  save(data);
+  if (countDrafts(data) !== before) window.dispatchEvent(new CustomEvent('cqa:progress', { detail: { xpBefore: data.xp, xpAfter: data.xp } }));
+}
+
+export function getChecks() {
+  return load().checks;
+}
+
+// Ticks or unticks a checklist item. Ticking counts as activity for the streak.
+export function setCheck(key, on) {
+  if (!LESSON_KEY.test(key)) return;
+  const data = load();
+  if (on) {
+    data.checks[key] = today();
+    touchStreak(data);
+  } else {
+    delete data.checks[key];
+  }
+  commit(data, data.xp);
+}
+
+// ---------- Challenge arena ----------
+
+export function arenaBonusAvailable() {
+  return load().practice.arenaBonusDay !== today();
+}
+
+// Saves a finished challenge. The XP bonus can be earned once a day, so replaying cannot farm XP.
+// Returns { bonus } (0 when today's bonus was already taken).
+export function recordChallenge(solved, total) {
+  const data = load();
+  const before = data.xp;
+  const clear = total > 0 && solved === total;
+  data.practice.arenaPlays++;
+  if (clear) data.practice.arenaClears++;
+  let bonus = 0;
+  if (solved > 0 && data.practice.arenaBonusDay !== today()) {
+    bonus = solved * ARENA_XP_EACH + (clear ? ARENA_XP_CLEAR : 0);
+    data.xp += bonus;
+    data.practice.arenaBonusDay = today();
+  }
+  touchStreak(data);
+  commit(data, before);
+  return { bonus };
+}
+
 // Level N starts at 50 * N * (N - 1) XP: 0, 100, 300, 600, 1000, ...
 export function levelInfo(xp) {
   let level = 1;
@@ -233,6 +369,10 @@ export function getStats() {
     exercisesSolved: Object.keys(d.exercises).length,
     quizzesPerfect: Object.values(d.quiz).filter((q) => q.best === q.total).length,
     bestTypingWpm: Math.max(0, ...Object.values(d.typing)),
+    arenaClears: d.practice.arenaClears,
+    reviews: d.practice.reviews,
+    draftsWritten: countDrafts(d),
+    projectSteps: Object.keys(d.checks).filter((k) => !k.startsWith('writing-')).length,
     lastExport: d.lastExport,
   };
 }

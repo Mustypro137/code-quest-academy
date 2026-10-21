@@ -5,7 +5,7 @@ import { isExerciseDone, completeExercise, EXERCISE_XP } from '../store.js';
 const TRIES_BEFORE_SOLUTION = 2;
 
 // A blank line starts a new paragraph. A block between lines of three backticks is shown as code.
-function renderPrompt(prompt) {
+export function renderPrompt(prompt) {
   return prompt.split(/```\n([\s\S]*?)\n```/).map((part, i) => (i % 2
     ? `<pre class="code"><code>${esc(part)}</code></pre>`
     : part.split('\n\n').filter((p) => p.trim()).map((p) => `<p>${inline(p)}</p>`).join(''))).join('');

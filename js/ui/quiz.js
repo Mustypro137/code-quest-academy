@@ -1,5 +1,5 @@
 import { inline } from './html.js';
-import { getQuizBest, recordQuiz } from '../store.js';
+import { getQuizBest, recordQuiz, recordAnswer } from '../store.js';
 
 // Multiple-choice quiz, one question at a time.
 // questions: [{ question, options: [...], answer: <index>, explanation }]
@@ -41,6 +41,7 @@ export function renderQuiz(box, moduleId, lessonId, questions) {
     const q = questions[index];
     const right = picked === q.answer;
     if (right) score++;
+    recordAnswer(moduleId, lessonId, index, right); // a wrong answer goes on the Revision list
     buttons.forEach((b, i) => {
       b.disabled = true;
       if (i === q.answer) b.classList.add('correct');

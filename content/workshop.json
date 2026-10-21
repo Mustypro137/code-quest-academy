@@ -1,0 +1,144 @@
+{
+  "plan": {
+    "id": "project-plan",
+    "title": "My own project plan",
+    "help": "Plan a project of your own on one page. It saves on this device as you type.",
+    "template": "Project name: [short name]\n\nOne sentence: This program takes [input] and gives [output] for [who].\n\nThe problem it solves: [why someone would want it]\n\nInput: [what goes in: a file, a list, text]\nOutput: [what comes out: a file, a report, a message]\n\nSteps:\n1. [small step]\n2. [small step]\n3. [small step]\n\nDone when: [3 things you can check, for example \"it cleans the sample file\", \"it never crashes on bad lines\", \"the README explains how to run it\"]\n\nNot now: [ideas for later, so you do not add them today]"
+  },
+  "projects": [
+    {
+      "id": "customer-cleaner",
+      "title": "Customer list cleaner",
+      "summary": "Clean a messy customer list with fake data and write a short report. This is your first portfolio project.",
+      "steps": [
+        {
+          "title": "Plan it on one page",
+          "text": "Say what goes in, what comes out, and when it is done.",
+          "href": "#/lesson/projects/01-choose-project"
+        },
+        {
+          "title": "Make a messy fake customers.csv",
+          "text": "The project lesson makes the file for you. Never use real customer data.",
+          "href": "#/lesson/automation/07-project"
+        },
+        {
+          "title": "Clean the emails",
+          "text": "Exercise 1: clean_email.",
+          "href": "#/lesson/automation/07-project"
+        },
+        {
+          "title": "Turn amounts into numbers",
+          "text": "Exercise 2: parse_amount.",
+          "href": "#/lesson/automation/07-project"
+        },
+        {
+          "title": "Clean each row",
+          "text": "Exercise 3: clean_row.",
+          "href": "#/lesson/automation/07-project"
+        },
+        {
+          "title": "Remove duplicate customers",
+          "text": "Exercise 4: remove_duplicates.",
+          "href": "#/lesson/automation/07-project"
+        },
+        {
+          "title": "Find the late customers",
+          "text": "Exercise 5: late_customers.",
+          "href": "#/lesson/automation/07-project"
+        },
+        {
+          "title": "Make the report",
+          "text": "Exercise 6: make_report.",
+          "href": "#/lesson/automation/07-project"
+        },
+        {
+          "title": "Add tests with assert",
+          "text": "Test normal, edge and bad cases.",
+          "href": "#/lesson/projects/03-testing"
+        },
+        {
+          "title": "Handle bad input kindly",
+          "text": "Keep the good rows and report the bad ones.",
+          "href": "#/lesson/projects/04-errors"
+        },
+        {
+          "title": "Write the README",
+          "text": "One sentence, the problem, how to run it, example output.",
+          "href": "#/lesson/linkedin/04-readme"
+        },
+        {
+          "title": "Put it on GitHub",
+          "text": "Add a .gitignore first, so no private files are saved.",
+          "href": "#/lesson/projects/05-git-github"
+        },
+        {
+          "title": "Write a post about it",
+          "text": "Use the hook, problem, steps, result, lesson.",
+          "href": "#/lesson/linkedin/03-project-post"
+        }
+      ]
+    },
+    {
+      "id": "message-sorter",
+      "title": "Customer message sorter",
+      "summary": "Sort fake customer messages into labels with a fake AI model, then swap in a real one on your PC.",
+      "steps": [
+        {
+          "title": "Plan it on one page",
+          "text": "Say what goes in, what comes out, and when it is done.",
+          "href": "#/lesson/projects/01-choose-project"
+        },
+        {
+          "title": "Build the prompt",
+          "text": "Exercise 1: build_classify_prompt.",
+          "href": "#/lesson/ai/06-project"
+        },
+        {
+          "title": "Ask the model and check the answer",
+          "text": "Exercise 2: classify.",
+          "href": "#/lesson/ai/06-project"
+        },
+        {
+          "title": "Try again when the answer is bad",
+          "text": "Exercise 3: classify_with_retry.",
+          "href": "#/lesson/ai/06-project"
+        },
+        {
+          "title": "Sort all the messages",
+          "text": "Exercise 4: sort_messages.",
+          "href": "#/lesson/ai/06-project"
+        },
+        {
+          "title": "Make the report",
+          "text": "Exercise 5: make_report.",
+          "href": "#/lesson/ai/06-project"
+        },
+        {
+          "title": "Test it with a fake model",
+          "text": "Fake models make tests steady and free.",
+          "href": "#/lesson/ai/03-fake-model"
+        },
+        {
+          "title": "Try a real model on your PC",
+          "text": "Use an environment variable for the key. Fake messages only.",
+          "href": "#/lesson/ai/05-real-api"
+        },
+        {
+          "title": "Write the README",
+          "text": "Explain what it does and how to run it.",
+          "href": "#/lesson/linkedin/04-readme"
+        },
+        {
+          "title": "Put it on GitHub",
+          "text": "Never commit keys.",
+          "href": "#/lesson/projects/05-git-github"
+        },
+        {
+          "title": "Write a post about it",
+          "text": "Be honest about what you did and learned.",
+          "href": "#/lesson/linkedin/03-project-post"
+        }
+      ]
+    }
+  ]
+}

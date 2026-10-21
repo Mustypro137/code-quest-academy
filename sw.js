@@ -13,6 +13,8 @@ const SHELL = [
   'js/ui/backup.js', 'js/ui/codebox.js', 'js/ui/exercise.js', 'js/ui/home.js',
   'js/ui/html.js', 'js/ui/lesson.js', 'js/ui/quiz.js', 'js/ui/typing.js',
   'js/ui/dashboard.js', 'js/ui/roadmap.js', 'js/ui/progress.js', 'js/ui/settings.js', 'js/ui/rewards.js',
+  'js/ui/practice.js', 'js/ui/revise.js', 'js/ui/challenge.js', 'js/ui/workshop.js', 'js/ui/writing.js',
+  'content/glossary.json', 'content/workshop.json', 'content/writing.json',
   'icons/icon-192.png', 'icons/icon-512.png',
 ];
 
